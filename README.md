@@ -18,7 +18,7 @@ Store assets to be used in the frontend, such as `.css`, `.js`, `.png`.
 
 `/routes`
 
-Sets the available URLs to be used. For example, `/` refers to the main home page and `/about` refers to the about page.
+Where the main HTML code resides. All code is under the body tag.
 
 `/vendor`
 
@@ -26,7 +26,7 @@ Stores necessary libraries used by the project, no need to touch.
 
 `/views`
 
-Where the HTML code resides, the CSS and JS should be imported from the `/public` folder.
+The HTML templates are stored here. Things like navigation bar, footer and carousels.
 
 `.htaccess`
 
@@ -46,6 +46,9 @@ This prevents the end user from accessing critical server directories such as `a
 
 Replace `Listen 8080` with `Listen 80`.
 
+### Project folder
+Git clone this repository to your apache /var/www folder. 
+
 ## How to create a new route (URL)
 
 1. Copy and rename the `Template.php` file in `routes` to your page name. For naming convention, follow like this: `ShoppingCart`, `Contact`. This will be where the frontend HTML content will be.
@@ -59,6 +62,6 @@ Router::get('/example', function () {
 ```
 
 Notes:
-- All Bootstrap CSS and JS have already been loaded.
+- All Bootstrap CSS and JS have already been loaded once inside `views/template/elements/Head.php`.
 - Common elements used across webpages are stored under `views/template`.
 - Please create a new branch to commit changes. DO NOT push to main branch, main is for code that has been finalized.
