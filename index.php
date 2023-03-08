@@ -20,6 +20,10 @@ Router::get('/about', function () {
     (new About())->indexAction();
 });
 
+Router::get('/example', function () {
+    (new About())->indexAction();
+});
+
 // The below code is for backend API, frontend is above.
 
 Router::get('/post', function (Request $req, Response $res) {
