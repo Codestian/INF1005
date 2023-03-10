@@ -3,8 +3,8 @@
 
 
     <section style="height: 100vh;">
-        <h1>Contact Us</h1>
-        <span>999.</span>
+        <h1>Login Page</h1>
+        <span>Log in and party.</span>
     </section>
 
 

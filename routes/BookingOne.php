@@ -3,8 +3,8 @@
 
 
     <section style="height: 100vh;">
-        <h1>Contact Us</h1>
-        <span>999.</span>
+        <h1>Main Booking Page</h1>
+        <span>Booking Page Pt. 1</span>
     </section>
 
 
