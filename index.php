@@ -9,6 +9,7 @@ use App\Model\Posts;
 
 use App\Controller\Home;
 use App\Controller\About;
+use App\Controller\Contact;
 
 Posts::load();
 
@@ -20,8 +21,8 @@ Router::get('/about', function () {
     (new About())->indexAction();
 });
 
-Router::get('/example', function () {
-    (new About())->indexAction();
+Router::get('/contact', function () {
+    (new Contact())->indexAction();
 });
 
 // The below code is for backend API, frontend is above.
