@@ -1,11 +1,14 @@
 <?php
 require __DIR__ . '/vendor/autoload.php';
 
+use App\Controller\Booking;
 use App\Lib\App;
+use App\Lib\Database;
 use App\Lib\Router;
 use App\Lib\Request;
 use App\Lib\Response;
 use App\Model\Posts;
+use App\Model\Restaurants;
 
 use App\Controller\Home;
 use App\Controller\About;
@@ -18,6 +21,10 @@ Router::get('/', function () {
 
 Router::get('/about', function () {
     (new About())->indexAction();
+});
+
+Router::get('/booking', function () {
+    (new Booking())->indexAction();
 });
 
 // The below code is for backend API, frontend is above.
@@ -40,4 +47,9 @@ Router::get('/post/([0-9]*)', function (Request $req, Response $res) {
     }
 });
 
+Router::get('/restaurants', function (Request $req, Response $res) {
+    $res->toJSON(Restaurants::getAll());
+});
+
 App::run();
+Database::connect();
