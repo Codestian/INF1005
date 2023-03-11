@@ -11,14 +11,14 @@ use App\Controller\Home;
 use App\Controller\About;
 use App\Controller\Contact;
 use App\Controller\Login;
-use App\Controller\Signup;
+use App\Controller\Register;
 use App\Controller\BookingOne;
 use App\Controller\BookingTwo;
 use App\Controller\BookingThree;
 use App\Controller\User;
 use App\Controller\Apply;
 use App\Controller\Restaurant;
-use App\Controller\Favourtie;
+use App\Controller\Favourite;
 use App\Controller\Bookings;
 use App\Controller\MasterDir;
 use App\Controller\Admin;
@@ -49,8 +49,8 @@ Router::get('/login', function () {
 });
 
 // Sign up Page.
-Router::get('/signup', function () {
-    (new Signup())->indexAction();
+Router::get('/register', function () {
+    (new Register())->indexAction();
 });
 
 // Booking Restaurant Page 1.
@@ -85,12 +85,7 @@ Router::get('/restaurant', function () {
 
 // User Favourite Restaurant Page (REQUIRES LOGIN)
 Router::get('/favourite', function () {
-    (new Favourtie())->indexAction();
-});
-
-// User's Bookings Page (REQUIRES LOGIN)
-Router::get('/bookings', function () {
-    (new Bookings())->indexAction();
+    (new Favourite())->indexAction();
 });
 
 // User's Bookings Page (REQUIRES LOGIN)

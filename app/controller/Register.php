@@ -1,9 +1,9 @@
 <?php namespace App\Controller;
 
-class Signup
+class Register
 {
     public function indexAction()
     {
-        include("routes/Signup.php");
+        include("routes/Register.php");
     }
 }

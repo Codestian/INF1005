@@ -1,6 +1,6 @@
 <?php namespace App\Controller;
 
-class Favourtie
+class Favourite
 {
     public function indexAction()
     {
