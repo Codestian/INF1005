@@ -1,3 +1,47 @@
 body {
-    padding-top: 56px;
+    padding-top: 90px;
+}
+
+nav {
+    background-color: white;
+}
+
+nav a.nav-link {
+    font-family: "Comic Sans MS", cursive;
+    font-size: 25px;
+    color: black;
+}
+
+nav a.login {
+    font-family: "Comic Sans MS", cursive;
+    font-size: 20px;
+    font-weight: bold;
+    color: black;
+    background-color: yellow;
+    border-color: yellow;
+    --bs-btn-hover-bg: orange;
+    --bs-btn-hover-border-color: orange;
+}
+
+li a.nav-link {
+    font-family: "Helvetica", sans-serif;
+}
+
+.offcanvas-title {
+    font-family: "Comic Sans MS", cursive;
+    font-size: 25px;
+    color: black;
+    font-weight: bold;
+}
+
+section {
+    background-color: orange;
+}
+
+footer p {
+    text-align: center;
+    font-style: italic;
+    font-size: 14px;
+    color: white;
+    margin: 10px;
 }

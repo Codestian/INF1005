@@ -123,7 +123,6 @@ Router::get('/west', function () {
     (new West())->indexAction();
 });
 
-
 // The below code is for backend API, frontend is above.
 
 Router::get('/post', function (Request $req, Response $res) {

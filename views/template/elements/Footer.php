@@ -1,3 +1,3 @@
 <footer class="py-5 bg-dark">
-    <span class="p-4 text-white">This is a footer</span>
+    <p> © 2023 <img src="../../../public/images/piza-smol.png">My rights available</p>
 </footer>

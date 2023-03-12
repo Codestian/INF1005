@@ -5,6 +5,6 @@
     <title><?php echo isset($title)?$title:"Empty Page"; ?></title>
     <meta name="description" content="">
     <link rel="stylesheet" type="text/css" href="../../../public/css/bootstrap.css">
-    <link rel="stylesheet" type="text/css" href="../../../public/css/index.css">
+    <link rel="stylesheet" type="text/css" href="../../../public/css/index.css?v=<?php echo time(); ?>">
 </head>
 
