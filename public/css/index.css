@@ -38,6 +38,12 @@ section {
     background-color: orange;
 }
 
+#main-map {
+    display: flex;
+    justify-content: center;
+    padding-top: 5px;
+}
+
 footer p {
     text-align: center;
     font-style: italic;

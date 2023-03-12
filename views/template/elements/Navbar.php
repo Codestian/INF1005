@@ -35,7 +35,7 @@
                 </div>
             </div>
 
-        <div class="col-md-auto" style="padding-left: 170px"><a class="nav-link" href="/"><img src="../../../public/images/borgor-small.png">Chopee</a></div>
+        <div class="col-md-auto" style="padding-left: 170px"><a class="nav-link" href="/"><img src="../../../public/images/borgor-small.png" alt="burger-icon">Chopee</a></div>
 
         <div class="col-sm-auto"><a class="btn btn-primary login" href="login" role="button">Sign Up or Login</a></div>
     </div>
