@@ -2,6 +2,6 @@
 
 use App\Lib\Model;
 
-class Users extends Model {
-
+class Users extends Model
+{
 }

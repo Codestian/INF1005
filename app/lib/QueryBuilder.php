@@ -2,6 +2,9 @@
 
 namespace App\Lib;
 
+// There is where the SQL statements are created.
+// Instead of manually creating SQl statement strings, we abstracted them to a chain pattern.
+// Usage is in Model.php.
 class QueryBuilder
 {
     /**

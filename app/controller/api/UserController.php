@@ -8,19 +8,19 @@ use mysqli;
 class UserController
 {
     private Users $users;
-    private string $table ='users';
+    private string $table ='user';
     public function __construct(mysqli $mysqli) {
         $this->users = new Users($mysqli);
     }
 
     public function getAllUsers(Request $req, Response $res): void
     {
-        $data = $this->users->getAll(['id', 'username', 'email', 'password'], $this->table);
+        $data = $this->users->read(['id', 'username', 'email', 'password'], $this->table, ['1 = 1']);
         $res->toJSON($data);
     }
     public function getOneUserById(Request $req, Response $res): void
     {
-        $data = $this->users->getOne(['id', 'username', 'email', 'password'], $this->table, ['id = ' . $req->params[0]]);
+        $data = $this->users->read(['id', 'username', 'email', 'password'], $this->table, ['id = ' . $req->params[0]]);
         $res->toJSON($data);
     }
     public function createUser(Request $req, Response $res): void

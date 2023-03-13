@@ -2,6 +2,7 @@
 require __DIR__ . '/vendor/autoload.php';
 
 use App\Controller\About;
+use App\Controller\api\ItemController;
 use App\Controller\Api\UserController;
 use App\Controller\Booking;
 use App\Controller\Home;
@@ -26,6 +27,8 @@ Router::get('/booking', function () {
 $mysqli = (new Database())->getConnection();
 
 $restaurant_controller = new RestaurantController($mysqli);
+$item_controller = new ItemController($mysqli);
+$user_controller = new UserController($mysqli);
 
 //  Retrieves all restaurants
 Router::get('/restaurants/?', [$restaurant_controller, 'getAllRestaurants']);
@@ -38,7 +41,17 @@ Router::put('/restaurants/(\d+)/?', [$restaurant_controller, 'updateRestaurant']
 //  Deletes one restaurant by its id
 Router::delete('/restaurants/(\d+)/?', [$restaurant_controller, 'deleteRestaurant']);
 
-$user_controller = new UserController($mysqli);
+// Retrieves all restaurant items
+Router::get('/items/?', [$item_controller, 'getAllItems']);
+// Retrieves all restaurant items
+Router::get('/items/(\d+)/?', [$item_controller, 'getOneItemById']);
+//  Creates a new restaurant item
+Router::post('/items/?', [$item_controller, 'createItem']);
+//  Updates one restaurant item by its id
+Router::put('/items/(\d+)/?', [$item_controller, 'updateItem']);
+//  Deletes one restaurant item by its id
+Router::delete('/items/(\d+)/?', [$item_controller, 'deleteItem']);
+
 
 //  Retrieves all users
 Router::get('/users/?', [$user_controller, 'getAllUsers']);
@@ -50,5 +63,8 @@ Router::post('/users/?', [$user_controller, 'createUser']);
 Router::put('/users/(\d+)/?', [$user_controller, 'updateUser']);
 //  Deletes one user by its id
 Router::delete('/users/(\d+)/?', [$user_controller, 'deleteUser']);
+
+// Retrieves all restaurant items by restaurant id
+Router::get('/restaurants/(\d+)/items/?', [$item_controller, 'getAllItemsByRestaurantId']);
 
 App::run();

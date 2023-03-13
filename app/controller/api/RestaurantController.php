@@ -6,26 +6,28 @@ use App\Lib\Request;
 use App\Lib\Response;
 use App\Model\Restaurants;
 use mysqli;
+
 class RestaurantController
 {
     private Restaurants $restaurants;
-    private string $table ='restaurants';
+    private string $table ='restaurant';
+
     public function __construct(mysqli $mysqli) {
         $this->restaurants = new Restaurants($mysqli);
     }
     public function getAllRestaurants(Request $req, Response $res): void
     {
-        $data = $this->restaurants->getAll(['id', 'name', 'description', 'address'], $this->table);
+        $data = $this->restaurants->read(['id', 'name', 'description', 'address'], $this->table, ['1 = 1']);
         $res->toJSON($data);
     }
     public function getOneRestaurantById(Request $req, Response $res): void
     {
-        $data = $this->restaurants->getOne(['id', 'name', 'description', 'address'], $this->table, ['id = ' . $req->params[0]]);
+        $data = $this->restaurants->read(['id', 'name', 'description', 'address'], $this->table, ['id = ' . $req->params[0]]);
         $res->toJSON($data);
     }
     public function createRestaurant(Request $req, Response $res): void
     {
-        $columns = ['name', 'description', 'address'];;
+        $columns = ['name', 'description', 'address'];
         $data = $this->restaurants->create($this->table, $columns, $req->getJSON($columns));
         $res->toJSON($data);
     }

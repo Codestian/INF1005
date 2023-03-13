@@ -2,6 +2,6 @@
 
 use App\Lib\Model;
 
-class Restaurants extends Model
+class Items extends Model
 {
 }

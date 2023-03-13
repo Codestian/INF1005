@@ -9,35 +9,14 @@ abstract class Model implements CrudInterface {
     {
         $this->mysqli = $mysqli;
     }
-    public function getAll(array $select, string $from) : array
+    public function read(array $select, string $from, array $where) : array
     {
-        $query = (new QueryBuilder())
-            ->select(...$select)
-            ->from($from);
-
-        $data = [];
-        try {
-            $result = $this->mysqli->query($query);
-            while ($row = $result->fetch_object()) {
-                $data[] = $row;
-            }
-        }
-        catch (\mysqli_sql_exception $e) {
-            $data[] = $e->getMessage();
-        }
-
-        $this->mysqli->close();
-        return $data;
-    }
-
-    public function getOne(array $select, string $from, array $where) : array {
-        $data = [];
-
         $query = (new QueryBuilder())
             ->select(...$select)
             ->from($from)
             ->where(...$where);
 
+        $data = [];
         try {
             $result = $this->mysqli->query($query);
             while ($row = $result->fetch_object()) {
@@ -51,7 +30,6 @@ abstract class Model implements CrudInterface {
         $this->mysqli->close();
         return $data;
     }
-
     public function create(string $insert, array $column, array $values) : array {
         $data = [];
 
@@ -70,7 +48,6 @@ abstract class Model implements CrudInterface {
 
         return $data;
     }
-
     public function update(string $update, array $set, array $where) : array {
         $data = [];
 
@@ -89,7 +66,6 @@ abstract class Model implements CrudInterface {
 
         return $data;
     }
-
     public function delete(string $delete, array $where) : array {
         $data = array();
 
