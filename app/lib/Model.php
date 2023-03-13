@@ -1,31 +1,110 @@
 <?php namespace App\Lib;
 
 use App\Lib\Interfaces\CrudInterface;
+use mysqli;
 
 abstract class Model implements CrudInterface {
-    public function getAll(): array
+    private mysqli $mysqli;
+    public function __construct(mysqli $mysqli)
     {
-        // TODO: Implement getAll() method.
+        $this->mysqli = $mysqli;
+    }
+    public function getAll(array $select, string $from) : array
+    {
+        $query = (new QueryBuilder())
+            ->select(...$select)
+            ->from($from);
+
+        $data = [];
+        try {
+            $result = $this->mysqli->query($query);
+            while ($row = $result->fetch_object()) {
+                $data[] = $row;
+            }
+        }
+        catch (\mysqli_sql_exception $e) {
+            $data[] = $e->getMessage();
+        }
+
+        $this->mysqli->close();
+        return $data;
     }
 
-    public function getOne(int $index): array
-    {
-        // TODO: Implement getOne() method.
+    public function getOne(array $select, string $from, array $where) : array {
+        $data = [];
+
+        $query = (new QueryBuilder())
+            ->select(...$select)
+            ->from($from)
+            ->where(...$where);
+
+        try {
+            $result = $this->mysqli->query($query);
+            while ($row = $result->fetch_object()) {
+                $data[] = $row;
+            }
+        }
+        catch (\mysqli_sql_exception $e) {
+            $data[] = $e->getMessage();
+        }
+
+        $this->mysqli->close();
+        return $data;
     }
 
-    public function create(array $requestData): array
-    {
-        // TODO: Implement create() method.
+    public function create(string $insert, array $column, array $values) : array {
+        $data = [];
+
+        $query = (new QueryBuilder())
+            ->insert($insert)
+            ->columns(...$column)
+            ->values(...$values);
+
+        try {
+            $this->mysqli->query($query);
+            $id = $this->mysqli->insert_id;
+            $data[] = $id;
+        } catch (\mysqli_sql_exception $e) {
+            $data[] = $e->getMessage();
+        }
+
+        return $data;
     }
 
-    public function update(int $index, array $requestData): array
-    {
-        // TODO: Implement update() method.
+    public function update(string $update, array $set, array $where) : array {
+        $data = [];
+
+        $query = (new QueryBuilder())
+            ->update($update)
+            ->set(...$set)
+            ->where(...$where);
+
+        try {
+            $this->mysqli->query($query);
+            $id = $this->mysqli->insert_id;
+            $data[] = $id;
+        } catch (\mysqli_sql_exception $e) {
+            $data[] = $e->getMessage();
+        }
+
+        return $data;
     }
 
-    public function delete(int $index): array
-    {
-        // TODO: Implement delete() method.
-    }
+    public function delete(string $delete, array $where) : array {
+        $data = array();
 
+        $query = (new QueryBuilder())
+            ->delete($delete)
+            ->where(...$where);
+
+        try {
+            $this->mysqli->query($query);
+            $data[] = "restaurant deleted!";
+        }
+        catch (\mysqli_sql_exception $e) {
+            $data[] = $e->getMessage();
+        }
+
+        return $data;
+    }
 }

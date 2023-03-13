@@ -2,6 +2,7 @@
 require __DIR__ . '/vendor/autoload.php';
 
 use App\Controller\About;
+use App\Controller\Api\UserController;
 use App\Controller\Booking;
 use App\Controller\Home;
 use App\Controller\Api\RestaurantController;
@@ -36,5 +37,18 @@ Router::post('/restaurants/?', [$restaurant_controller, 'createRestaurant']);
 Router::put('/restaurants/(\d+)/?', [$restaurant_controller, 'updateRestaurant']);
 //  Deletes one restaurant by its id
 Router::delete('/restaurants/(\d+)/?', [$restaurant_controller, 'deleteRestaurant']);
+
+$user_controller = new UserController($mysqli);
+
+//  Retrieves all users
+Router::get('/users/?', [$user_controller, 'getAllUsers']);
+//  Retrieves one user by its id
+Router::get('/users/(\d+)/?', [$user_controller, 'getOneUserById']);
+//  Creates a new user
+Router::post('/users/?', [$user_controller, 'createUser']);
+//  Updates one user by its id
+Router::put('/users/(\d+)/?', [$user_controller, 'updateUser']);
+//  Deletes one user by its id
+Router::delete('/users/(\d+)/?', [$user_controller, 'deleteUser']);
 
 App::run();
