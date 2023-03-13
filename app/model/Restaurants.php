@@ -1,49 +1,107 @@
 <?php namespace App\Model;
 
-use App\Lib\Config;
-use App\Lib\QueryBuilder;
+use App\Lib\Interfaces\CrudInterface;
 use mysqli;
-use stdClass;
+use App\Lib\QueryBuilder;
 
-class Restaurants
+class Restaurants implements CrudInterface
 {
-    public static function getAll()
+    private mysqli $mysqli;
+    public function __construct(mysqli $mysqli)
     {
-        $servername = "127.0.0.1";
-        $username = "root";
-        $password = "";
-        $database = "inf1005-alpha";
+        $this->mysqli = $mysqli;
+    }
+    public function getAll() : array
+    {
+        $query = (new QueryBuilder())
+            ->select('id', 'name', 'description', 'address')
+            ->from('restaurants');
 
-        // Create connection
-        $mysqli = new mysqli($servername, $username, $password, $database);
-
-        // Check connection
-        if ($mysqli->connect_error) {
-            die("Connection failed: " . $mysqli->connect_error);
-        } else {
-            $query = (new QueryBuilder())
-                ->select('id', 'name')
-                ->from('restaurants');
-
-            $result = $mysqli->query($query);
-
-            $data = array();
+        $data = array();
+        try {
+            $result = $this->mysqli->query($query);
             while ($row = $result->fetch_object()) {
                 $data[] = $row;
             }
-
-            $mysqli->close();
-
-            return $data;
         }
+        catch (\mysqli_sql_exception $e) {
+            $data[] = $e->getMessage();
+        }
+
+        $this->mysqli->close();
+        return $data;
     }
+    public function getOne(int $index) : array {
+        $query = (new QueryBuilder())
+            ->select('id', 'name', 'description')
+            ->from('restaurants')
+            ->where('id=' . $index);
 
-    public static function getOne() {}
+        $data = array();
+        try {
+            $result = $this->mysqli->query($query);
+            while ($row = $result->fetch_object()) {
+                $data[] = $row;
+            }
+        }
+        catch (\mysqli_sql_exception $e) {
+            $data[] = $e->getMessage();
+        }
 
-    public static function add() {}
+        $this->mysqli->close();
+        return $data;
+    }
+    public function create(array $requestData) : array {
+        $data = array();
 
-    public static function update() {}
+        $query = (new QueryBuilder())
+            ->insert('restaurants')
+            ->columns('name', 'description', 'address')
+            ->values($requestData['name'], $requestData['description'], $requestData['address']);
 
-    public static function delete() {}
+        try {
+            $this->mysqli->query($query);
+            $id = $this->mysqli->insert_id;
+            $data[] = $id;
+        } catch (\mysqli_sql_exception $e) {
+            $data[] = $e->getMessage();
+        }
 
+        return $data;
+    }
+    public function update(int $index, array $requestData) : array {
+        $data = array();
+
+        $query = (new QueryBuilder())
+            ->update('restaurants')
+            ->set('name = ' . $requestData['name'], 'description = ' . $requestData['description'], 'address = ' . $requestData['address'])
+            ->where('id = ' . $index);
+
+        try {
+            $this->mysqli->query($query);
+            $id = $this->mysqli->insert_id;
+            $data[] = $id;
+        } catch (\mysqli_sql_exception $e) {
+            $data[] = $e->getMessage();
+        }
+
+        return $data;
+    }
+    public function delete(int $index) : array {
+        $data = array();
+
+        $query = (new QueryBuilder())
+            ->delete('restaurants')
+            ->where('id = ' . $index);
+
+        try {
+            $this->mysqli->query($query);
+            $data[] = $index . " deleted!";
+        }
+        catch (\mysqli_sql_exception $e) {
+            $data[] = $e->getMessage();
+        }
+
+        return $data;
+    }
 }

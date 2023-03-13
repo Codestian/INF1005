@@ -1,25 +1,19 @@
 <?php
 require __DIR__ . '/vendor/autoload.php';
 
+use App\Controller\About;
 use App\Controller\Booking;
+use App\Controller\Home;
+use App\Controller\Api\RestaurantController;
 use App\Lib\App;
 use App\Lib\Database;
 use App\Lib\Router;
-use App\Lib\Request;
-use App\Lib\Response;
-use App\Model\Posts;
-use App\Model\Restaurants;
-
-use App\Controller\Home;
-use App\Controller\About;
-
-Posts::load();
 
 Router::get('/', function () {
     (new Home())->indexAction();
 });
 
-Router::get('/about', function () {
+Router::get('/about/?', function () {
     (new About())->indexAction();
 });
 
@@ -28,28 +22,19 @@ Router::get('/booking', function () {
 });
 
 // The below code is for backend API, frontend is above.
+$mysqli = (new Database())->getConnection();
 
-Router::get('/post', function (Request $req, Response $res) {
-    $res->toJSON(Posts::all());
-});
+$restaurant_controller = new RestaurantController($mysqli);
 
-Router::post('/post', function (Request $req, Response $res) {
-    $post = Posts::add($req->getJSON());
-    $res->status(201)->toJSON($post);
-});
-
-Router::get('/post/([0-9]*)', function (Request $req, Response $res) {
-    $post = Posts::findById($req->params[0]);
-    if ($post) {
-        $res->toJSON($post);
-    } else {
-        $res->status(404)->toJSON(['error' => "Not Found"]);
-    }
-});
-
-Router::get('/restaurants', function (Request $req, Response $res) {
-    $res->toJSON(Restaurants::getAll());
-});
+//  Retrieves all restaurants
+Router::get('/restaurants/?', [$restaurant_controller, 'getAllRestaurants']);
+//  Retrieves one restaurant by its id
+Router::get('/restaurants/(\d+)/?', [$restaurant_controller, 'getOneRestaurantById']);
+//  Creates a new restaurant
+Router::post('/restaurants/?', [$restaurant_controller, 'createRestaurant']);
+//  Updates one restaurant by its id
+Router::put('/restaurants/(\d+)/?', [$restaurant_controller, 'updateRestaurant']);
+//  Deletes one restaurant by its id
+Router::delete('/restaurants/(\d+)/?', [$restaurant_controller, 'deleteRestaurant']);
 
 App::run();
-Database::connect();

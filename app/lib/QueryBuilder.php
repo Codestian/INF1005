@@ -1,4 +1,6 @@
-<?php namespace App\Lib;
+<?php
+
+namespace App\Lib;
 
 class QueryBuilder
 {
@@ -17,12 +19,41 @@ class QueryBuilder
      */
     private array $from = [];
 
+    /**
+     * @var string|null
+     */
+    private ?string $table = null;
+
+    /**
+     * @var array<string>
+     */
+    private array $set = [];
+
+    /**
+     * @var array<string>
+     */
+    private array $columns = [];
+
+    /**
+     * @var array<string>
+     */
+    private array $values = [];
+
     public function __toString(): string
     {
         $where = $this->conditions === [] ? '' : ' WHERE ' . implode(' AND ', $this->conditions);
-        return 'SELECT ' . implode(', ', $this->fields)
-            . ' FROM ' . implode(', ', $this->from)
-            . $where;
+        $fields = empty($this->fields) ? '*' : implode(', ', $this->fields);
+
+        switch (true) {
+            case !empty($this->values):
+                return 'INSERT INTO ' . $this->table . ' (' . $fields . ') VALUES (' . implode(', ', $this->values) . ')';
+            case !empty($this->set):
+                return 'UPDATE ' . $this->table . ' SET ' . implode(', ', $this->set) . $where;
+            case !empty($this->table):
+                return 'DELETE FROM ' . $this->table . $where;
+            default:
+                return 'SELECT ' . $fields . ' FROM ' . implode(', ', $this->from) . $where;
+        }
     }
 
     public function select(string ...$select): self
@@ -46,6 +77,49 @@ class QueryBuilder
         } else {
             $this->from[] = "{$table} AS {$alias}";
         }
+        return $this;
+    }
+
+    public function insert(string $table): self
+    {
+        $this->table = $table;
+        return $this;
+    }
+
+    public function columns(string ...$columns): self
+    {
+        $this->fields = $columns;
+        return $this;
+    }
+
+    public function values(string ...$values): self
+    {
+        foreach ($values as $value) {
+            if (is_string($value)) {
+                $value = "'" . $value . "'";
+            }
+            $this->values[] = $value;
+        }
+        return $this;
+    }
+
+    public function update(string $table): self
+    {
+        $this->table = $table;
+        return $this;
+    }
+
+    public function set(string ...$set): self
+    {
+        foreach ($set as $arg) {
+            $this->set[] = $arg;
+        }
+        return $this;
+    }
+
+    public function delete(string $table): self
+    {
+        $this->table = $table;
         return $this;
     }
 }
