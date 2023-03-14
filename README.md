@@ -1,6 +1,7 @@
 # INF1005 Project
 
-This LAMP stack project is built with the MVC model. 
+This LAMP stack project is built with the MVC model, heavily inspired by Laravel.
+Contains concepts such as migrations, routers, requests.
 
 ## Project Structure
 
@@ -65,3 +66,25 @@ Notes:
 - All Bootstrap CSS and JS have already been loaded once inside `views/template/elements/Head.php`.
 - Common elements used across webpages are stored under `views/template`.
 - Please create a new branch to commit changes. DO NOT push to main branch, main is for code that has been finalized.
+
+## How to create a new MySQL table in PHP and without opening MySQL Workbench.
+
+To create tables, we use what are called 'migrations'. They are located in `database/migrations`.
+Migrations are useful in quickly creating tables and helps a lot in development, especially in setting up in another environment.
+Instead of manually creating tables and running SQL commands, all these can be done with one command.
+`hakimator.php` is a small program which will help you in building and pushing migrations. This is heavily inspired by Laravel.
+
+1. To create a migration, run `php hakimator.php make:migrate create_myTable_table`. It has to follow the format (`create_myTable_table`).
+2. A new php file should be created in `database/migrations`. Modify the file to include table columns, primary and foreign keys etc.
+3. To push the migrations to the MySQL database, run `php hakimator.php migrate`. Do note this will override and clear your existing table data.
+
+In your migrations file, to create a column:
+```php
+$builder->addColumn("id", "INT", true, true);
+```
+This will create a column named `id`, of type `int` which is set to `not null` and `auto increment`.
+
+To set a column as primary key:
+```php
+$builder->setPrimaryKey("id");
+```

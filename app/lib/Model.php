@@ -3,11 +3,34 @@
 use App\Lib\Interfaces\CrudInterface;
 use mysqli;
 
+/*
+Most important part of backend, interacts with MySQL database via SQL statements created from QueryBuilder.php.
+These 4 methods encompass the core CRUD concepts in relational databases, satisfying most use cases.
+Statements requiring multiple values such as VALUES and WHERE are passed in as arrays, using the `...` operator.
+*/
 abstract class Model implements CrudInterface {
     private mysqli $mysqli;
     public function __construct(mysqli $mysqli)
     {
         $this->mysqli = $mysqli;
+    }
+    public function create(string $insert, array $column, array $values) : array {
+        $data = [];
+
+        $query = (new QueryBuilder())
+            ->insert($insert)
+            ->columns(...$column)
+            ->values(...$values);
+
+        try {
+            $this->mysqli->query($query);
+            $id = $this->mysqli->insert_id;
+            $data[] = $id;
+        } catch (\mysqli_sql_exception $e) {
+            $data[] = $e->getMessage();
+        }
+
+        return $data;
     }
     public function read(array $select, string $from, array $where) : array
     {
@@ -30,24 +53,6 @@ abstract class Model implements CrudInterface {
         $this->mysqli->close();
         return $data;
     }
-    public function create(string $insert, array $column, array $values) : array {
-        $data = [];
-
-        $query = (new QueryBuilder())
-            ->insert($insert)
-            ->columns(...$column)
-            ->values(...$values);
-
-        try {
-            $this->mysqli->query($query);
-            $id = $this->mysqli->insert_id;
-            $data[] = $id;
-        } catch (\mysqli_sql_exception $e) {
-            $data[] = $e->getMessage();
-        }
-
-        return $data;
-    }
     public function update(string $update, array $set, array $where) : array {
         $data = [];
 
@@ -59,7 +64,7 @@ abstract class Model implements CrudInterface {
         try {
             $this->mysqli->query($query);
             $id = $this->mysqli->insert_id;
-            $data[] = $id;
+            $data[] = "updated!";
         } catch (\mysqli_sql_exception $e) {
             $data[] = $e->getMessage();
         }
@@ -75,7 +80,7 @@ abstract class Model implements CrudInterface {
 
         try {
             $this->mysqli->query($query);
-            $data[] = "restaurant deleted!";
+            $data[] = "deleted!";
         }
         catch (\mysqli_sql_exception $e) {
             $data[] = $e->getMessage();

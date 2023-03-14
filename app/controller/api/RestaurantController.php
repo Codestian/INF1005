@@ -2,6 +2,7 @@
 
 namespace App\Controller\api;
 
+use App\Lib\Schema;
 use App\Lib\Request;
 use App\Lib\Response;
 use App\Model\Restaurants;
