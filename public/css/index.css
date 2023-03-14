@@ -35,13 +35,14 @@ li a.nav-link {
 }
 
 section {
-    background-color: orange;
+    background-color: white;
 }
 
 #main-map {
     display: flex;
     justify-content: center;
     padding-top: 5px;
+    background-color: orange;
 }
 
 footer p {
