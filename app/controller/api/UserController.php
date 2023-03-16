@@ -15,23 +15,23 @@ class UserController
 
     public function getAllUsers(Request $req, Response $res): void
     {
-        $data = $this->users->read(['id', 'username', 'email', 'password'], $this->table, ['1 = 1']);
+        $data = $this->users->read(['id', 'username', 'email', 'password', 'role_id'], $this->table, ['1 = 1']);
         $res->toJSON($data);
     }
     public function getOneUserById(Request $req, Response $res): void
     {
-        $data = $this->users->read(['id', 'username', 'email', 'password'], $this->table, ['id = ' . $req->params[0]]);
+        $data = $this->users->read(['id', 'username', 'email', 'password', 'role_id'], $this->table, ['id = ' . $req->params[0]]);
         $res->toJSON($data);
     }
     public function createUser(Request $req, Response $res): void
     {
-        $columns = ['username', 'email', 'password'];;
+        $columns = ['username', 'email', 'password', 'role_id'];;
         $data = $this->users->create($this->table, $columns, $req->getJSON($columns));
         $res->toJSON($data);
     }
     public function updateUser(Request $req, Response $res): void
     {
-        $columns = ['username', 'email', 'password'];;
+        $columns = ['username', 'email', 'password', 'role_id'];;
         $value = $req->getJSON($columns);
 
         $merged = array_map(function ($key, $val) {
@@ -45,5 +45,10 @@ class UserController
     {
         $data = $this->users->delete($this->table, ['id = ' . $req->params[0]]);
         $res->toJSON($data);
+    }
+
+    public function loginUser(Request  $req, Response $res) {
+//        $data = $this->users->read(['id', 'username', 'email', 'password', 'role_id'], $this->table, ['id = ' . $req->params[0]]);
+
     }
 }

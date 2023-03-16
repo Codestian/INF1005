@@ -3,6 +3,7 @@ require __DIR__ . "/vendor/autoload.php";
 
 use App\Controller\About;
 use App\Controller\api\ItemController;
+use App\Controller\Api\RoleController;
 use App\Controller\Api\UserController;
 use App\Controller\Booking;
 use App\Controller\Home;
@@ -32,6 +33,7 @@ $api_suffix = Config::get("API_SUFFIX");
 $restaurant_controller = new RestaurantController($mysqli);
 $item_controller = new ItemController($mysqli);
 $user_controller = new UserController($mysqli);
+$role_controller = new RoleController($mysqli);
 
 //  Retrieves all restaurants
 Router::get("/{$api_suffix}/restaurants/?", [$restaurant_controller, "getAllRestaurants"]);
@@ -66,7 +68,20 @@ Router::put("/{$api_suffix}/users/(\d+)/?", [$user_controller, "updateUser"]);
 //  Deletes one user by its id
 Router::delete("/u{$api_suffix}/sers/(\d+)/?", [$user_controller, "deleteUser"]);
 
+//  Retrieves all roles
+Router::get("/{$api_suffix}/roles/?", [$role_controller, "getAllRoles"]);
+//  Retrieves one role by its id
+Router::get("/{$api_suffix}/roles/(\d+)/?", [$role_controller, "getOneRoleById"]);
+//  Creates a new role
+Router::post("/{$api_suffix}/roles/?", [$role_controller, "createRole"]);
+//  Updates one role by its id
+Router::put("/{$api_suffix}/roles/(\d+)/?", [$role_controller, "updateRole"]);
+//  Deletes one role by its id
+Router::delete("/u{$api_suffix}/roles/(\d+)/?", [$role_controller, "deleteRole"]);
+
 // Retrieves all restaurant items by restaurant id
 Router::get("/{$api_suffix}/restaurants/(\d+)/items/?", [$item_controller, "getAllItemsByRestaurantId"]);
+
+Router::get("/{$api_suffix}/login/?", [$user_controller, "loginUser"]);
 
 App::run();

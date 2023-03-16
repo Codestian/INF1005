@@ -2,10 +2,10 @@
 
 use App\Lib\Schema;
 
-class CreateRestaurantsTable {
+class Test0CreateRestaurantsTable {
 
     public function up() : string {
-        $builder = new Schema("restaurants");
+        $builder = new Schema("restaurant");
         $builder->addColumn("id", "INT", true, true);
         $builder->addColumn("name", "VARCHAR(64)", true);
         $builder->addColumn("description", "TEXT(512)", true);
