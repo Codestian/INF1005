@@ -25,6 +25,8 @@ Router::get("/booking", function () {
     (new Booking())->indexAction();
 });
 
+Router::get("/login", fn() => include "routes/Login.php");
+
 // The below code is for backend API, frontend is above.
 $mysqli = (new Database())->getConnection();
 
