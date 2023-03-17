@@ -40,6 +40,12 @@
         padding: 0;
     }
 
+    @media (max-width: 992px) {
+        .left-login {
+            display: none;
+        }
+    }
+
     .login-hero-text {
         padding: 32px;
         position: absolute;
