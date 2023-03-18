@@ -1,6 +1,6 @@
 </main>
 <?php
-if($showFooter) {
+if(!isset($showFooter) || $showFooter) {
     include("views/template/elements/Footer.php");
 }
 ?>

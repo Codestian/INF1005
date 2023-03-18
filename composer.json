@@ -12,6 +12,9 @@
     ],
     "require": {
         "monolog/monolog": "^3.3",
-        "ext-mysqli": "*"
+        "ext-mysqli": "*",
+        "league/oauth2-client": "^2.6",
+        "league/oauth2-google": "^4.0",
+        "ext-json": "*"
     }
 }

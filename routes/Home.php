@@ -1,4 +1,4 @@
-<?php include("views/template/Top.php"); ?>
+<?php $title="Home"; include("views/template/Top.php"); ?>
 
 <!-- You generally do not need to touch Top.php and Bottom.php for the main content. -->
 <section style="height: 100vh;">

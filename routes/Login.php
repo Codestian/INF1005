@@ -1,7 +1,5 @@
-<?php $showNavbar = false; include("views/template/Top.php"); ?>
+<?php $title="Login"; $showNavbar = false; include("views/template/Top.php"); ?>
 
-
-<!-- INSERT CONTENT HERE -->
 <div class="container-fluid">
     <div class="row">
         <div class="col-lg-6 login-container left-login">
@@ -14,13 +12,21 @@
 </div>
 
 <script>
-    document.getElementById("login-form").addEventListener("submit", function(event) {
-        event.preventDefault();
+    document.querySelector("#login-form").addEventListener("submit", (e) => {
+        e.preventDefault();
         fetch("/api/v1/users")
             .then(response => response.json())
             .then(data => console.log(data))
             .catch(error => console.error(error));
     });
+
+    document.querySelector("#google-login").addEventListener("click", (e) => {
+        e.preventDefault();
+        fetch("/api/v1/auth/google/login")
+            .then(response => response.json())
+            .then(data => window.location.href = data.url)
+            .catch(error => console.error(error));
+    })
 </script>
 
 <style>
@@ -101,4 +107,5 @@
     }
 
 </style>
+
 <?php $showFooter = false; include("views/template/Bottom.php"); ?>

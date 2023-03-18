@@ -1,4 +1,4 @@
-<?php include("views/template/Top.php"); ?>
+<?php $title="Booking"; include("views/template/Top.php"); ?>
 
 
 <!-- INSERT CONTENT HERE -->

@@ -1,11 +1,11 @@
 <!-- Page template -->
 <!DOCTYPE html>
 <html lang="en">
-<?php $title = '1914';
+<?php
 include("views/template/elements/Head.php"); ?>
 <body>
 <?php
-if($showNavbar) {
+if(!isset($showNavbar) || $showNavbar) {
     include("views/template/elements/Navbar.php");
 }
 ?>

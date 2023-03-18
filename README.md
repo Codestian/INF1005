@@ -1,6 +1,6 @@
 # INF1005 Project
 
-This LAMP stack project is built with the MVC model.
+This LAMP stack project is built with the MVC model, with the latest PHP 8 features.
 A framework is created from scratch, named Kimavel and is heavily inspired by Laravel.
 Includes the following concepts:
 - Models

@@ -1,7 +1,5 @@
 <?php namespace App\Controller\Api;
 
-namespace App\Controller\api;
-
 use App\Lib\Request;
 use App\Lib\Response;
 use App\Model\Items;

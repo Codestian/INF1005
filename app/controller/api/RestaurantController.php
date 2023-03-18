@@ -1,12 +1,11 @@
 <?php namespace App\Controller\Api;
 
-namespace App\Controller\api;
-
 use App\Lib\Schema;
 use App\Lib\Request;
 use App\Lib\Response;
 use App\Model\Restaurants;
 use mysqli;
+use stdClass;
 
 class RestaurantController
 {
@@ -19,13 +18,21 @@ class RestaurantController
     public function getAllRestaurants(Request $req, Response $res): void
     {
         $data = $this->restaurants->read(['id', 'name', 'description', 'address'], $this->table, ['1 = 1']);
-        $res->toJSON($data);
+
+        $obj = new stdClass();
+        $obj->status = 200;
+        $obj->message = $data;
+
+        $res->toJSON($obj);
     }
     public function getOneRestaurantById(Request $req, Response $res): void
     {
         $data = $this->restaurants->read(['id', 'name', 'description', 'address'], $this->table, ['id = ' . $req->params[0]]);
-        $res->toJSON($data);
-    }
+        $obj = new stdClass();
+        $obj->status = 200;
+        $obj->message = $data;
+
+        $res->toJSON($obj);    }
     public function createRestaurant(Request $req, Response $res): void
     {
         $columns = ['name', 'description', 'address'];

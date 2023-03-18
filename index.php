@@ -5,6 +5,9 @@ use App\Controller\About;
 use App\Controller\api\ItemController;
 use App\Controller\Api\RoleController;
 use App\Controller\Api\UserController;
+
+use App\Controller\Api\Providers\GoogleAuthController;
+
 use App\Controller\Booking;
 use App\Controller\Home;
 use App\Controller\Api\RestaurantController;
@@ -38,6 +41,8 @@ $restaurant_controller = new RestaurantController($mysqli);
 $item_controller = new ItemController($mysqli);
 $user_controller = new UserController($mysqli);
 $role_controller = new RoleController($mysqli);
+
+$google_auth_controller = new GoogleAuthController($mysqli);
 
 Router::get("/{$api_suffix}/?", function (Request $req, Response $res) {
 
@@ -95,6 +100,10 @@ Router::delete("/u{$api_suffix}/roles/(\d+)/?", [$role_controller, "deleteRole"]
 // Retrieves all restaurant items by restaurant id
 Router::get("/{$api_suffix}/restaurants/(\d+)/items/?", [$item_controller, "getAllItemsByRestaurantId"]);
 
-Router::get("/{$api_suffix}/login/?", [$user_controller, "loginUser"]);
+Router::get("/{$api_suffix}/auth/login/?", [$user_controller, "loginUser"]);
+
+// Google Oauth login
+Router::get("/{$api_suffix}/auth/google/login/?", [$google_auth_controller, "getAuthUrl"]);
+Router::get("/{$api_suffix}/auth/google/redirect(/?\?.*)", [$google_auth_controller, "login"]);
 
 App::run();
