@@ -11,6 +11,8 @@ use App\Controller\Api\RestaurantController;
 use App\Lib\App;
 use App\Lib\Config;
 use App\Lib\Database;
+use App\Lib\Request;
+use App\Lib\Response;
 use App\Lib\Router;
 
 Router::get("/", function () {
@@ -36,6 +38,15 @@ $restaurant_controller = new RestaurantController($mysqli);
 $item_controller = new ItemController($mysqli);
 $user_controller = new UserController($mysqli);
 $role_controller = new RoleController($mysqli);
+
+Router::get("/{$api_suffix}/?", function (Request $req, Response $res) {
+
+    $obj = new stdClass();
+    $obj->status = 200;
+    $obj->message = "Welcome to Choppy's API";
+
+    $res->toJSON($obj);
+});
 
 //  Retrieves all restaurants
 Router::get("/{$api_suffix}/restaurants/?", [$restaurant_controller, "getAllRestaurants"]);
