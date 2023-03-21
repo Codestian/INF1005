@@ -31,6 +31,7 @@ Router::get("/booking", function () {
 });
 
 Router::get("/login", fn() => include "routes/Login.php");
+Router::get("/auth/redirect/google/?(/?\?.*)", fn() => include "routes/auth/RedirectGoogle.php");
 
 // The below code is for backend API, frontend is above.
 $mysqli = (new Database())->getConnection();
@@ -103,7 +104,11 @@ Router::get("/{$api_suffix}/restaurants/(\d+)/items/?", [$item_controller, "getA
 Router::get("/{$api_suffix}/auth/login/?", [$user_controller, "loginUser"]);
 
 // Google Oauth login
-Router::get("/{$api_suffix}/auth/google/login/?", [$google_auth_controller, "getAuthUrl"]);
-Router::get("/{$api_suffix}/auth/google/redirect(/?\?.*)", [$google_auth_controller, "login"]);
+Router::get("/{$api_suffix}/auth/google/url/?", [$google_auth_controller, "getAuthUrl"]);
+Router::get("/{$api_suffix}/auth/google/login/?(\?code=.+)?", [$google_auth_controller, "login"]);
+
+//Router::get(".*", function() {
+//    include("routes/404.php");
+//});
 
 App::run();

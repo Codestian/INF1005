@@ -2,11 +2,11 @@
 
 use App\Lib\Schema;
 
-class MigrationTemplate {
+class CreateReservationsTable {
 
     // Modify the table variable to target table.
     public mysqli $mysqli;
-    private string $table = "";
+    private string $table = "reservation";
     public function __construct(mysqli $mysqli)
     {
         $this->mysqli = $mysqli;
@@ -17,8 +17,14 @@ class MigrationTemplate {
         $builder = new Schema($this->table);
 
         $builder->addColumn("id", "INT", true, true);
-        // CREATE COLUMNS AND CONSTRAINTS HERE
         $builder->setPrimaryKey("id");
+        $builder->addColumn("datetime", "DATETIME", true, false);
+        $builder->addColumn("pax", "INT", true);
+        $builder->addColumn("user_id", "INT", true);
+        $builder->addColumn("restaurant_id", "INT", true);
+
+        $builder->setForeignKey("user_id", "user", "id");
+        $builder->setForeignKey("restaurant_id", "restaurant", "id");
 
         $this->mysqli->query($builder->buildCreate());
     }

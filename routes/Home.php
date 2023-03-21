@@ -6,6 +6,8 @@
     <span>This is an example page. The navbar and footer has been abstracted to Top.php and Bottom.php. </span>
 </section>
 
+<br />
+
 <?php include("views/template/Bottom.php"); ?>
 
 

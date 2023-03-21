@@ -15,6 +15,7 @@
         "ext-mysqli": "*",
         "league/oauth2-client": "^2.6",
         "league/oauth2-google": "^4.0",
-        "ext-json": "*"
+        "ext-json": "*",
+        "firebase/php-jwt": "^6.4"
     }
 }
