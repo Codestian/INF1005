@@ -17,12 +17,13 @@ class RestaurantController
     }
     public function getAllRestaurants(Request $req, Response $res): void
     {
-        $data = $this->restaurants->read(['id', 'name', 'description', 'address'], $this->table, ['1 = 1']);
+        $data = $this->restaurants->read(['id', 'name', 'description', 'address', 'cuisine_id'], $this->table, ['1 = 1']);
 
         $obj = new stdClass();
         $obj->status = 200;
         $obj->message = $data;
 
+        $this->restaurants->close();
         $res->toJSON($obj);
     }
     public function getOneRestaurantById(Request $req, Response $res): void
@@ -32,16 +33,19 @@ class RestaurantController
         $obj->status = 200;
         $obj->message = $data;
 
-        $res->toJSON($obj);    }
+        $this->restaurants->close();
+        $res->toJSON($obj);
+    }
     public function createRestaurant(Request $req, Response $res): void
     {
-        $columns = ['name', 'description', 'address'];
+        $columns = ['name', 'description', 'address', 'cuisine_id'];
         $data = $this->restaurants->create($this->table, $columns, $req->getJSON($columns));
+        $this->restaurants->close();
         $res->toJSON($data);
     }
     public function updateRestaurant(Request $req, Response $res): void
     {
-        $columns = ['name', 'description', 'address'];
+        $columns = ['name', 'description', 'address', 'cuisine_id'];
         $value = $req->getJSON($columns);
 
         $merged = array_map(function ($key, $val) {
@@ -49,11 +53,13 @@ class RestaurantController
         }, $columns, $value);
 
         $data = $this->restaurants->update($this->table, $merged, ['id = ' . $req->params[0]]);
+        $this->restaurants->close();
         $res->toJSON($data);
     }
     public function deleteRestaurant(Request $req, Response $res): void
     {
         $data = $this->restaurants->delete($this->table, ['id = ' . $req->params[0]]);
+        $this->restaurants->close();
         $res->toJSON($data);
     }
 }

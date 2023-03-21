@@ -1,5 +1,7 @@
 <?php namespace App\Lib;
 
+require_once 'app/lib/interfaces/CrudInterface.php';
+
 use App\Lib\Interfaces\CrudInterface;
 use mysqli;
 
@@ -50,7 +52,6 @@ abstract class Model implements CrudInterface {
             $data[] = $e->getMessage();
         }
 
-        $this->mysqli->close();
         return $data;
     }
     public function update(string $update, array $set, array $where) : array {
@@ -88,4 +89,8 @@ abstract class Model implements CrudInterface {
 
         return $data;
     }
+    public function close() {
+        $this->mysqli->close();
+    }
+
 }

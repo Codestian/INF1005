@@ -55,6 +55,10 @@ This prevents the end user from accessing critical server directories such as `a
 
 Replace `Listen 8080` with `Listen 80`.
 
+To clear a database schema and its tables, run `php hakimator.php clear $schema`.
+To create the database tables, run `php hakimator.php migrate`.
+To insert prebuilt data to the database, run `php hakimator.php seed`.
+
 ### Project folder
 Git clone this repository to your apache /var/www folder. 
 

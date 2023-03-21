@@ -2,10 +2,10 @@
 
 <div class="container-fluid">
     <div class="row">
-        <div class="col-lg-6 login-container left-login">
+        <div class="col-lg-6 min-vh-100 login-container left-login">
             <?php include("views/login/Background.php"); ?>
         </div>
-        <div class="col-lg-6 login-container right-login">
+        <div class="col-lg-6 min-vh-100 login-container right-login">
             <?php include("views/login/Form.php"); ?>
         </div>
     </div>
@@ -22,7 +22,7 @@
 
     document.querySelector("#google-login").addEventListener("click", (e) => {
         e.preventDefault();
-        fetch("/api/v1/auth/google/login")
+        fetch("/api/v1/auth/google/url")
             .then(response => response.json())
             .then(data => window.location.href = data.url)
             .catch(error => console.error(error));
@@ -35,7 +35,6 @@
     }
 
     .login-container {
-        height: 100vh;
         display: flex;
         justify-content: center;
         align-items: center;
