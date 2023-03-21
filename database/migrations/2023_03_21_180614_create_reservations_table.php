@@ -18,9 +18,13 @@ class CreateReservationsTable {
 
         $builder->addColumn("id", "INT", true, true);
         $builder->setPrimaryKey("id");
-        $builder->addColumn("datetime", "DATETIME", true, false, true);
+        $builder->addColumn("datetime", "DATETIME", true, false);
         $builder->addColumn("pax", "INT", true);
-        $builder->addColumn("pax", "INT", true);
+        $builder->addColumn("user_id", "INT", true);
+        $builder->addColumn("restaurant_id", "INT", true);
+
+        $builder->setForeignKey("user_id", "user", "id");
+        $builder->setForeignKey("restaurant_id", "restaurant", "id");
 
         $this->mysqli->query($builder->buildCreate());
     }
