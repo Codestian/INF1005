@@ -21,20 +21,20 @@ class UserController
     }
     public function getOneUserById(Request $req, Response $res): void
     {
-        $data = $this->users->read(['id', 'username', 'email', 'password', 'role_id'], $this->table, ['id = ' . $req->params[0]]);
+        $data = $this->users->read(['id', 'username', 'email', 'password', 'role_id', 'provider_id'], $this->table, ['id = ' . $req->params[0]]);
         $this->users->close();
         $res->toJSON($data);
     }
     public function createUser(Request $req, Response $res): void
     {
-        $columns = ['username', 'email', 'password', 'role_id', 'provider'];
+        $columns = ['username', 'email', 'password', 'role_id', 'provider_id'];
         $data = $this->users->create($this->table, $columns, $req->getJSON($columns));
         $this->users->close();
         $res->toJSON($data);
     }
     public function updateUser(Request $req, Response $res): void
     {
-        $columns = ['username', 'email', 'password', 'role_id'];;
+        $columns = ['username', 'email', 'password', 'role_id', 'provider_id'];
         $value = $req->getJSON($columns);
 
         $merged = array_map(function ($key, $val) {
@@ -52,8 +52,18 @@ class UserController
         $res->toJSON($data);
     }
 
-    public function loginUser(Request  $req, Response $res) {
-//        $data = $this->users->read(['id', 'username', 'email', 'password', 'role_id'], $this->table, ['id = ' . $req->params[0]]);
+    public function loginUser(Request  $req, Response $res): void {
+        $columns = ['email', 'password'];
+        $value = $req->getJSON($columns);
+
+        $res->toJSON($value);
+
+//        if($value["email"] == $data["email"]) {
+//            $res->toJSON($data);
+//        }
+//        else {
+//            echo "no";
+//        }
 
     }
 }

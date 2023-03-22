@@ -38,7 +38,6 @@ class GoogleAuthController {
     public function login(Request $req, Response $res) : void {
 
         $obj = new stdClass();
-        $obj->status = 200;
 
         $queryParams = $req->getQueryParams('code');
 
@@ -50,52 +49,44 @@ class GoogleAuthController {
                 $ownerDetails = $this->provider->getResourceOwner($token);
                 $email = $ownerDetails->getEmail();
 
-                $data = $this->users->read(['username', 'email', 'role_id'], $this->table, ['email = ' . "'" . $email . "'"]);
-
-                $obj1 = new stdClass();
-
-                $obj->message = $obj1;
-
-                $obj2 = new stdClass();
+                $data = $this->users->read(['username', 'email', 'role_id', 'provider_id'], $this->table, ['email = ' . "'" . $email . "'"]);
 
                 if(isset($data[0]->username)) {
                     //  User exists in database, provide JWT token.
-                    $obj2->email = $data[0]->email;
-                    $obj2->role = $data[0]->role_id;
+                    $obj->email = $data[0]->email;
+                    $obj->role = $data[0]->role_id;
 
-                    $obj1->isRegistered = true;
-                    $obj1->username = $data[0]->username;
+                    $obj->isRegistered = true;
+                    $obj->username = $data[0]->username;
                 }
                 else {
                     //  User is new, let client allow user to set username after creating user.
-                    $columns = ['username', 'email', 'role_id', 'provider'];
+                    $columns = ['username', 'email', 'role_id', 'provider_id'];
                     // Generate random username, which can be modified afterwards.
                     $username = $this->generateUsername();
-                    // Create new user row with email rerieved from oauth provider.
-                    $this->users->create($this->table, $columns, [$username, $ownerDetails->getEmail(), 2, 'google']);
+                    // Create new user row with email retrieved from oauth provider.
+                    $this->users->create($this->table, $columns, [$username, $ownerDetails->getEmail(), 2, 2]);
 
-                    $obj2->email = $ownerDetails->getEmail();
-                    $obj2->role = 2;
+                    $obj->email = $ownerDetails->getEmail();
+                    $obj->role = 2;
 
-                    $obj1->isRegistered = false;
-                    $obj1->username = $username;
+                    $obj->isRegistered = false;
+                    $obj->username = $username;
                 }
 
                 $this->users->close();
 
-                $jwt = JWT::encode([$obj2], "secret", 'HS256');
+                $jwt = JWT::encode([$obj], "secret", 'HS256');
                 setcookie( "token", $jwt, path:"/" ,httponly:true);
 
                 $res->toJSON($obj);
             }
             catch (IdentityProviderException $e) {
-                $obj->message = "Error getting access token: " . $e->getMessage();
-                $res->toJSON($obj);
+                $res->toJSON("Error getting access token: " . $e->getMessage(), 400);
             }
         }
         else {
-            $obj->message = "please relogin again.";
-            $res->toJSON($obj);
+            $res->toJSON("please login again", 400);
         }
 
 //        $test = Token::generateToken("test","secret");

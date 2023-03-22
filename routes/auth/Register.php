@@ -1,33 +1,15 @@
-<?php $title="Login"; $showNavbar = false; include("views/template/Top.php"); ?>
+<?php $title="Register"; $showNavbar = false; $mainPaddingTop = "0"; include("views/template/Top.php"); ?>
 
 <div class="container-fluid">
     <div class="row">
         <div class="col-lg-6 min-vh-100 login-container left-login">
-            <?php include("views/login/Background.php"); ?>
+            <?php $quote="Food is our common ground, a universal experience."; $background="https://images.unsplash.com/photo-1504674900247-0877df9cc836?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1920&q=80"; include("views/auth/Background.php"); ?>
         </div>
         <div class="col-lg-6 min-vh-100 login-container right-login">
-            <?php include("views/login/Form.php"); ?>
+            <?php include("views/auth/RegisterForm.php"); ?>
         </div>
     </div>
 </div>
-
-<script>
-    document.querySelector("#login-form").addEventListener("submit", (e) => {
-        e.preventDefault();
-        fetch("/api/v1/users")
-            .then(response => response.json())
-            .then(data => console.log(data))
-            .catch(error => console.error(error));
-    });
-
-    document.querySelector("#google-login").addEventListener("click", (e) => {
-        e.preventDefault();
-        fetch("/api/v1/auth/google/url")
-            .then(response => response.json())
-            .then(data => window.location.href = data.url)
-            .catch(error => console.error(error));
-    })
-</script>
 
 <style>
     body {
@@ -108,3 +90,4 @@
 </style>
 
 <?php $showFooter = false; include("views/template/Bottom.php"); ?>
+

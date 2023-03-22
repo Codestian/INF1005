@@ -1,6 +1,6 @@
 <?php $title="About"; include("views/template/Top.php"); ?>
 
-<section style="height: 100vh;">
+<section>
     <h1>About</h1>
     <span>We r a grp of students.</span>
 </section>

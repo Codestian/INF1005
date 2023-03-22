@@ -38,6 +38,7 @@ class Request
     public function getJSON(array $attribute_names): array {
         // Get the JSON data from the request body
         $json_data = file_get_contents('php://input');
+        $res = new Response();
 
         // Decode the JSON data
         try {
@@ -52,7 +53,8 @@ class Request
             }
             if (!empty($missing_attributes)) {
                 // Handle missing attributes error
-                exit('Missing attributes: ' . implode(', ', $missing_attributes));
+                $res->toJSON('Missing attributes: ' . implode(', ', $missing_attributes), 400);
+                exit();
             }
 
             // Validate and sanitize the POST data
@@ -61,14 +63,15 @@ class Request
                 $filtered_data[$attribute_name] = filter_var(trim($data[$attribute_name]), FILTER_SANITIZE_FULL_SPECIAL_CHARS);
                 if ($attribute_name == 'email' && !filter_var($filtered_data[$attribute_name], FILTER_VALIDATE_EMAIL)) {
                     // Handle invalid email address error
-                    exit('Invalid email address');
+                    $res->toJSON('Invalid email address', 400);
+                    exit();
                 }
             }
 
             return $filtered_data;
         } catch (\JsonException $e) {
-            $data[] = "error, no json";
-            return $data;
+            $res->toJSON('JSON is not in the correct format', 400);
+            exit();
         }
     }
 }
