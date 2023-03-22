@@ -116,7 +116,6 @@ function echoSQL() : void {
 
     $builder->addColumn("id", "INT", true, true);
     $builder->addColumn("username", "VARCHAR(45)", true, false, true);
-
     $builder->setPrimaryKey("id");
 
 //    ----------------------------------------------

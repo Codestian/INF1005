@@ -9,4 +9,4 @@ if(!isset($showNavbar) || $showNavbar) {
     include("views/template/elements/Navbar.php");
 }
 ?>
-<main>
+<main style="min-height: 100vh; padding-top:<?php echo $mainPaddingTop ?? "56"; ?>px">

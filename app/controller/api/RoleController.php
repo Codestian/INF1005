@@ -34,7 +34,7 @@ class RoleController
     }
     public function updateRole(Request $req, Response $res): void
     {
-        $columns = ['role'];;
+        $columns = ['role'];
         $value = $req->getJSON($columns);
 
         $merged = array_map(function ($key, $val) {

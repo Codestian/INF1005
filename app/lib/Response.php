@@ -2,20 +2,23 @@
 
 namespace App\Lib;
 
+use stdClass;
+
 class Response
 {
-    private $status = 200;
-
     public function status(int $code)
     {
         $this->status = $code;
         return $this;
     }
 
-    public function toJSON($data = [])
+    public function toJSON($data = [], $status = 200)
     {
-        http_response_code($this->status);
+        http_response_code($status);
         header('Content-Type: application/json');
-        echo json_encode($data);
+        $obj = new stdClass();
+        $obj->status = $status;
+        $obj->message = $data;
+        echo json_encode($obj);
     }
 }

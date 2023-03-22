@@ -5,7 +5,6 @@ class Router
     public static function get($route, $callback): void
     {
         self::validateMethod($route, $callback, "GET");
-
     }
     public static function post($route, $callback): void
     {

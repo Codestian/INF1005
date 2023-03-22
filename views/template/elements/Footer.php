@@ -1,3 +1,3 @@
-<footer class="py-5 bg-dark">
-    <span class="p-4 text-white">This is a footer</span>
+<footer class="py-5 bg-light">
+    <span class="p-4">This is a footer</span>
 </footer>

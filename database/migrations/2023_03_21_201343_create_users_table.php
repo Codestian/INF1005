@@ -23,10 +23,11 @@ class CreateUsersTable {
         $builder->addColumn("email", "VARCHAR(45)", true, false, true);
         $builder->addColumn("password", "VARCHAR(255)");
         $builder->addColumn("role_id", "INT", true);
-        $builder->addColumn("provider", "VARCHAR(45)", true);
+        $builder->addColumn("provider_id", "INT", true);
 
         $builder->setPrimaryKey("id");
         $builder->setForeignKey("role_id", "role", "id");
+        $builder->setForeignKey("provider_id", "provider", "id");
 
         $this->mysqli->query($builder->buildCreate());
     }
@@ -34,8 +35,8 @@ class CreateUsersTable {
     //  If you need to insert data right after migration, do it here.
     public function seed() : void {
         $users = new Users($this->mysqli);
-        $keys = ['username', 'email', 'password', 'role_id', 'provider'];
-        $values = ['Administrator Alan', 'admin@gmail.com', 'Password12!', '1', 'normal'];
+        $keys = ['username', 'email', 'password', 'role_id', 'provider_id'];
+        $values = ['Administrator Alan', 'admin@gmail.com', 'Password12!', 1, 1];
         $users->create($this->table, $keys, $values);
     }
 

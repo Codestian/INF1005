@@ -18,23 +18,14 @@ class RestaurantController
     public function getAllRestaurants(Request $req, Response $res): void
     {
         $data = $this->restaurants->read(['id', 'name', 'description', 'address', 'cuisine_id'], $this->table, ['1 = 1']);
-
-        $obj = new stdClass();
-        $obj->status = 200;
-        $obj->message = $data;
-
         $this->restaurants->close();
-        $res->toJSON($obj);
+        $res->toJSON($data);
     }
     public function getOneRestaurantById(Request $req, Response $res): void
     {
         $data = $this->restaurants->read(['id', 'name', 'description', 'address'], $this->table, ['id = ' . $req->params[0]]);
-        $obj = new stdClass();
-        $obj->status = 200;
-        $obj->message = $data;
-
         $this->restaurants->close();
-        $res->toJSON($obj);
+        $res->toJSON($data);
     }
     public function createRestaurant(Request $req, Response $res): void
     {
