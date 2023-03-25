@@ -10,6 +10,7 @@
 // To insert prebuilt data to all tables, run `php hakimator.php seed`.
 
 use App\Lib\Database;
+use App\Lib\QueryBuilder;
 use App\Lib\Schema;
 
 //  For PHP scripts, we need to require the necessary php files.
@@ -111,15 +112,22 @@ function create_migration($input_name) : void {
 // Useful for debugging and knowing what's to be executed in MySQL>
 function echoSQL() : void {
     // Edit your SQL statement between the lines.
-    $builder = new Schema("exampleTable");
-//    ----------------------------------------------
+    $id = 'DROP TABLE;';
+    $query = (new QueryBuilder())
+        ->select('id')
+        ->from('restaurant')
+        ->where('email = ' . '"' . $id . '"');
 
-    $builder->addColumn("id", "INT", true, true);
-    $builder->addColumn("username", "VARCHAR(45)", true, false, true);
-    $builder->setPrimaryKey("id");
-
-//    ----------------------------------------------
-    echo $builder->buildCreate() . "\n";
+    echo $query . "\n";
+//    $builder = new Schema("exampleTable");
+////    ----------------------------------------------
+//
+//    $builder->addColumn("id", "INT", true, true);
+//    $builder->addColumn("username", "VARCHAR(45)", true, false, true);
+//    $builder->setPrimaryKey("id");
+//
+////    ----------------------------------------------
+//    echo $builder->buildCreate() . "\n";
 }
 
 // Execute the appropriate function based on command-line arguments

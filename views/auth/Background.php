@@ -1,5 +1,5 @@
 <div class="login-hero-text">
-    <h2 class="display-5 fw-bold text-white">
+    <h2 class="display-5 fw-bold text-white fade-left">
         <?php echo $quote ?? ""; ?>
     </h2>
 </div>

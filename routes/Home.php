@@ -9,6 +9,14 @@
 
 </section>
 
+<script>
+
+    // fetch('/api/v1/auth/verify')
+    //     .then(response => response.json())
+    //     .then(data => console.log(data));
+
+</script>
+
 
 
 <?php include("views/template/Bottom.php"); ?>

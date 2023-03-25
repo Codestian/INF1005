@@ -1,7 +1,12 @@
-<?php $title="Login"; $showNavbar = false; include("views/template/Top.php"); ?>
+<?php $title="Login"; $showNavbar = false; $mainPaddingTop = "0"; include("views/template/Top.php"); ?>
 
 <div class="container-fluid redirect-container min-vh-100">
-    <h1 class="h3 fw-bold text-center" id="login-text">Logging in...</h1>
+    <div class="d-flex justify-content-center">
+        <div class="spinner-border me-3" role="status">
+            <span class="visually-hidden">Loading...</span>
+        </div>
+        <h1 class="h3 fw-bold text-center">Logging in...</h1>
+    </div>
     <form class="text-center" id="register-form">
         <!--                <img class="mb-4" src="/docs/5.2/assets/brand/bootstrap-logo.svg" alt="" width="72" height="57">-->
         <h1 class="h3 mb-2 fw-bold text-start">Welcome!</h1>
@@ -47,7 +52,7 @@
 
 <script>
 
-    const loginText = document.querySelector('#login-text');
+    const loadingContainer = document.querySelector('#loading-container');
     const registerForm = document.querySelector('#register-form');
     const registerUsername = document.querySelector('#register-username');
     const registerButton = document.querySelector('#register-button');
@@ -60,26 +65,27 @@
     const paramValue = urlParams.get('code');
 
     if(paramValue) {
+        //  Calls API to verify the redirect params Google passed in to url.
         fetch("/api/v1/auth/google/login?code=" + paramValue)
             .then(response => response.json())
             .then(data => {
-                if(!data.message.isRegistered) {
-                    registerUsername.value = data.message.username;
+                if(!data.data.isRegistered) {
+                    registerUsername.value = data.data.username;
                     registerForm.style.display = 'block';
-                    loginText.style.display = 'none';
+                    loadingContainer.style.display = 'none';
                 }
                 else {
                     window.location.href = "/";
                 }
             })
             .catch(error => console.error(error));
-    }
 
-    registerButton.addEventListener('click', (e) => {
-        e.preventDefault();
-        window.location.href = "/";
-        console.log('continue to website');
-    })
+        registerButton.addEventListener('click', (e) => {
+            e.preventDefault();
+            window.location.href = "/";
+            console.log('continue to website');
+        });
+    }
 </script>
 
 <?php $showFooter = false; include("views/template/Bottom.php"); ?>

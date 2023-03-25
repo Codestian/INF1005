@@ -2,10 +2,11 @@
 
 use Exception;
 use Firebase\JWT\JWT;
+use Firebase\JWT\Key;
 
 class Token {
 
-    private static $secretKey = "my secret";
+    private static $secretKey = "secret";
 
     public static function generateToken($data): string
     {
@@ -20,24 +21,10 @@ class Token {
 
     public static function decodeToken($jwt) {
         try {
-            $decoded = JWT::decode($jwt, self::$secretKey);
-
+            $decoded = JWT::decode($jwt, new Key(self::$secretKey, 'HS256'));
             return $decoded->data;
         } catch (Exception $e) {
-            return null; // Invalid token
+            return null;
         }
     }
-
-
 }
-
-//                    $jwt1 = JWT::encode(["test@gmail.com"], "fmoeofeofe", 'HS256');
-
-//                    $decoded = "";
-//
-//                    try {
-//                        $decoded = JWT::decode($jwt1, new Key("secret", 'HS256'));
-//                    }
-//                    catch (SignatureInvalidException $e) {
-//                        $decoded = $e->getMessage();
-//                    }

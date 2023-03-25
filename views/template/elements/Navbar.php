@@ -26,14 +26,15 @@
                 </li>
             </ul>
             <div class="d-flex align-items-center justify-content-center">
-                <div class="flex-shrink-0 dropdown" id="nav-dropdown">
+                <div class="flex-shrink-0 dropdown flex-row d-flex align-items-center" id="nav-dropdown">
+                    <span class="me-3 text-end" id="nav-username"></span>
                     <a href="#" class="d-block link-dark text-decoration-none dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="true">
                         <img src="https://github.com/mdo.png" alt="mdo" width="32" height="32" class="rounded-circle">
                     </a>
                     <ul class="dropdown-menu text-small shadow" style="position: absolute; inset: 0px 0px auto auto; margin: 0px; transform: translate(0px, 34px);" data-popper-placement="bottom-end">
-                        <li><a class="dropdown-item" href="#">Profile</a></li>
+                        <li><a class="dropdown-item" href="/profile">Profile</a></li>
                         <li><hr class="dropdown-divider"></li>
-                        <li><a class="dropdown-item" href="#">Logout</a></li>
+                        <li><a class="dropdown-item" id="logout-btn" href="#">Logout</a></li>
                     </ul>
                 </div>
                 <div id="nav-auth">
