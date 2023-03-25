@@ -2,6 +2,8 @@
 
 class Router
 {
+    private static $beforeMiddleware = [];
+
     public static function get($route, $callback): void
     {
         self::validateMethod($route, $callback, "GET");
@@ -19,6 +21,10 @@ class Router
     public static function delete($route, $callback): void
     {
         self::validateMethod($route, $callback, "DELETE");
+    }
+    public static function before($callback): void
+    {
+        self::$beforeMiddleware[] = $callback;
     }
     private static function validateMethod($route, $callback, $method): void
     {

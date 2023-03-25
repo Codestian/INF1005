@@ -3,3 +3,35 @@
     font-size: 0.8rem;
     letter-spacing: 2px;
 }
+
+@keyframes FadeLeft {
+    0% {
+        opacity: 0;
+        transform: translateX(5px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes FadeUp {
+    0% {
+        opacity: 0;
+        transform: translateY(5px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.fade-left {
+    animation-name: FadeLeft;
+    animation-duration: 1s;
+}
+
+.fade-up {
+    animation-name: FadeUp;
+    animation-duration: 0.5s;
+}

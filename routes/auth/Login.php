@@ -12,37 +12,62 @@
 </div>
 
 <script>
+    const loginAlert = document.querySelector('#login-alert');
+
+    const loginEmail = document.querySelector('#login-email');
+    const loginPassword = document.querySelector('#login-password');
+
+    loginAlert.style.display = 'none';
+
     document.querySelector("#login-form").addEventListener("submit", (e) => {
         e.preventDefault();
+
+        const sanitizedEmail = loginEmail.value.trim();
+        const sanitizedPassword = loginPassword.value.trim();
+
         fetch("/api/v1/auth/login", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
             },
             body: JSON.stringify({
-                "email": "mh.silvine@gmail.com",
-                "password": "testpass"
+                "email": sanitizedEmail,
+                "password": sanitizedPassword
             }),
         })
             .then(response => response.json())
-            .then(data => console.log(data))
-            .catch(error => console.error(error));
+            .then(data => {
+                if(data.status !== 200) {
+                    loginAlert.style.display = 'block';
+                    loginAlert.textContent = data.data.message;
+                }
+                else {
+                    alert("You are logged in. Welcome!");
+                    window.location.href = "/";
+                }
+            })
+            .catch(error => {
+                console.error(error);
+                loginAlert.style.display = 'block';
+                loginAlert.textContent = "Please try again";
+            });
     });
 
     document.querySelector("#google-login").addEventListener("click", (e) => {
         e.preventDefault();
         fetch("/api/v1/auth/google/url")
             .then(response => response.json())
-            .then(data => window.location.href = data.message.url)
+            .then(data => window.location.href = data.data.url)
             .catch(error => console.error(error));
+    })
+
+    document.querySelector("#apple-login").addEventListener("click", (e) => {
+        e.preventDefault();
+        alert('Apple Sign In not implemented. Requires $$$.');
     })
 </script>
 
 <style>
-    body {
-        padding-top: 0;
-    }
-
     .login-container {
         display: flex;
         justify-content: center;
@@ -110,10 +135,9 @@
         position: absolute;
         top: 0;
         left: 0;
-        z-index: 0;
+        z-index: -1;
         opacity: 0.05;
     }
-
 </style>
 
 <?php $showFooter = false; include("views/template/Bottom.php"); ?>

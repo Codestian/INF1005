@@ -18,7 +18,7 @@ class Response
         header('Content-Type: application/json');
         $obj = new stdClass();
         $obj->status = $status;
-        $obj->message = $data;
+        $obj->data = $data;
         echo json_encode($obj);
     }
 }

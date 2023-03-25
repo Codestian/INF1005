@@ -14,6 +14,7 @@ use App\Lib\Database;
 use App\Lib\Request;
 use App\Lib\Response;
 use App\Lib\Router;
+use App\Lib\Token;
 
 Router::get("/", fn() => include("routes/Home.php"));
 
@@ -46,12 +47,9 @@ $role_controller = new RoleController($mysqli);
 $google_auth_controller = new GoogleAuthController($mysqli);
 
 Router::get("/{$api_suffix}/?", function (Request $req, Response $res) {
-
-    $obj = new stdClass();
-    $obj->status = 200;
-    $obj->message = "Welcome to Choppy's API";
-
-    $res->toJSON($obj);
+    $data = new StdClass();
+    $data->message = "Welcome to Choppy's API";
+    $res->toJSON($data);
 });
 
 //  Retrieves all restaurants
@@ -85,7 +83,7 @@ Router::post("/{$api_suffix}/users/?", [$user_controller, "createUser"]);
 //  Updates one user by its id
 Router::put("/{$api_suffix}/users/(\d+)/?", [$user_controller, "updateUser"]);
 //  Deletes one user by its id
-Router::delete("/u{$api_suffix}/sers/(\d+)/?", [$user_controller, "deleteUser"]);
+Router::delete("/{$api_suffix}/users/(\d+)/?", [$user_controller, "deleteUser"]);
 
 //  Retrieves all roles
 Router::get("/{$api_suffix}/roles/?", [$role_controller, "getAllRoles"]);
@@ -101,7 +99,12 @@ Router::delete("/u{$api_suffix}/roles/(\d+)/?", [$role_controller, "deleteRole"]
 // Retrieves all restaurant items by restaurant id
 Router::get("/{$api_suffix}/restaurants/(\d+)/items/?", [$item_controller, "getAllItemsByRestaurantId"]);
 
+// Authentication
 Router::post("/{$api_suffix}/auth/login/?", [$user_controller, "loginUser"]);
+Router::post("/{$api_suffix}/auth/register/?", [$user_controller, "registerUser"]);
+Router::get("/{$api_suffix}/auth/logout/?", [$user_controller, "logoutUser"]);
+
+Router::get("/{$api_suffix}/auth/verify/?", [$user_controller, "verifyUser"]);
 
 // Google Oauth login
 Router::get("/{$api_suffix}/auth/google/url/?", [$google_auth_controller, "getAuthUrl"]);

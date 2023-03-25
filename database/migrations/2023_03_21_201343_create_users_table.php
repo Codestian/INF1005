@@ -36,7 +36,7 @@ class CreateUsersTable {
     public function seed() : void {
         $users = new Users($this->mysqli);
         $keys = ['username', 'email', 'password', 'role_id', 'provider_id'];
-        $values = ['Administrator Alan', 'admin@gmail.com', 'Password12!', 1, 1];
+        $values = ['Administrator Hid', 'admin@gmail.com', 'Password12!', 1, 1];
         $users->create($this->table, $keys, $values);
     }
 

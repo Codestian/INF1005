@@ -27,7 +27,7 @@ abstract class Model implements CrudInterface {
         try {
             $this->mysqli->query($query);
             $id = $this->mysqli->insert_id;
-            $data[] = $id;
+            $data[] = "user created successfully";
         } catch (\mysqli_sql_exception $e) {
             $data[] = $e->getMessage();
         }
