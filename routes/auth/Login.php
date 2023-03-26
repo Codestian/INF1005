@@ -3,69 +3,16 @@
 <div class="container-fluid">
     <div class="row">
         <div class="col-lg-6 min-vh-100 login-container left-login">
-            <?php $quote="Food is symbolic of love when words are inadequate."; $background="https://images.unsplash.com/photo-1600891964599-f61ba0e24092?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1920&q=80"; include("views/auth/Background.php"); ?>
+            <?php $quote="Food is symbolic of love when words are inadequate."; $background="../../../public/images/auth/loginBackground.png"; include("views/auth/Background.php"); ?>
         </div>
         <div class="col-lg-6 min-vh-100 login-container right-login">
             <?php include("views/auth/LoginForm.php"); ?>
+            <img src="../../../public/images/auth/formBackground.png" alt="Form background">
         </div>
     </div>
 </div>
 
-<script>
-    const loginAlert = document.querySelector('#login-alert');
-
-    const loginEmail = document.querySelector('#login-email');
-    const loginPassword = document.querySelector('#login-password');
-
-    loginAlert.style.display = 'none';
-
-    document.querySelector("#login-form").addEventListener("submit", (e) => {
-        e.preventDefault();
-
-        const sanitizedEmail = loginEmail.value.trim();
-        const sanitizedPassword = loginPassword.value.trim();
-
-        fetch("/api/v1/auth/login", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-                "email": sanitizedEmail,
-                "password": sanitizedPassword
-            }),
-        })
-            .then(response => response.json())
-            .then(data => {
-                if(data.status !== 200) {
-                    loginAlert.style.display = 'block';
-                    loginAlert.textContent = data.data.message;
-                }
-                else {
-                    alert("You are logged in. Welcome!");
-                    window.location.href = "/";
-                }
-            })
-            .catch(error => {
-                console.error(error);
-                loginAlert.style.display = 'block';
-                loginAlert.textContent = "Please try again";
-            });
-    });
-
-    document.querySelector("#google-login").addEventListener("click", (e) => {
-        e.preventDefault();
-        fetch("/api/v1/auth/google/url")
-            .then(response => response.json())
-            .then(data => window.location.href = data.data.url)
-            .catch(error => console.error(error));
-    })
-
-    document.querySelector("#apple-login").addEventListener("click", (e) => {
-        e.preventDefault();
-        alert('Apple Sign In not implemented. Requires $$$.');
-    })
-</script>
+<script type="text/javascript" src="../../public/css/auth/login.js"></script>
 
 <style>
     .login-container {

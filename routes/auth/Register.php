@@ -3,67 +3,16 @@
 <div class="container-fluid">
     <div class="row">
         <div class="col-lg-6 min-vh-100 login-container left-login">
-            <?php $quote="Food is our common ground, a universal experience."; $background="https://images.unsplash.com/photo-1504674900247-0877df9cc836?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1920&q=80"; include("views/auth/Background.php"); ?>
+            <?php $quote="Food is our common ground, a universal experience."; $background="../../../public/images/auth/registerBackground.png"; include("views/auth/Background.php"); ?>
         </div>
         <div class="col-lg-6 min-vh-100 login-container right-login">
             <?php include("views/auth/RegisterForm.php"); ?>
+            <img src="../../../public/images/auth/formBackground.png" alt="Form background">
         </div>
     </div>
 </div>
 
-<script>
-    const registerAlert = document.querySelector('#register-alert');
-
-    const registerEmail = document.querySelector('#register-email');
-    const registerUsername = document.querySelector('#register-username');
-    const registerPassword = document.querySelector('#register-password');
-    const registerPasswordConfirm = document.querySelector('#register-password-confirm');
-
-    registerAlert.style.display = 'none';
-
-    document.querySelector("#register-form").addEventListener("submit", (e) => {
-        e.preventDefault();
-        // Sanitize and trim the input values
-        const sanitizedEmail = registerEmail.value.trim();
-        const sanitizedUsername = registerUsername.value.trim();
-        const sanitizedPassword = registerPassword.value.trim();
-        const sanitizedPasswordConfirm = registerPasswordConfirm.value.trim();
-
-        if(sanitizedPassword === sanitizedPasswordConfirm) {
-            fetch("/api/v1/auth/register", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify({
-                    "email": sanitizedEmail,
-                    "username": sanitizedUsername,
-                    "password": sanitizedPassword
-                }),
-            })
-                .then(response => response.json())
-                .then(data => {
-                    if(data.status !== 200) {
-                        registerAlert.style.display = 'block';
-                        registerAlert.textContent = data.data.message;
-                    }
-                    else {
-                        // User account creation successful, redirect user to home.
-                        alert('Welcome! You are now registered.');
-                        window.location.href = "/";
-                    }
-                })
-                .catch(error => {
-                    console.error(error);
-                });
-        }
-        else {
-            registerAlert.style.display = 'block';
-            registerAlert.textContent = "Passwords do not match.";
-        }
-
-    });
-</script>
+<script type="text/javascript" src="../../public/css/auth/register.js"></script>
 
 <style>
     body {

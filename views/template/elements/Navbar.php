@@ -38,8 +38,8 @@
                     </ul>
                 </div>
                 <div id="nav-auth">
-                    <a href="/register" class="btn btn-primary me-2">Register</a>
-                    <a href="/login" class="btn btn-success">Login</a>
+                    <a href="/register" class="btn btn-outline-dark me-2">Register</a>
+                    <a href="/login" class="btn btn-warning">Login</a>
                 </div>
             </div>
         </div>

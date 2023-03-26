@@ -5,4 +5,4 @@
 </div>
 <div class="login-hero-gradient"></div>
 <div class="login-hero-overlay"></div>
-<img src="<?php echo $background ?? ""; ?>" alt="">
+<img src="<?php echo $background ?? ""; ?>" alt="Background of food">
