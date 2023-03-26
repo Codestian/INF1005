@@ -12,7 +12,7 @@
     </div>
 </div>
 
-<script type="text/javascript" src="../../public/css/auth/login.js"></script>
+<script type="text/javascript" src="../../public/js/auth/login.js"></script>
 
 <style>
     .login-container {

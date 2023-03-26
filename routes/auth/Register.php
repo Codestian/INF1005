@@ -12,7 +12,7 @@
     </div>
 </div>
 
-<script type="text/javascript" src="../../public/css/auth/register.js"></script>
+<script type="text/javascript" src="../../public/js/auth/register.js"></script>
 
 <style>
     body {

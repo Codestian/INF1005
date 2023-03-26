@@ -19,7 +19,7 @@ class UserController
 
     public function getAllUsers(Request $req, Response $res): void
     {
-        $data = $this->users->read(['id', 'username', 'email', 'password', 'role_id'], $this->table, ['1 = 1']);
+        $data = $this->users->read(['id', 'username', 'email', 'password', 'role_id', 'provider_id'], $this->table, ['1 = 1']);
         $this->users->close();
         $res->toJSON($data);
     }
