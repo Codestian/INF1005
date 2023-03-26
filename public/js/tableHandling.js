@@ -185,7 +185,8 @@ userList.addEventListener('click',(e)=>{
 
                     fetch(apiURL + "/" + id, options)
                         //.then(response => response.json())
-                        .then(data => console.log(data))
+                        //.then(data => console.log(data))
+                        .then(()=>location.reload)
 
                         .catch(error=>console.log(error))
 
