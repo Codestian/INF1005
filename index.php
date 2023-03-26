@@ -85,7 +85,7 @@ Router::post("/{$api_suffix}/users/?", [$user_controller, "createUser"]);
 //  Updates one user by its id
 Router::put("/{$api_suffix}/users/(\d+)/?", [$user_controller, "updateUser"]);
 //  Deletes one user by its id
-Router::delete("/u{$api_suffix}/sers/(\d+)/?", [$user_controller, "deleteUser"]);
+Router::delete("/{$api_suffix}/users/(\d+)/?", [$user_controller, "deleteUser"]);
 
 //  Retrieves all roles
 Router::get("/{$api_suffix}/roles/?", [$role_controller, "getAllRoles"]);
@@ -96,7 +96,7 @@ Router::post("/{$api_suffix}/roles/?", [$role_controller, "createRole"]);
 //  Updates one role by its id
 Router::put("/{$api_suffix}/roles/(\d+)/?", [$role_controller, "updateRole"]);
 //  Deletes one role by its id
-Router::delete("/u{$api_suffix}/roles/(\d+)/?", [$role_controller, "deleteRole"]);
+Router::delete("/{$api_suffix}/roles/(\d+)/?", [$role_controller, "deleteRole"]);
 
 // Retrieves all restaurant items by restaurant id
 Router::get("/{$api_suffix}/restaurants/(\d+)/items/?", [$item_controller, "getAllItemsByRestaurantId"]);

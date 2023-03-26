@@ -69,7 +69,13 @@ body,html{
 
 }
 
+main{
+    background-color: #ffc720;
+}
 
+thead{
+    background-color : gainsboro;
+}
 
 
 

@@ -146,6 +146,10 @@
                             </div>
                             <div class="modal-body">
                                 <div class="form-group">
+                                    <label>ID</label>
+                                    <input type="text" id = "editID" class="form-control" required>
+                                </div>
+                                <div class="form-group">
                                     <label>Name</label>
                                     <input type="text" id = "editName" class="form-control" required>
                                 </div>
@@ -157,11 +161,15 @@
                                     <label>Password</label>
                                     <input type = "text" id ="editPassword" class="form-control" required>
                                 </div>
+                                <div class="form-group">
+                                    <label>Role ID</label>
+                                    <input type="text" id = "editRole_id" class="form-control" required>
+                                </div>
 
                             </div>
                             <div class="modal-footer">
                                 <input type="button" class="btn btn-default" data-bs-dismiss="modal" value="Cancel">
-                                <input type="button" data-bs-dismiss="modal" class="btn btn-info" value="Save">
+                                <input type="button" data-bs-dismiss="modal" id = "update" class="btn btn-info" value="Save">
                             </div>
                         </form>
                     </div>
@@ -186,7 +194,7 @@
                             </div>
                             <div class="modal-footer">
                                 <input type="button" class="btn btn-default" data-bs-dismiss="modal" value="Cancel">
-                                <input type="button" class="btn btn-danger" data-bs-dismiss="modal" value="Delete">
+                                <input type="button" class="btn btn-danger" id = "delete" data-bs-dismiss="modal" value="Delete">
                             </div>
                         </form>
                     </div>
