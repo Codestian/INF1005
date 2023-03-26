@@ -3,17 +3,15 @@
 
 
 
-let table = document.querySelector("#tableForm");
+
+
+
+
 
 
 const apiURL = "/api/v1/users";
 const idName = 'checkbox';
 let count = document.querySelectorAll('input[type="checkbox"]').length - 1 ;
-// const checkboxIds = [];
-//
-// document.querySelectorAll('input[type="checkbox"]:checked').forEach(checkbox => {
-//     checkboxIds.push(checkbox.id.replace('checkbox', ''));
-// });
 
 
 const userList = document.querySelector('#user-list');
@@ -120,19 +118,17 @@ userList.addEventListener('click',(e)=>{
 
         let id = e.target.parentElement.parentElement.parentElement.id;
         if(deleteButtonPressed){
-
-            const deleteBtn = document.querySelector('#deleteUsersModal');
-            deleteBtn.addEventListener('click', (t) => {
-                if(t.target.id == "delete"){
-
-                    fetch(apiURL + "/"+  id, {
-                        method: 'DELETE',
-                    })
-                        .then(() => location.reload())
-                }
-
-
-            });
+            deleteModal(id);
+            // const deleteBtn = document.querySelector('#deleteUsersModal');
+            // deleteBtn.addEventListener('click', (t) => {
+            //     console.log("pressed");
+            //     // if(t.target.id == "delete"){
+            //     //     fetchDelete(id);
+            //     // }
+            //
+            //
+            //
+            // });
 
         }
         if(editButtonPressed) {
@@ -211,6 +207,90 @@ userList.addEventListener('click',(e)=>{
 
 });
 
+function checkedID(){
+    // Get all checkboxes on the page
+    const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+
+// Create an empty array to store the checked checkboxes
+    const checkedCheckboxes = [];
+
+// Loop through all the checkboxes
+    checkboxes.forEach((checkbox) => {
+        // Check if the checkbox is checked
+        if (checkbox.checked) {
+            // Check if the checkbox is the selectAll checkbox
+            if (checkbox.id != 'selectAll') {
+                checkedCheckboxes.push(checkbox.id.replace('checkbox', ''));
+            }
+        }
+    });
+    return checkedCheckboxes;
+
+}
+
+
+function fetchDelete(id){
+    fetch(apiURL + "/"+  id, {
+        method: 'DELETE',
+    })
+        .then(() => location.reload())
+
+}
+
+
+function deleteModal(id){
+    const deleteBtn = document.querySelector('#deleteUsersModal');
+    deleteBtn.addEventListener('click', (t) => {
+        console.log(id,"pressed");
+        if(t.target.id == "delete"){
+            fetchDelete(id);
+        }
+
+
+
+    });
+}
+
+function deleteAll(){
+    const ids = checkedID();
+    const deleteBtn = document.querySelector("#delete");
+
+    deleteBtn.addEventListener('click', (f)=>{
+        ids.forEach(function(content){
+            deleteModal(content);
+        })
+    })
+}
+
+//Disable delete button
+const table = document.querySelector('table');
+table.addEventListener('change', (a) => {
+    const checkboxes = table.querySelectorAll('input[type="checkbox"]:checked');
+    const deleteButton = document.getElementById(' deleteBtn');
+
+
+    if (checkboxes.length > 0) {
+        //console.log('At least one checkbox is checked');
+        deleteButton.disabled = false;
+        // Do something here, e.g. enable a button
+    } else {
+        //console.log('No checkboxes are checked');
+        deleteButton.disabled = true;
+        // Do something here, e.g. disable a button
+    }
+
+
+});
+
+// const selectAll = document.querySelector('#selectAll');
+// const checkboxes = document.querySelectorAll('.checkbox');
+
+//Select All checkbox
+// selectAll.addEventListener('change', function() {
+//     checkboxes.forEach(checkbox => {
+//         checkbox.checked = selectAll.checked;
+//     });
+// });
 
 
 

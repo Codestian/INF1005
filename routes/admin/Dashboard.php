@@ -33,7 +33,7 @@
                             <div class="col-sm-6 p-0 d-flex justify-content-lg-end justify-content-center">
                                 <button id = "submit" type="submit" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addUsersModal">
                                     <i class="material-icons">&#xE147;</i> <span>Add New Users</span></button>
-                                <button id=" delete" type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteUsersModal">
+                                <button id=" deleteBtn" type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteUsersModal" onclick="deleteAll()" disabled  >
                                     <i class="material-icons">&#xE15C;</i> <span>Delete</span></button>
                             </div>
                         </div>
