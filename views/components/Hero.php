@@ -1,6 +1,6 @@
 <section class="hero">
     <div class="container px-4">
-        <h1 class="fw-bold pb-4 display-5 text-white"><?php echo $title ?? "Empty Page"; ?></h1>
+        <h1 class="fw-bold pb-4 display-5 text-white fade-up"><?php echo $title ?? "Empty Page"; ?></h1>
     </div>
     <div class="hero-gradient"></div>
     <div class="hero-overlay"></div>

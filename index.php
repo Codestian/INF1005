@@ -14,12 +14,16 @@ use App\Lib\Database;
 use App\Lib\Request;
 use App\Lib\Response;
 use App\Lib\Router;
-use App\Lib\Token;
 
 Router::get("/", fn() => include("routes/Home.php"));
 
 Router::get("/restaurants/?", fn() => include("routes/Restaurants.php"));
 Router::get("/restaurants/(\d+)/?", fn() => include("routes/RestaurantsOne.php"));
+
+Router::get("/restaurants/north/?", fn() => include("routes/RestaurantsMap.php"));
+Router::get("/restaurants/south/?", fn() => include("routes/RestaurantsMap.php"));
+Router::get("/restaurants/east/?", fn() => include("routes/RestaurantsMap.php"));
+Router::get("/restaurants/west/?", fn() => include("routes/RestaurantsMap.php"));
 
 Router::get("/about/?", fn() => include("routes/About.php"));
 Router::get("/contact/?", fn() => include("routes/Contact.php"));
