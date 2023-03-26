@@ -3,7 +3,7 @@
         'name' => 'muhdhakim/sites',
         'pretty_version' => 'dev-main',
         'version' => 'dev-main',
-        'reference' => 'eb5d1d0b7ba5a05a92cc07a06cde3db31725696c',
+        'reference' => '587db8b9c2ec7401aa5a5bf9c8bac8bb86080bd9',
         'type' => 'library',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -76,7 +76,7 @@
         'muhdhakim/sites' => array(
             'pretty_version' => 'dev-main',
             'version' => 'dev-main',
-            'reference' => 'eb5d1d0b7ba5a05a92cc07a06cde3db31725696c',
+            'reference' => '587db8b9c2ec7401aa5a5bf9c8bac8bb86080bd9',
             'type' => 'library',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),

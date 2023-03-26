@@ -21,4 +21,3 @@
     <button class="w-100 btn btn-lg btn-primary mb-3" type="submit">Register</button>
     <p class="mt-5 mb-3 text-muted">&copy; 2017–2022</p>
 </form>
-<img src="https://images.unsplash.com/photo-1470790376778-a9fbc86d70e2?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1920&q=80" alt="">

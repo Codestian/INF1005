@@ -18,7 +18,7 @@ include "views/components/Hero.php"; ?>
             </p>
         </div>
         <div class="col-md-6">
-            <img src="https://images.unsplash.com/photo-1517048676732-d65bc937f952?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80"
+            <img src="../public/images/about/mission.png"
                  style="width: 100%; max-height: 320px; object-fit: cover;" class="img-fluid rounded-3"
                  alt="Your Image Alt Text Here">
         </div>
