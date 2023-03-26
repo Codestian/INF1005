@@ -1,12 +1,8 @@
-<?php include("views/template/Top.php"); ?>
+<?php $title="Contact"; include("views/template/Top.php"); ?>
+
+<?php $title="Contact Us"; include "views/components/Hero.php"; ?>
 
 
-
-    <section style="height: 100vh;">
-        <h1>Contact Us</h1>
-        <span>999.</span>
-    </section>
 
 
 <?php include("views/template/Bottom.php"); ?>
-

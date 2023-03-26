@@ -1,146 +1,117 @@
 <?php
-require __DIR__ . '/vendor/autoload.php';
+require __DIR__ . "/vendor/autoload.php";
 
+use App\Controller\api\ItemController;
+use App\Controller\Api\RoleController;
+use App\Controller\Api\UserController;
+
+use App\Controller\Api\Providers\GoogleAuthController;
+
+use App\Controller\Api\RestaurantController;
 use App\Lib\App;
-use App\Lib\Router;
+use App\Lib\Config;
+use App\Lib\Database;
 use App\Lib\Request;
 use App\Lib\Response;
-use App\Model\Posts;
+use App\Lib\Router;
+use App\Lib\Token;
 
-use App\Controller\Home;
-use App\Controller\About;
-use App\Controller\Contact;
-use App\Controller\Login;
-use App\Controller\Register;
-use App\Controller\BookingOne;
-use App\Controller\BookingTwo;
-use App\Controller\BookingThree;
-use App\Controller\User;
-use App\Controller\Apply;
-use App\Controller\Restaurant;
-use App\Controller\Favourite;
-use App\Controller\Bookings;
-use App\Controller\MasterDir;
-use App\Controller\Admin;
-use App\Controller\North;
-use App\Controller\Central;
-use App\Controller\East;
-use App\Controller\West;
+Router::get("/", fn() => include("routes/Home.php"));
 
-Posts::load();
+Router::get("/restaurants/?", fn() => include("routes/Restaurants.php"));
+Router::get("/restaurants/(\d+)/?", fn() => include("routes/RestaurantsOne.php"));
 
-Router::get('/', function () {
-    (new Home())->indexAction();
-});
+Router::get("/about/?", fn() => include("routes/About.php"));
+Router::get("/contact/?", fn() => include("routes/Contact.php"));
+Router::get("/work/?", fn() => include("routes/Work.php"));
 
-// About Us Page.
-Router::get('/about', function () {
-    (new About())->indexAction();
-});
+Router::get("/profile/?", fn() => include("routes/auth/Profile.php"));
 
-// Contact Us Page.
-Router::get('/contact', function () {
-    (new Contact())->indexAction();
-});
+Router::get("/login", fn() => include "routes/auth/Login.php");
+Router::get("/register", fn() => include "routes/auth/Register.php");
+Router::get("/auth/redirect/google/?(/?\?.*)", fn() => include "routes/auth/RedirectGoogle.php");
 
-// Log in Page.
-Router::get('/login', function () {
-    (new Login())->indexAction();
-});
-
-// Sign up Page.
-Router::get('/register', function () {
-    (new Register())->indexAction();
-});
-
-// Booking Restaurant Page 1.
-Router::get('/bookingone', function () {
-    (new BookingOne())->indexAction();
-});
-
-// Only go to Booking two when Booking One details are filled in successfully.
-Router::get('/bookingtwo', function () {
-    (new BookingTwo())->indexAction();
-});
-
-// Only go to Booking three when Booking One & Two details are filled in successfully.
-Router::get('/bookingthree', function () {
-    (new BookingThree())->indexAction();
-});
-
-// ONLY FOR USERS THAT ARE LOG-IN
-Router::get('/user', function () {
-    (new User())->indexAction();
-});
-
-// Restaurant Application Page
-Router::get('/apply', function () {
-    (new Apply())->indexAction();
-});
-
-// Restaurant Page ( INDIVIDUAL )
-Router::get('/restaurant', function () {
-    (new Restaurant())->indexAction();
-});
-
-// User Favourite Restaurant Page (REQUIRES LOGIN)
-Router::get('/favourite', function () {
-    (new Favourite())->indexAction();
-});
-
-// User's Bookings Page (REQUIRES LOGIN)
-Router::get('/bookings', function () {
-    (new Bookings())->indexAction();
-});
-
-// Restaurant Master Directory Page
-Router::get('/master', function () {
-    (new MasterDir())->indexAction();
-});
-
-// Admin Page ( Adds & Remove Restaurant List ) [ MUST BE AN ADMIN TO GO TO PAGE ]
-Router::get('/admin', function () {
-    (new Admin())->indexAction();
-});
-
-// North Side Directory Page
-Router::get('/north', function () {
-    (new North())->indexAction();
-});
-
-// Central Side Directory Page
-Router::get('/central', function () {
-    (new Central())->indexAction();
-});
-
-// East Side Directory Page
-Router::get('/east', function () {
-    (new East())->indexAction();
-});
-
-// West Side Directory Page
-Router::get('/west', function () {
-    (new West())->indexAction();
-});
+Router::get("/admin/dashboard/?", fn() => include("routes/admin/Dashboard.php"));
+Router::get("/admin/login/?", fn() => include("routes/admin/Login.php"));
 
 // The below code is for backend API, frontend is above.
+$mysqli = (new Database())->getConnection();
 
-Router::get('/post', function (Request $req, Response $res) {
-    $res->toJSON(Posts::all());
+$api_suffix = Config::get("API_SUFFIX");
+
+$restaurant_controller = new RestaurantController($mysqli);
+$item_controller = new ItemController($mysqli);
+$user_controller = new UserController($mysqli);
+$role_controller = new RoleController($mysqli);
+
+$google_auth_controller = new GoogleAuthController($mysqli);
+
+Router::get("/{$api_suffix}/?", function (Request $req, Response $res) {
+    $data = new StdClass();
+    $data->message = "Welcome to Choppy's API";
+    $res->toJSON($data);
 });
 
-Router::post('/post', function (Request $req, Response $res) {
-    $post = Posts::add($req->getJSON());
-    $res->status(201)->toJSON($post);
-});
+//  Retrieves all restaurants
+Router::get("/{$api_suffix}/restaurants/?", [$restaurant_controller, "getAllRestaurants"]);
+//  Retrieves one restaurant by its id
+Router::get("/{$api_suffix}/restaurants/(\d+)/?", [$restaurant_controller, "getOneRestaurantById"]);
+//  Creates a new restaurant
+Router::post("/{$api_suffix}/restaurants/?", [$restaurant_controller, "createRestaurant"]);
+//  Updates one restaurant by its id
+Router::put("/{$api_suffix}/restaurants/(\d+)/?", [$restaurant_controller, "updateRestaurant"]);
+//  Deletes one restaurant by its id
+Router::delete("/{$api_suffix}/restaurants/(\d+)/?", [$restaurant_controller, "deleteRestaurant"]);
 
-Router::get('/post/([0-9]*)', function (Request $req, Response $res) {
-    $post = Posts::findById($req->params[0]);
-    if ($post) {
-        $res->toJSON($post);
-    } else {
-        $res->status(404)->toJSON(['error' => "Not Found"]);
-    }
-});
+// Retrieves all restaurant items
+Router::get("/{$api_suffix}/items/?", [$item_controller, "getAllItems"]);
+// Retrieves all restaurant items
+Router::get("/{$api_suffix}/items/(\d+)/?", [$item_controller, "getOneItemById"]);
+//  Creates a new restaurant item
+Router::post("/{$api_suffix}/items/?", [$item_controller, "createItem"]);
+//  Updates one restaurant item by its id
+Router::put("/{$api_suffix}/items/(\d+)/?", [$item_controller, "updateItem"]);
+//  Deletes one restaurant item by its id
+Router::delete("/{$api_suffix}/items/(\d+)/?", [$item_controller, "deleteItem"]);
+
+//  Retrieves all users
+Router::get("/{$api_suffix}/users/?", [$user_controller, "getAllUsers"]);
+//  Retrieves one user by its id
+Router::get("/{$api_suffix}/users/(\d+)/?", [$user_controller, "getOneUserById"]);
+//  Creates a new user
+Router::post("/{$api_suffix}/users/?", [$user_controller, "createUser"]);
+//  Updates one user by its id
+Router::put("/{$api_suffix}/users/(\d+)/?", [$user_controller, "updateUser"]);
+//  Deletes one user by its id
+Router::delete("/{$api_suffix}/users/(\d+)/?", [$user_controller, "deleteUser"]);
+
+//  Retrieves all roles
+Router::get("/{$api_suffix}/roles/?", [$role_controller, "getAllRoles"]);
+//  Retrieves one role by its id
+Router::get("/{$api_suffix}/roles/(\d+)/?", [$role_controller, "getOneRoleById"]);
+//  Creates a new role
+Router::post("/{$api_suffix}/roles/?", [$role_controller, "createRole"]);
+//  Updates one role by its id
+Router::put("/{$api_suffix}/roles/(\d+)/?", [$role_controller, "updateRole"]);
+//  Deletes one role by its id
+Router::delete("/u{$api_suffix}/roles/(\d+)/?", [$role_controller, "deleteRole"]);
+
+// Retrieves all restaurant items by restaurant id
+Router::get("/{$api_suffix}/restaurants/(\d+)/items/?", [$item_controller, "getAllItemsByRestaurantId"]);
+
+// Authentication
+Router::post("/{$api_suffix}/auth/login/?", [$user_controller, "loginUser"]);
+Router::post("/{$api_suffix}/auth/register/?", [$user_controller, "registerUser"]);
+Router::get("/{$api_suffix}/auth/logout/?", [$user_controller, "logoutUser"]);
+
+Router::get("/{$api_suffix}/auth/verify/?", [$user_controller, "verifyUser"]);
+
+// Google Oauth login
+Router::get("/{$api_suffix}/auth/google/url/?", [$google_auth_controller, "getAuthUrl"]);
+Router::get("/{$api_suffix}/auth/google/login/?(\?code=.+)?", [$google_auth_controller, "login"]);
+
+//Router::get(".*", function() {
+//    include("routes/404.php");
+//});
 
 App::run();

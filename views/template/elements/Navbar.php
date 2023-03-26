@@ -1,42 +1,47 @@
-<nav class="navbar fixed-top">
-    <div class="container-fluid text-center row row-cols-3" style="padding-left: 50px">
-
-            <button class="col-sm-auto navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar"
-                    aria-controls="offcanvasNavbar" aria-label="offcanvas">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-
-            <div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasNavbar" aria-labelledby="offcanvasNavbarLabel">
-                <div class="offcanvas-header">
-                    <h5 class="offcanvas-title" id="offcanvasNavbarLabel">Chopee Directory</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close" </button>
-                </div>
-                <div class="offcanvas-body">
-
-                    <form class="d-flex mt-3" role="search">
-                        <input class="form-control form-control-lg me-2" type="search" placeholder="Find a Store here!" aria-label="Search">
-                        <button class="btn btn-outline-success" type="submit">Search</button>
-                    </form>
-
-                    <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
-                        <li class="nav-item">
-                            <a class="nav-link active" aria-current="page" href="/">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="master">Master Directory</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="about">About Us</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="contact">Contact Us</a>
-                        </li>
+<nav class="navbar navbar-expand-md fixed-top bg-light">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="#">
+            <img src="../../../public/images/borgor-small.png" alt="Logo" width="30" height="24" class="d-inline-block align-text-top">
+            Choppy
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav me-auto mb-2 mb-md-0 text-center">
+                <li class="nav-item">
+                    <a class="nav-link active" aria-current="page" href="/">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/restaurants">Restaurants</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/about">About</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/contact">Contact</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/work">Work with us</a>
+                </li>
+            </ul>
+            <div class="d-flex align-items-center justify-content-center">
+                <div class="flex-shrink-0 dropdown flex-row d-flex align-items-center" id="nav-dropdown">
+                    <span class="me-3 text-end" id="nav-username"></span>
+                    <a href="#" class="d-block link-dark text-decoration-none dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="true">
+                        <img src="https://github.com/mdo.png" alt="mdo" width="32" height="32" class="rounded-circle">
+                    </a>
+                    <ul class="dropdown-menu text-small shadow" style="position: absolute; inset: 0px 0px auto auto; margin: 0px; transform: translate(0px, 34px);" data-popper-placement="bottom-end">
+                        <li><a class="dropdown-item" href="/profile">Profile</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" id="logout-btn" href="#">Logout</a></li>
                     </ul>
                 </div>
+                <div id="nav-auth">
+                    <a href="/register" class="btn btn-outline-dark me-2">Register</a>
+                    <a href="/login" class="btn btn-warning">Login</a>
+                </div>
             </div>
-
-        <div class="col-md-auto" style="padding-left: 170px"><a class="nav-link" href="/"><img src="../../../public/images/borgor-small.png" alt="burger-icon">Chopee</a></div>
-
-        <div class="col-sm-auto"><a class="btn btn-primary login" href="login" role="button">Sign Up or Login</a></div>
+        </div>
     </div>
 </nav>

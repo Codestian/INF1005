@@ -1,54 +1,41 @@
 body {
-    padding-top: 90px;
+    font-family:'Poppins',sans-serif;
 }
 
-nav {
-    background-color: white;
+.btn {
+    text-transform: uppercase;
+    font-size: 0.8rem;
+    letter-spacing: 2px;
 }
 
-nav a.nav-link {
-    font-family: "Comic Sans MS", cursive;
-    font-size: 25px;
-    color: black;
+@keyframes FadeLeft {
+    0% {
+        opacity: 0;
+        transform: translateX(5px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateX(0);
+    }
 }
 
-nav a.login {
-    font-family: "Comic Sans MS", cursive;
-    font-size: 20px;
-    font-weight: bold;
-    color: black;
-    background-color: yellow;
-    border-color: yellow;
-    --bs-btn-hover-bg: orange;
-    --bs-btn-hover-border-color: orange;
+@keyframes FadeUp {
+    0% {
+        opacity: 0;
+        transform: translateY(5px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
-li a.nav-link {
-    font-family: "Helvetica", sans-serif;
+.fade-left {
+    animation-name: FadeLeft;
+    animation-duration: 1s;
 }
 
-.offcanvas-title {
-    font-family: "Comic Sans MS", cursive;
-    font-size: 25px;
-    color: black;
-    font-weight: bold;
-}
-
-section {
-    background-color: white;
-}
-
-#main-map {
-    display: flex;
-    justify-content: center;
-    padding-top: 5px;
-    background-color: orange;
-}
-
-footer p {
-    text-align: center;
-    font-style: italic;
-    font-size: 14px;
-    color: white;
-    margin: 10px;
+.fade-up {
+    animation-name: FadeUp;
+    animation-duration: 0.5s;
 }

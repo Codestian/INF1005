@@ -1,5 +1,0 @@
-$(function() {
-    $('.maparea').maphilight();
-});
-
-
