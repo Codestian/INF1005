@@ -54,7 +54,7 @@ class MessageFormatter implements MessageFormatterInterface
     private $template;
 
     /**
-     * @param string $template Log message template
+     * @param string $template Log message components
      */
     public function __construct(?string $template = self::CLF)
     {

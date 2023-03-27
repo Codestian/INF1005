@@ -35,7 +35,11 @@ Router::get("/login", fn() => include "routes/auth/Login.php");
 Router::get("/register", fn() => include "routes/auth/Register.php");
 Router::get("/auth/redirect/google/?(/?\?.*)", fn() => include "routes/auth/RedirectGoogle.php");
 
-Router::get("/admin/dashboard/?", fn() => include("routes/admin/Dashboard.php"));
+Router::get("/admin/dashboard/([a-z]+)/?", function(Request $req, Response $res) {
+    $table_name = $req->params[0];
+    include("routes/admin/Dashboard.php");
+});
+
 Router::get("/admin/login/?", fn() => include("routes/admin/Login.php"));
 
 // The below code is for backend API, frontend is above.

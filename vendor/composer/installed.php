@@ -1,8 +1,8 @@
 <?php return array(
     'root' => array(
         'name' => 'muhdhakim/sites',
-        'pretty_version' => 'dev-main',
-        'version' => 'dev-main',
+        'pretty_version' => 'dev-table.js',
+        'version' => 'dev-table.js',
         'reference' => '587db8b9c2ec7401aa5a5bf9c8bac8bb86080bd9',
         'type' => 'library',
         'install_path' => __DIR__ . '/../../',
@@ -74,8 +74,8 @@
             'dev_requirement' => false,
         ),
         'muhdhakim/sites' => array(
-            'pretty_version' => 'dev-main',
-            'version' => 'dev-main',
+            'pretty_version' => 'dev-table.js',
+            'version' => 'dev-table.js',
             'reference' => '587db8b9c2ec7401aa5a5bf9c8bac8bb86080bd9',
             'type' => 'library',
             'install_path' => __DIR__ . '/../../',
