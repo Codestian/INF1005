@@ -1,7 +1,7 @@
 <?php
 require __DIR__ . "/vendor/autoload.php";
 
-use App\Controller\api\ItemController;
+use App\Controller\Api\ItemController;
 use App\Controller\Api\RoleController;
 use App\Controller\Api\UserController;
 
