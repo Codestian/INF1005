@@ -15,21 +15,25 @@ function createTableHead(...rowData) {
     return tableRow;
 }
 
-function createTableRow(...rowData) {
+function createTableRow(row, idx) {
     const tableRow = document.createElement('tr');
-    const tableData = rowData.map(data => {
+
+    const keyArr =Object.keys(row);
+
+    const tableData = keyArr.map(key => {
         const td = document.createElement('td');
-        td.textContent = data;
+        td.classList.add("key-" + key);
+        td.textContent = row[key];
         return td;
     });
 
     tableRow.appendChild(createRowCheckBox(true));
 
-    for (let i = 0; i < rowData.length; i++) {
-        tableRow.appendChild(tableData[i] || document.createElement('td'));
+    for (let i = 0; i < keyArr.length; i++) {
+        tableRow.appendChild( tableData[i] || document.createElement('td'));
     }
 
-    tableRow.appendChild(createRowButtons());
+    tableRow.appendChild(createRowButtons(idx));
 
     return tableRow;
 }
@@ -67,21 +71,22 @@ function createRowCheckBox(isTD) {
     return td;
 }
 
-function createRowButtons() {
+function createRowButtons(idx) {
     // create the table cell element
     const td = document.createElement('td');
 
     // create the edit icon link element
     const editLink = document.createElement('a');
-    editLink.href = '#editUsersModal';
-    editLink.classList.add('edit');
+    editLink.href = '#editRowModal';
+    editLink.classList.add('edit-row-btn');
+    editLink.addEventListener('click', setInputEdit);
     editLink.dataset.bsToggle = 'modal';
 
     // create the edit icon element
     const editIcon = document.createElement('i');
     editIcon.classList.add('material-icons');
-    editIcon.id = 'editIcon';
     editIcon.dataset.toggle = 'tooltip';
+    editIcon.id = "row-" + idx;
     editIcon.title = 'Edit';
     editIcon.innerHTML = '&#xE254;';
 
@@ -90,7 +95,7 @@ function createRowButtons() {
 
     // create the delete icon link element
     const deleteLink = document.createElement('a');
-    deleteLink.href = '#deleteUsersModal';
+    deleteLink.href = '#deleteRowModal';
     deleteLink.classList.add('delete');
     deleteLink.dataset.bsToggle = 'modal';
 
@@ -111,6 +116,28 @@ function createRowButtons() {
 
     return td;
 }
+
+function createFormGroup(labelText, inputId, inputType) {
+    const formGroup = document.createElement('div');
+    formGroup.classList.add('form-group');
+
+    const inputLabel = document.createElement('label');
+    inputLabel.textContent = labelText;
+
+    const inputElement = document.createElement('input');
+    inputElement.type = inputType;
+    inputElement.id = inputId;
+    inputElement.classList.add('form-control');
+    inputElement.required = true;
+
+    inputLabel.setAttribute('for', inputId);
+
+    formGroup.appendChild(inputLabel);
+    formGroup.appendChild(inputElement);
+
+    return formGroup;
+}
+
 
 function snakeToCapitalizedSpaced(str) {
     return str.split('_').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');

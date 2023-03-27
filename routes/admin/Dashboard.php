@@ -2,7 +2,6 @@
 $showNavbar = false;
 $mainPaddingTop = "0";
 include("views/template/Top.php"); ?>
-    <script type="text/javascript" src="../../public/js/admin/table.js"></script>
     <div class="d-flex">
         <nav class="sidebar-container">
             <div class="d-flex flex-column flex-shrink-0 p-3 text-white bg-dark" style="width: 280px; height: 100vh;">
@@ -62,7 +61,7 @@ include("views/template/Top.php"); ?>
                 case 'items':
                 case 'roles':
                 case 'restaurants':
-                    include("views/admin/template/Table.php");
+                    include("views/admin/Database.php");
                     break;
                 default:
                     break;
