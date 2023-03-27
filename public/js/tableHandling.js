@@ -11,7 +11,7 @@
 
 const apiURL = "/api/v1/users";
 const idName = 'checkbox';
-let count = document.querySelectorAll('input[type="checkbox"]').length - 1 ;
+let count = '';
 
 
 const userList = document.querySelector('#user-list');
@@ -77,12 +77,12 @@ function addUser() {
         .then(response => response.json())
         .then(data => {
             let message = data.message;
-            console.log(message);
+            //console.log(message);
             userData.id= message.length.id + 1;
             userData.role_id = 1 ;
             userData.provider_id = 1;
-            console.log(userData);
-            console.log(message.length.id);
+            //console.log(userData);
+            //console.log(message.length.id);
 
 
             const options = {
@@ -119,16 +119,16 @@ userList.addEventListener('click',(e)=>{
         let id = e.target.parentElement.parentElement.parentElement.id;
         if(deleteButtonPressed){
             deleteModal(id);
-            // const deleteBtn = document.querySelector('#deleteUsersModal');
-            // deleteBtn.addEventListener('click', (t) => {
-            //     console.log("pressed");
-            //     // if(t.target.id == "delete"){
-            //     //     fetchDelete(id);
-            //     // }
-            //
-            //
-            //
-            // });
+            const deleteBtn = document.querySelector('#deleteUsersModal');
+            deleteBtn.addEventListener('click', (t) => {
+                //console.log("pressed");
+                if(t.target.id == "delete"){
+                    fetchDelete(id);
+                }
+
+
+
+            });
 
         }
         if(editButtonPressed) {
@@ -146,7 +146,7 @@ userList.addEventListener('click',(e)=>{
                 .then(response => response.json())
                 .then(data => {
                     let message = data.message;
-                    console.log(message);
+                    //console.log(message);
 
 
                     message.forEach((user) => {
@@ -169,7 +169,7 @@ userList.addEventListener('click',(e)=>{
 
 
 
-                    console.log(userData);
+                   //console.log(userData);
 
                     const options = {
                         method: 'PUT',
@@ -207,6 +207,7 @@ userList.addEventListener('click',(e)=>{
 
 });
 
+//Get all checkboxIDs to delete
 function checkedID(){
     // Get all checkboxes on the page
     const checkboxes = document.querySelectorAll('input[type="checkbox"]');
@@ -228,7 +229,7 @@ function checkedID(){
 
 }
 
-
+//delete fetch template
 function fetchDelete(id){
     fetch(apiURL + "/"+  id, {
         method: 'DELETE',
@@ -237,11 +238,11 @@ function fetchDelete(id){
 
 }
 
-
+//modal for delete
 function deleteModal(id){
     const deleteBtn = document.querySelector('#deleteUsersModal');
     deleteBtn.addEventListener('click', (t) => {
-        console.log(id,"pressed");
+        //console.log(id,"pressed");
         if(t.target.id == "delete"){
             fetchDelete(id);
         }
@@ -251,6 +252,7 @@ function deleteModal(id){
     });
 }
 
+//for mass delete button
 function deleteAll(){
     const ids = checkedID();
     const deleteBtn = document.querySelector("#delete");
@@ -262,7 +264,7 @@ function deleteAll(){
     })
 }
 
-//Disable delete button
+//Disable mass delete button
 const table = document.querySelector('table');
 table.addEventListener('change', (a) => {
     const checkboxes = table.querySelectorAll('input[type="checkbox"]:checked');
@@ -282,15 +284,23 @@ table.addEventListener('change', (a) => {
 
 });
 
-// const selectAll = document.querySelector('#selectAll');
-// const checkboxes = document.querySelectorAll('.checkbox');
 
-//Select All checkbox
-// selectAll.addEventListener('change', function() {
-//     checkboxes.forEach(checkbox => {
-//         checkbox.checked = selectAll.checked;
-//     });
-// });
-
+//selectAll checkbox function
+const selectAllCheckbox = document.querySelector('#selectAll');
+selectAllCheckbox.addEventListener('change', function() {
+    const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+    // If the "Select All" checkbox is checked, check all the other checkboxes
+    if (this.checked) {
+        checkboxes.forEach(function(checkbox) {
+            //console.log(checkbox.id);
+            checkbox.checked = true;
+        });
+    } else {
+        // If the "Select All" checkbox is unchecked, uncheck all the other checkboxes
+        checkboxes.forEach(function(checkbox) {
+            checkbox.checked = false;
+        });
+    }
+});
 
 
