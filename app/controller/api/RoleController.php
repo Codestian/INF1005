@@ -2,7 +2,7 @@
 
 use App\Lib\Request;
 use App\Lib\Response;
-use App\Model\roles;
+use App\Model\Roles;
 use mysqli;
 
 class RoleController
