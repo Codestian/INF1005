@@ -32,7 +32,6 @@ include("views/template/Top.php"); ?>
         getData(restID);
         checkLogin()
     }
-    // console.log(checkLogin());
 
     function reviewSubmit(){
         var reviewScore = document.getElementById("reviewForm").elements[0].value;
@@ -42,7 +41,21 @@ include("views/template/Top.php"); ?>
             .then(response => response.json())
             .then(data => {
                 let userID = data.data.id;
-                console.log("User with ID: " + userID + "posted a view with score: " + reviewScore + " saying: " + reviewBody)
+                console.log("User with ID: " + userID + " posted a view with score: " + reviewScore + " saying: " + reviewBody )
+            })
+    }
+
+    function bookingSubmit(){
+        var bookingDateTime = document.getElementById("bookingForm").elements[0].value;
+        var bookingPax = document.getElementById("bookingForm").elements[1].value;
+        const apiCallAuthVerify = "http://localhost/api/v1/auth/verify";
+        fetch(apiCallAuthVerify)
+            .then(response => response.json())
+            .then(data => {
+                let userID = data.data.id;
+                const queryString = window.location.href;
+                const restID = queryString.split("restaurants/").pop();
+                console.log("User with ID: " + userID + " made a booking for date-time: " + bookingDateTime + " for pax: " + bookingPax + " for restaurant with ID: " + restID)
             })
     }
 
@@ -60,6 +73,13 @@ include("views/template/Top.php"); ?>
                     tmpData += 'Add a Review\n';
                     tmpData += '</button>';
                     document.getElementById("ReviewButton").innerHTML = tmpData;
+                    tmpData = '<button style="height: 50px; " type="button" class="btn btn-primary btn-outline-success" data-bs-toggle="modal" data-bs-target="#bookingModalLoggedInModal">\n'
+                    tmpData += 'Book Now\n';
+                    tmpData += '</button>';
+                    document.getElementById("BookingButton").innerHTML = tmpData;
+                    // <button style="height: 50px; " type="button" class="btn btn-primary btn-outline-success">
+                    //     Book Now
+                    // </button>
                 }
                 else if (message == false)
                 {
@@ -69,6 +89,10 @@ include("views/template/Top.php"); ?>
                     tmpData += 'Add a Review\n';
                     tmpData += '</button>';
                     document.getElementById("ReviewButton").innerHTML = tmpData;
+                    tmpData = '<button style="height: 50px; " type="button" class="btn btn-primary btn-outline-success" data-bs-toggle="modal" data-bs-target="#bookingModalNotLoggedInModal">\n'
+                    tmpData += 'Book Now\n';
+                    tmpData += '</button>';
+                    document.getElementById("BookingButton").innerHTML = tmpData;
                 }
             })
         return message;
@@ -433,6 +457,57 @@ include("views/template/Top.php"); ?>
     </div>
 </div>
 
+<div class="modal fade" id="bookingModalLoggedInModal" tabindex="-1" role="dialog" aria-labelledby="bookingModalLoggedInModalTitle" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="bookingModalLoggedInModalTitle">Make a Booking</h5>
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div id="bookingModalLoggedInBody" class="modal-body">
+                <form id="bookingForm">
+                    <div>
+                        <label for="reviewRating" >Date Time</label>
+                        <div>
+                            <input type="datetime-local">
+                        </div>
+                    </div>
+                    <br>
+                    <div>
+                        <label for="reviewBody">Pax</label>
+                        <div>
+                            <input type="number">
+                        </div>
+                    </div>
+                    <br>
+                    <a id="bookingSubmit" onclick="bookingSubmit()" class="btn btn-primary">Submit</a>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="bookingModalNotLoggedInModal" tabindex="-1" role="dialog" aria-labelledby="bookingModalNotLoggedInModalTitle" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="bookingModalLoggedInModalTitle">Make a Booking</h5>
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div id="bookingModalNotLoggedInModalBody" class="modal-body">
+                Please Log-in to make a booking!
+                <br>
+                <br>
+                <a href="/login" class="btn btn-warning">Login</a>
+            </div>
+        </div>
+    </div>
+</div>
+
 <section style="padding-top: 10px;">
     <div style="width: 90%; margin-left: 5%">
         <div style="display: block; width: 100%">
@@ -446,9 +521,7 @@ include("views/template/Top.php"); ?>
                     </div>
                 </div>
                 <div style="margin-left: auto">
-                    <button style="height: 50px; " type="button" class="btn btn-primary btn-outline-success">
-                        Book Now
-                    </button>
+                    <div id="BookingButton"></div>
                 </div>
             </div>
             <div style="display: flex">
