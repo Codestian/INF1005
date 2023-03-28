@@ -4,6 +4,10 @@ require __DIR__ . "/vendor/autoload.php";
 use App\Controller\Api\UserController;
 use App\Controller\Api\Providers\GoogleAuthController;
 
+use App\Controller\CuisineController;
+use App\Controller\ProviderController;
+use App\Controller\RegionController;
+use App\Controller\ReservationController;
 use App\Controller\RestaurantController;
 use App\Controller\ItemController;
 use App\Controller\ReviewController;
@@ -52,7 +56,7 @@ $api_suffix = Config::get("API_SUFFIX");
 $restaurant_controller = new RestaurantController(
     new \App\Model\Restaurants($mysqli),
     'restaurant',
-    ['id', 'name', 'description', 'address', 'rating', 'opening_hours', 'closing_hours', 'estimated_price', 'cuisine_id']
+    ['id', 'name', 'description', 'address', 'rating', 'opening_hours', 'closing_hours', 'estimated_price', 'cuisine_id', 'region_id']
 );
 
 $item_controller = new ItemController(
@@ -67,16 +71,37 @@ $role_controller = new RoleController(
     ['id', 'name']
 );
 
+$region_controller = new RegionController(
+    new \App\Model\Region($mysqli),
+    'region',
+    ['id', 'name']
+);
+
 $review_controller = new ReviewController(
     new \App\Model\Review($mysqli),
     'review',
     ['id', 'rating', 'description', 'date', 'restaurant_id', 'user_id']
 );
 
+$cuisine_controller = new CuisineController(
+    new \App\Model\Cuisine($mysqli),
+    'cuisine',
+    ['id', 'name']
+);
 
+$reservation_controller = new ReservationController(
+    new \App\Model\Reservation($mysqli),
+    'reservation',
+    ['id', 'datetime', 'pax', 'user_id', 'restaurant_id']
+);
+
+$provider_controller = new ProviderController(
+    new \App\Model\Provider($mysqli),
+    'provider',
+    ['id', 'name']
+);
 
 $user_controller = new UserController($mysqli);
-
 $google_auth_controller = new GoogleAuthController($mysqli);
 
 Router::get("/{$api_suffix}/?", function (Request $req, Response $res) {
@@ -88,7 +113,11 @@ Router::get("/{$api_suffix}/?", function (Request $req, Response $res) {
 addRoutesForResource('restaurants', $restaurant_controller);
 addRoutesForResource('items', $item_controller);
 addRoutesForResource('roles', $role_controller);
+addRoutesForResource('regions', $region_controller);
 addRoutesForResource('reviews', $review_controller);
+addRoutesForResource('cuisines', $cuisine_controller);
+addRoutesForResource('reservations', $reservation_controller);
+addRoutesForResource('providers', $provider_controller);
 
 function addRoutesForResource($resource_name, $controller): void {
     $api_suffix = "api/v1"; // Replace with your own API version suffix

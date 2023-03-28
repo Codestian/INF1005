@@ -19,7 +19,9 @@ include("views/template/Top.php"); ?>
     let restOpeningHours = "";
     let restClosingHours = "";
     let restPrice = "";
+    let restCuisineID = "";
     let restCuisine = "";
+
 
     const apiURL = "/api/v1/restaurants/";
     const queryString = window.location.href;
@@ -28,9 +30,49 @@ include("views/template/Top.php"); ?>
         // console.log("has rest")
         const restID = queryString.split("restaurants/").pop();
         getData(restID);
+        checkLogin()
+    }
+    // console.log(checkLogin());
+
+    function reviewSubmit(){
+        var reviewScore = document.getElementById("reviewForm").elements[0].value;
+        var reviewBody = document.getElementById("reviewForm").elements[1].value;
+        const apiCallAuthVerify = "http://localhost/api/v1/auth/verify";
+        fetch(apiCallAuthVerify)
+            .then(response => response.json())
+            .then(data => {
+                let userID = data.data.id;
+                console.log("User with ID: " + userID + "posted a view with score: " + reviewScore + " saying: " + reviewBody)
+            })
     }
 
-
+    function checkLogin(){
+        const apiCallAuthVerify = "http://localhost/api/v1/auth/verify";
+        fetch(apiCallAuthVerify)
+            .then(response => response.json())
+            .then(data => {
+                message = data.data.isVerified;
+                if (message == true)
+                {
+                    // console.log("logged in")
+                    let tmpData = "";
+                    tmpData += '<button type="button" class="btn btn-primary btn-outline-success"  data-bs-toggle="modal" data-bs-target="#reviewModalLoggedInModal">\n';
+                    tmpData += 'Add a Review\n';
+                    tmpData += '</button>';
+                    document.getElementById("ReviewButton").innerHTML = tmpData;
+                }
+                else if (message == false)
+                {
+                    // console.log("not logged in")
+                    let tmpData = "";
+                    tmpData += '<button type="button" class="btn btn-primary btn-outline-success"  data-bs-toggle="modal" data-bs-target="#reviewModalNotLoggedInModal">\n';
+                    tmpData += 'Add a Review\n';
+                    tmpData += '</button>';
+                    document.getElementById("ReviewButton").innerHTML = tmpData;
+                }
+            })
+        return message;
+    }
 
     function getData(restID) {
         const apiCallRestInfo = apiURL + restID;
@@ -60,11 +102,16 @@ include("views/template/Top.php"); ?>
                 restPrice = restInfo[0].estimated_price;
                 tmpData = '<i class="bi bi-currency-dollar"></i>'+ restPrice + '/pax ';
                 document.getElementById("restPrice").innerHTML = tmpData;
-                restCuisine = restInfo[0].cuisine_id;
-                document.getElementById("restCuisine").innerText = "Cuisine: " + restCuisine;
+                restCuisineID = restInfo[0].cuisine_id;
+                const apiCallCuisine = "http://localhost/api/v1/cuisines/" + restCuisineID;
+                fetch(apiCallCuisine)
+                    .then(response => response.json())
+                    .then(data => {
+                        let cuisine = data.data;
+                        restCuisine = cuisine[0].name;
+                        document.getElementById("restCuisine").innerText = "Cuisine: " + restCuisine;
+                    })
             })
-        const apiCallCuisine = apiURL + restID + "/items";
-
         const apiCallMenuItems = apiURL + restID + "/items";
         fetch(apiCallMenuItems)
             .then(response => response.json())
@@ -326,16 +373,71 @@ include("views/template/Top.php"); ?>
         </div>
     </div>
 </div>
+
+<div class="modal fade" id="reviewModalLoggedInModal" tabindex="-1" role="dialog" aria-labelledby="reviewModalLoggedInModalTitle" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="reviewModalLoggedInModalTitle">Leave a Review</h5>
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div id="reviewModalLoggedInBody" class="modal-body">
+                <form id="reviewForm">
+                    <div>
+                        <label for="reviewRating" >Rating out of 5</label>
+                        <div>
+                            <select class="form-control" id="exampleFormControlSelect1">
+                                <option>1</option>
+                                <option>2</option>
+                                <option>3</option>
+                                <option>4</option>
+                                <option>5</option>
+                            </select>
+                        </div>
+                    </div>
+                    <br>
+                    <div>
+                        <label for="reviewBody">Review</label>
+                        <div>
+                            <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+                        </div>
+                    </div>
+                    <br>
+                    <div style="display: flex; justify-content: center">
+                        <a id="reviewSubmit" onclick="reviewSubmit()" class="btn btn-primary">Submit</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="reviewModalNotLoggedInModal" tabindex="-1" role="dialog" aria-labelledby="reviewModalNotLoggedInModalTitle" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="reviewModalLoggedInModalTitle">Leave a Review</h5>
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div id="reviewModalNotLoggedInModalBody" class="modal-body">
+                Please Log-in to leave a review!
+                <br>
+                <br>
+                <a href="/login" class="btn btn-warning">Login</a>
+            </div>
+        </div>
+    </div>
+</div>
+
 <section style="padding-top: 10px;">
     <div style="width: 90%; margin-left: 5%">
         <div style="display: block; width: 100%">
             <div style="display: flex; align-items: center">
                 <div style="display: flex; align-items: center">
-                    <div>
-                        <button style="height: 50px; width: 50px" type="button" class="btn btn-outline-danger">
-                            <i class="bi bi-heart"></i>
-                        </button>
-                    </div>
                     <div style="white-space: nowrap; margin-left: 2%">
                         <p id="restName" style="font-size: 3rem; ">Restaurant Name</p>
                     </div>
@@ -366,11 +468,7 @@ include("views/template/Top.php"); ?>
                             <i class="bi bi-share-fill"></i>
                         </button>
                     </div>
-                    <div">
-                    <button type="button" class="btn btn-primary btn-outline-success">
-                        Add a Review
-                    </button>
-                </div>
+                    <div id="ReviewButton"></div>
             </div>
         </div>
         <div style="display: flex">
