@@ -25,8 +25,8 @@ include("views/template/Top.php"); ?>
 
 
     function getData(restID) {
-        const apiCall = apiURL + restID;
-        fetch(apiCall)
+        const apiCallRestInfo = apiURL + restID;
+        fetch(apiCallRestInfo)
             .then(response => response.json())
             .then(data => {
 
@@ -38,6 +38,30 @@ include("views/template/Top.php"); ?>
                 document.getElementById("restAddr").innerText = restAddress;
                 restDesription = restInfo[0].description;
                 document.getElementById("restDesc").innerText = restDesription;
+            })
+        const apiCallMenuItems = apiURL + restID + "/items";
+        fetch(apiCallMenuItems)
+            .then(response => response.json())
+            .then(data => {
+                let menuItems = data.data;
+                // console.log(menuItems);
+                let tmpData = "";
+                menuItems.forEach((item) => {
+                    // console.log(item.price)
+                    tmpData += '<div class="row">\n';
+                    tmpData += '<div class="col-sm-8" >\n';
+                    tmpData += '<p style="font-size: 1rem">\n';
+                    tmpData +=  item.name + '\n';
+                    tmpData += '</p>\n';
+                    tmpData += '</div>\n';
+                    tmpData += '<div class="col-sm-2" >\n';
+                    tmpData += '<p style="font-size: 1rem">\n';
+                    tmpData +=  item.price + "S$";
+                    tmpData += ' </p>\n';
+                    tmpData += '</div>\n';
+                    tmpData += '</div>\n';
+                })
+                document.getElementById("menuModalSubBody2").innerHTML = tmpData;
             })
     }
 
@@ -245,17 +269,33 @@ include("views/template/Top.php"); ?>
 
 </style>
 
-<div class="modal fade" id="exampleModalLong" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+<div class="modal fade" id="menuModal" tabindex="-1" role="dialog" aria-labelledby="menuModalTitle" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLongTitle">Menu</h5>
+                <h5 class="modal-title" id="menuModalTitle">Menu</h5>
                 <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <div class="modal-body">
-                ...
+            <div id="menuModalBody" class="modal-body">
+                <div id="menuModalSubBody1" class="container">
+                    <div class="row">
+                        <div class="col-sm-8" >
+                            <p class="font-weight-bold" style="font-size: 1rem">
+                                Item
+                            </p>
+                        </div>
+                        <div class="col-sm-2" >
+                            <p class="font-weight-bold" style="font-size: 1rem">
+                                Price
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div id="menuModalSubBody2" class="container">
+
+                </div>
             </div>
         </div>
     </div>
@@ -321,7 +361,7 @@ include("views/template/Top.php"); ?>
                     </p>
                 </div>
                 <div style="margin-left: 2%">
-                    <p data-bs-toggle="modal" data-bs-target="#exampleModalLong" style="font-size: 1.2rem;"> <i class="bi bi-book-fill"></i> Menu
+                    <p data-bs-toggle="modal" data-bs-target="#menuModal" style="font-size: 1.2rem;"> <i class="bi bi-book-fill"></i> Menu
                     </p>
                 </div>
             </div>
@@ -367,7 +407,7 @@ include("views/template/Top.php"); ?>
         </p>
         <div style="display: flex; margin-top: 30px">
             <p class="font-weight-bold" style="font-size: 1.2rem;">Popular Items</p>
-            <p class="font-weight-bold" style="margin-left: auto; margin-right: 10px" data-bs-toggle="modal" data-bs-target="#exampleModalLong">view full menu</p>
+            <p class="font-weight-bold" style="margin-left: auto; margin-right: 10px" data-bs-toggle="modal" data-bs-target="#menuModal">view full menu</p>
         </div>
         <div class="swiffy-slider slider-item-show3 slider-item-reveal slider-nav-invisible slider-nav-dark slider-nav-inside">
             <ul class="slider-container py-4" style="padding-top: 0px">
