@@ -12,7 +12,6 @@ if (navAuth && navDropdown && navUsername && logoutBtn) {
         .then(response => response.json())
         .then(data => {
             const { isVerified, username } = data.data;
-            console.log(data.data);
             if(isVerified) {
                 navDropdown.style.setProperty('display', 'flex', 'important');
             }
@@ -50,7 +49,9 @@ if (navAuth && navDropdown && navUsername && logoutBtn) {
         'contact': 3,
         'work': 4
     };
-    navigationLinks[pageIndices[page]].classList.add("active");
 
+    if(pageIndices[page]) {
+        navigationLinks[pageIndices[page]].classList.add("active");
+    }
 
 }
