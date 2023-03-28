@@ -146,9 +146,14 @@ include("views/template/Top.php"); ?>
                 menuItems.forEach((item) => {
                     // console.log(item.price)
                     tmpData += '<div class="row">\n';
-                    tmpData += '<div class="col-sm-8" >\n';
+                    tmpData += '<div class="col-sm-3" >\n';
                     tmpData += '<p style="font-size: 1rem">\n';
                     tmpData +=  item.name + '\n';
+                    tmpData += '</p>\n';
+                    tmpData += '</div>\n';
+                    tmpData += '<div class="col-sm-7" >\n';
+                    tmpData += '<p style="font-size: 1rem">\n';
+                    tmpData +=  item.description + '\n';
                     tmpData += '</p>\n';
                     tmpData += '</div>\n';
                     tmpData += '<div class="col-sm-2" >\n';
@@ -160,6 +165,7 @@ include("views/template/Top.php"); ?>
                 })
                 document.getElementById("menuModalSubBody2").innerHTML = tmpData;
             })
+
     }
 
 </script>
@@ -378,9 +384,14 @@ include("views/template/Top.php"); ?>
             <div id="menuModalBody" class="modal-body">
                 <div id="menuModalSubBody1" class="container">
                     <div class="row">
-                        <div class="col-sm-8" >
+                        <div class="col-sm-3" >
                             <p class="font-weight-bold" style="font-size: 1rem">
                                 Item
+                            </p>
+                        </div>
+                        <div class="col-sm-7" >
+                            <p class="font-weight-bold" style="font-size: 1rem">
+                                Description
                             </p>
                         </div>
                         <div class="col-sm-2" >
@@ -542,23 +553,23 @@ include("views/template/Top.php"); ?>
                         </button>
                     </div>
                     <div id="ReviewButton"></div>
+                </div>
+            </div>
+            <div style="display: flex">
+                <div>
+                    <p style="font-size: 1.2rem" id="restCuisine">Cuisine: </p>
+                </div>
+                <div style="margin-left: 1%">
+                    <p style="font-size: 1.2rem;" id="restPrice">
+                        <i class="bi bi-currency-dollar"></i>Estimated Price
+                    </p>
+                </div>
+                <div style="margin-left: 2%">
+                    <p data-bs-toggle="modal" data-bs-target="#menuModal" style="font-size: 1.2rem;"> <i class="bi bi-book-fill"></i> Menu
+                    </p>
+                </div>
             </div>
         </div>
-        <div style="display: flex">
-            <div>
-                <p style="font-size: 1.2rem" id="restCuisine">Cuisine: </p>
-            </div>
-            <div style="margin-left: 1%">
-                <p style="font-size: 1.2rem;" id="restPrice">
-                    <i class="bi bi-currency-dollar"></i>Estimated Price
-                </p>
-            </div>
-            <div style="margin-left: 2%">
-                <p data-bs-toggle="modal" data-bs-target="#menuModal" style="font-size: 1.2rem;"> <i class="bi bi-book-fill"></i> Menu
-                </p>
-            </div>
-        </div>
-    </div>
     </div>
 </section>
 <div id="restaurantCarousel">
