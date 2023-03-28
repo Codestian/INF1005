@@ -21,7 +21,7 @@ Router::get("/restaurants/?", fn() => include("routes/Restaurants.php"));
 Router::get("/restaurants/(\d+)/?", fn() => include("routes/RestaurantsOne.php"));
 
 Router::get("/restaurants/north/?", fn() => include("routes/RestaurantsMap.php"));
-Router::get("/restaurants/south/?", fn() => include("routes/RestaurantsMap.php"));
+Router::get("/restaurants/central/?", fn() => include("routes/RestaurantsMap.php"));
 Router::get("/restaurants/east/?", fn() => include("routes/RestaurantsMap.php"));
 Router::get("/restaurants/west/?", fn() => include("routes/RestaurantsMap.php"));
 
