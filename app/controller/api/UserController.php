@@ -150,26 +150,28 @@ class UserController
 
     public function verifyUser(Request $req, Response $res): void
     {
-        $username = $this->checkTokenMiddleware($req, $res);
+        $obj = $this->checkTokenMiddleware($req, $res);
         $data = new StdClass();
         $data->isVerified = true;
-        $data->username = $username;
+        $data->username = $obj->username;
+        $data->id = $obj->id;
         $res->toJSON($data);
     }
 
-    public function checkTokenMiddleware(Request $req, Response $res): string
+    public function checkTokenMiddleware(Request $req, Response $res): stdClass
     {
         $isAuthenticated = false;
-        $username = "";
+        $obj = new StdClass();
 
         if (isset($_COOKIE['token'])) {
             $token = (string)$_COOKIE['token'];
             $data = Token::decodeToken($token);
             if (isset($data->email) && isset($data->role)) {
-                $sql = $this->users->read(['username', 'email', 'role_id', 'provider_id'], $this->table, ['email = ' . "'" . $data->email . "'"]);
+                $sql = $this->users->read(['id', 'username'], $this->table, ['email = ' . "'" . $data->email . "'"]);
                 $this->users->close();
                 if (isset($sql[0]->username)) {
-                    $username = $sql[0]->username;
+                    $obj->username = $sql[0]->username;
+                    $obj->id = $sql[0]->id;
                     $isAuthenticated = true;
                 }
             }
@@ -180,6 +182,6 @@ class UserController
             $res->toJSON($data);
             exit();
         }
-        return $username;
+        return $obj;
     }
 }

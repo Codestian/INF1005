@@ -1,11 +1,13 @@
 <?php $title="Login"; $showNavbar = false; $mainPaddingTop = "0"; include("views/template/Top.php"); ?>
 
 <div class="container-fluid redirect-container min-vh-100">
-    <div class="d-flex justify-content-center">
-        <div class="spinner-border me-3" role="status">
-            <span class="visually-hidden">Loading...</span>
+    <div class="justify-content-center" id="loading-container">
+        <div class="d-flex">
+            <div class="spinner-border me-3" role="status">
+                <span class="visually-hidden">Loading...</span>
+            </div>
+            <h1 class="h3 fw-bold text-center">Logging in...</h1>
         </div>
-        <h1 class="h3 fw-bold text-center">Logging in...</h1>
     </div>
     <form class="text-center" id="register-form">
         <!--                <img class="mb-4" src="/docs/5.2/assets/brand/bootstrap-logo.svg" alt="" width="72" height="57">-->
