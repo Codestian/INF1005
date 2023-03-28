@@ -1,3 +1,3 @@
-<footer class="py-5 bg-light">
-    <span class="p-4">This is a footer</span>
+<footer class="d-flex py-5 bg-dark justify-content-center">
+    <p class="text-white"> © 2023 <img src="../../../public/images/piza-smol.png" alt="pizza-icon">Choppy, Inc</p>
 </footer>
