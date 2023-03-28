@@ -6,6 +6,43 @@ include("views/template/Top.php"); ?>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css"
       integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css">
+
+<script>
+
+    let restName = "";
+    let restAddress = "";
+    let restDesription = "";
+
+    const apiURL = "/api/v1/restaurants/";
+    const queryString = window.location.href;
+    if (queryString.includes("restaurants/"))
+    {
+        // console.log("has rest")
+        const restID = queryString.split("restaurants/").pop();
+        getData(restID);
+    }
+
+
+
+    function getData(restID) {
+        const apiCall = apiURL + restID;
+        fetch(apiCall)
+            .then(response => response.json())
+            .then(data => {
+
+                let restInfo = data.data;
+                // console.log(restInfo);
+                restName = restInfo[0].name;
+                document.getElementById("restName").innerText = restName;
+                restAddress = restInfo[0].address;
+                document.getElementById("restAddr").innerText = restAddress;
+                restDesription = restInfo[0].description;
+                document.getElementById("restDesc").innerText = restDesription;
+            })
+    }
+
+</script>
+
 <style>
     .carousel-item {
         height: 30rem;
@@ -208,13 +245,12 @@ include("views/template/Top.php"); ?>
 
 </style>
 
-<div class="modal fade" id="exampleModalLong" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle"
-     aria-hidden="true">
+<div class="modal fade" id="exampleModalLong" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="exampleModalLongTitle">Menu</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
@@ -224,72 +260,69 @@ include("views/template/Top.php"); ?>
         </div>
     </div>
 </div>
-<section style="padding-top: 65px;">
-    <div class="container">
-        <div>
+<section style="padding-top: 10px;">
+    <div style="width: 90%; margin-left: 5%">
+        <div style="display: block; width: 100%">
             <div style="display: flex; align-items: center">
-                <div style="display: block;  width: 5%; order: 1">
-                    <button style="height: 50px; width: 50px" type="button" class="btn btn-outline-danger">
-                        <i class="bi bi-heart"></i>
-                    </button>
+                <div style="display: flex; align-items: center">
+                    <div>
+                        <button style="height: 50px; width: 50px" type="button" class="btn btn-outline-danger">
+                            <i class="bi bi-heart"></i>
+                        </button>
+                    </div>
+                    <div style="white-space: nowrap; margin-left: 2%">
+                        <p id="restName" style="font-size: 3rem; ">Restaurant Name</p>
+                    </div>
+                    <div style="margin-left: 5%; display: flex; align-items: center; color: #ffbf00;">
+                        <svg style="padding-right: 1%" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1792 1792" width="15" height="15">
+                            <path fill="currentColor"
+                                  d="M1728 647q0 22-26 48l-363 354 86 500q1 7 1 20 0 21-10.5 35.5t-30.5 14.5q-19 0-40-12l-449-236-449 236q-22 12-40 12-21 0-31.5-14.5t-10.5-35.5q0-6 2-20l86-500-364-354q-25-27-25-48 0-37 56-46l502-73 225-455q19-41 49-41t49 41l225 455 502 73q56 9 56 46z"></path>
+                        </svg>
+                        5.0
+                    </div>
                 </div>
-                <div style="display: block;width: 65%; order: 2">
-                    <p style="font-size: 3rem; ">Restaurant Name</p>
-                </div>
-                <div style="display: block;width: 10%; order: 3">
-                    <button style="height: 50px; width: 100px; " type="button"
-                            class="btn btn-primary btn-outline-success">
+                <div style="margin-left: auto">
+                    <button style="height: 50px; " type="button" class="btn btn-primary btn-outline-success">
                         Book Now
                     </button>
                 </div>
-                <div style="display: block;width: 20%; order: 4">
-                    Ratings:<br>
-                    STARS HERE
-                </div>
             </div>
-            <div>
-                <div style="display: flex; align-items: center">
-                    <div style="width: 30%">
-                        <p style="font-size: 1.2rem">Restaurant Type, Food Type</p>
-                    </div>
-                    <div style="width: 42%">
-                        <p style="font-size: 1.2rem;">
-                            <i class="bi bi-currency-dollar"></i>Estimated Price
-                        </p>
-                    </div>
-                    <div style="width: 5%">
+            <div style="display: flex">
+                <div>
+                    <p style="font-size: 1.2rem; " id="restAddr">
+                        <i class="bi bi-geo-alt"></i>Address
+                    </p>
+                </div>
+                <div style="margin-left: 2%">
+                    <p style="font-size: 1.2rem;">
+                        <i class="bi bi-clock-fill"></i> Opening Hours
+                    </p>
+                </div>
+                <div style="margin-left: auto; display: flex">
+                    <div style="margin-right: 2%;">
                         <button type="button" class="btn btn-success">
                             <i class="bi bi-share-fill"></i>
                         </button>
                     </div>
-                    <div style="width: 15%">
-                        <button type="button" class="btn btn-primary btn-outline-success">
-                            Add a Review
-                        </button>
-                    </div>
+                    <div">
+                    <button type="button" class="btn btn-primary btn-outline-success">
+                        Add a Review
+                    </button>
+                </div>
                 </div>
             </div>
-            <div>
-                <div style="display: flex; align-items: center">
-                    <div style="width: 100%">
-                        <p style="font-size: 1.2rem; ">
-                            <i class="bi bi-geo-alt"></i>Address
-                        </p>
-                    </div>
+            <div style="display: flex">
+                <div>
+                    <p style="font-size: 1.2rem">Restaurant Type, Food Type</p>
                 </div>
-            </div>
-            <div>
-                <div style="display: flex; align-items: center">
-                    <div style="width: 30%">
-                        <p style="font-size: 1.2rem;">
-                            <i class="bi bi-clock-fill"></i> Opening Hours
-                        </p>
-                    </div>
-                    <div>
-                        <p style="font-size: 1.2rem;" data-toggle="modal" data-target="#exampleModalLong">
-                            <i class="bi bi-book-fill"></i> Menu
-                        </p>
-                    </div>
+                <div style="margin-left: 1%">
+                    <p style="font-size: 1.2rem;">
+                        <i class="bi bi-currency-dollar"></i>Estimated Price
+                    </p>
+                </div>
+                <div style="margin-left: 2%">
+                    <p data-bs-toggle="modal" data-bs-target="#exampleModalLong" style="font-size: 1.2rem;"> <i class="bi bi-book-fill"></i> Menu
+                    </p>
                 </div>
             </div>
         </div>
@@ -324,7 +357,7 @@ include("views/template/Top.php"); ?>
 <div style="display: flex; width: 90%; margin-left: 5%; margin-top: 20px ">
     <div style="width: 60%;">
         <p class="font-weight-bold" style="font-size: 1.2rem">Restaurant Description</p>
-        <p style="margin: 10px">
+        <p id="restDesc" style="margin: 10px">
             Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the
             industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and
             scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap
@@ -334,8 +367,7 @@ include("views/template/Top.php"); ?>
         </p>
         <div style="display: flex; margin-top: 30px">
             <p class="font-weight-bold" style="font-size: 1.2rem;">Popular Items</p>
-            <p class="font-weight-bold" style="margin-left: auto; margin-right: 10px" data-toggle="modal"
-               data-target="#exampleModalLong">view full menu</p>
+            <p class="font-weight-bold" style="margin-left: auto; margin-right: 10px" data-bs-toggle="modal" data-bs-target="#exampleModalLong">view full menu</p>
         </div>
         <div class="swiffy-slider slider-item-show3 slider-item-reveal slider-nav-invisible slider-nav-dark slider-nav-inside">
             <ul class="slider-container py-4" style="padding-top: 0px">
