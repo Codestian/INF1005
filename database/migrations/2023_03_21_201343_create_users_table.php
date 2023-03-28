@@ -35,9 +35,13 @@ class CreateUsersTable {
     //  If you need to insert data right after migration, do it here.
     public function seed() : void {
         $users = new Users($this->mysqli);
+
         $keys = ['username', 'email', 'password', 'role_id', 'provider_id'];
         $values = ['Administrator Hid', 'admin@gmail.com', 'Password12!', 1, 1];
         $users->create($this->table, $keys, $values);
+
+        $values1 = ['John Doe', 'john@gmail.com', 'mypassword!', 2, 1];
+        $users->create($this->table, $keys, $values1);
     }
 
 }

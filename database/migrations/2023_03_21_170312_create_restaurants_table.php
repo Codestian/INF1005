@@ -43,9 +43,13 @@ class CreateRestaurantsTable {
 
         $keys = ['name', 'description', 'address', 'rating', 'opening_hours', 'closing_hours', 'estimated_price', 'cuisine_id', 'region_id'];
 
-        $restaurants->create($this->table, $keys, ['Saap Saap Thai', 'Berry nice food', 'Tampines Hub', 5, 1000, 2200, 14, 1, 1]);
-        $restaurants->create($this->table, $keys, ['McDonalds', 'McSpicy makes me poop', 'Temasek Polytechnic', 4, 1100, 2100, 12, 6, 4]);
-        $restaurants->create($this->table, $keys, ['Saizeriya', 'Microwaved dishes', 'Jurong Point Mall', 2, 1200, 0000, 9, 2, 3]);
+        $restaurants->create($this->table, $keys, ['Saap Saap Thai', 'Vivamus at semper turpis. Praesent suscipit quam vitae consectetur varius. Vivamus condimentum nunc vel lacus sagittis, eu varius sapien aliquam. Fusce pretium et mi ac facilisis. Nulla facilisi. Donec iaculis faucibus urna. Praesent ultrices finibus ultricies.', 'Tampines Hub', 5, 1000, 2200, 14, 1, 1]);
+        $restaurants->create($this->table, $keys, ['McDonalds', 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. In pharetra elit sit amet erat malesuada egestas nec sed massa. Mauris felis ipsum, sodales nec pharetra nec, suscipit id quam. Integer condimentum mi orci, ac pretium dui iaculis in. Nulla placerat diam turpis, id pretium ex vestibulum ut.', 'Temasek Polytechnic', 4, 1100, 2100, 12, 6, 4]);
+        $restaurants->create($this->table, $keys, ['Saizeriya', 'Mauris quis risus tempus, aliquam lacus nec, posuere diam. Nulla at magna quis urna condimentum blandit sed tristique arcu. Praesent viverra erat sapien, eget maximus dolor posuere congue.', 'Jurong Point Mall', 2, 1200, 0000, 9, 2, 3]);
+        $restaurants->create($this->table, $keys, ['Jinjjia Chicken', 'Nulla sit amet ipsum maximus eros ornare vestibulum. Ut ut iaculis turpis. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Quisque consectetur, nibh et bibendum posuere, enim tellus facilisis metus, non dapibus odio felis vitae justo.', 'Jurong East', 5, 1000, 2200, 14, 2, 1]);
+        $restaurants->create($this->table, $keys, ['Sushi Stuff', 'Donec diam nulla, faucibus sed placerat tincidunt, mattis vitae ante. Mauris quis risus tempus, aliquam lacus nec, posuere diam. Nulla at magna quis urna condimentum blandit sed tristique arcu.', 'AMK Hub', 5, 1000, 2200, 14, 1, 2]);
+        $restaurants->create($this->table, $keys, ['KFC', 'Quisque ac ultrices dui, a placerat lectus. Sed nibh odio, sodales at arcu vitae, feugiat pretium nisl. Quisque in orci nec erat mattis aliquam eu eget mi.', 'Bugis', 5, 1000, 2200, 14, 6, 2]);
+
     }
 
 }
