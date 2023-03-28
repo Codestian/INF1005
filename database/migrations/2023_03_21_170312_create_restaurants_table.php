@@ -27,9 +27,11 @@ class CreateRestaurantsTable {
         $builder->addColumn("closing_hours", "INT", true);
         $builder->addColumn("estimated_price", "INT", true);
         $builder->addColumn("cuisine_id", "INT", true);
+        $builder->addColumn("region_id", "INT", true);
 
         $builder->setPrimaryKey("id");
         $builder->setForeignKey("cuisine_id", "cuisine", "id");
+        $builder->setForeignKey("region_id", "region", "id");
 
         $this->mysqli->query($builder->buildCreate());
     }
@@ -39,11 +41,11 @@ class CreateRestaurantsTable {
         //  NOTE: Comment this out in production.
         $restaurants = new Restaurants($this->mysqli);
 
-        $keys = ['name', 'description', 'address', 'rating', 'opening_hours', 'closing_hours', 'estimated_price', 'cuisine_id'];
+        $keys = ['name', 'description', 'address', 'rating', 'opening_hours', 'closing_hours', 'estimated_price', 'cuisine_id', 'region_id'];
 
-        $restaurants->create($this->table, $keys, ['Saap Saap Thai', 'Berry nice food', 'Tampines Hub', 5, 1000, 2200, 14, 1]);
-        $restaurants->create($this->table, $keys, ['McDonalds', 'McSpicy makes me poop', 'Temasek Polytechnic', 4, 1100, 2100, 12, 6]);
-        $restaurants->create($this->table, $keys, ['Saizeriya', 'Microwaved dishes', 'Jurong Point Mall', 2, 1200, 0000, 9, 2]);
+        $restaurants->create($this->table, $keys, ['Saap Saap Thai', 'Berry nice food', 'Tampines Hub', 5, 1000, 2200, 14, 1, 1]);
+        $restaurants->create($this->table, $keys, ['McDonalds', 'McSpicy makes me poop', 'Temasek Polytechnic', 4, 1100, 2100, 12, 6, 4]);
+        $restaurants->create($this->table, $keys, ['Saizeriya', 'Microwaved dishes', 'Jurong Point Mall', 2, 1200, 0000, 9, 2, 3]);
     }
 
 }

@@ -1,12 +1,13 @@
 <?php
 
 use App\Lib\Schema;
+use App\Model\Roles;
 
-class CreateReservationsTable {
+class CreateRegionsTable {
 
     // Modify the table variable to target table.
     public mysqli $mysqli;
-    private string $table = "reservation";
+    private string $table = "region";
     public function __construct(mysqli $mysqli)
     {
         $this->mysqli = $mysqli;
@@ -16,21 +17,22 @@ class CreateReservationsTable {
     public function up() : void {
         $builder = new Schema($this->table);
 
+        // CREATE COLUMNS AND CONSTRAINTS HERE
         $builder->addColumn("id", "INT", true, true);
-        $builder->addColumn("datetime", "DATETIME", true, false);
-        $builder->addColumn("pax", "INT", true);
-        $builder->addColumn("user_id", "INT", true);
-        $builder->addColumn("restaurant_id", "INT", true);
+        $builder->addColumn("name", "VARCHAR(10)", true, false, true);
 
         $builder->setPrimaryKey("id");
-        $builder->setForeignKey("user_id", "user", "id");
-        $builder->setForeignKey("restaurant_id", "restaurant", "id");
 
         $this->mysqli->query($builder->buildCreate());
     }
 
     //  If you need to insert data right after migration, do it here.
     public function seed() : void {
+        $roles = new Roles($this->mysqli);
+        $roles->create($this->table, ['name'], ['north']);
+        $roles->create($this->table, ['name'], ['south']);
+        $roles->create($this->table, ['name'], ['east']);
+        $roles->create($this->table, ['name'], ['west']);
     }
 
 }
