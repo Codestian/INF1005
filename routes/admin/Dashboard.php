@@ -36,6 +36,18 @@ include("views/template/Top.php"); ?>
                         </a>
                     </li>
                     <li>
+                        <a href="/admin/dashboard/reviews" class="nav-link text-white">
+                            <svg class="bi me-2" width="16" height="16"><use xlink:href="#speedometer2"></use></svg>
+                            Review
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/admin/dashboard/reservations" class="nav-link text-white">
+                            <svg class="bi me-2" width="16" height="16"><use xlink:href="#speedometer2"></use></svg>
+                            Reservation
+                        </a>
+                    </li>
+                    <li>
                         <a href="/admin/dashboard/users" class="nav-link text-white">
                             <svg class="bi me-2" width="16" height="16"><use xlink:href="#speedometer2"></use></svg>
                             Users
@@ -60,6 +72,8 @@ include("views/template/Top.php"); ?>
                 case 'users':
                 case 'items':
                 case 'roles':
+                case 'reservations':
+                case 'reviews':
                 case 'restaurants':
                     include("views/admin/Database.php");
                     break;
