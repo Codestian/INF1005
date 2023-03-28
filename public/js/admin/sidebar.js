@@ -7,6 +7,10 @@ const pageIndices = {
     'restaurants': 1,
     'roles': 2,
     'items': 3,
-    'users': 4
+    'reviews': 4,
+    'reservations': 5,
+    'users': 6,
+    'regions': 7,
+    'providers': 8
 };
 navigationLinks[pageIndices[page]].classList.add("active");

@@ -1,7 +1,6 @@
 <?php
 require __DIR__ . "/vendor/autoload.php";
 
-use App\Controller\Api\UserController;
 use App\Controller\Api\Providers\GoogleAuthController;
 
 use App\Controller\CuisineController;
@@ -12,6 +11,7 @@ use App\Controller\RestaurantController;
 use App\Controller\ItemController;
 use App\Controller\ReviewController;
 use App\Controller\RoleController;
+use App\Controller\UserController;
 
 use App\Lib\App;
 use App\Lib\Config;
@@ -41,6 +41,7 @@ Router::get("/login", fn() => include "routes/auth/Login.php");
 Router::get("/register", fn() => include "routes/auth/Register.php");
 Router::get("/auth/redirect/google/?(/?\?.*)", fn() => include "routes/auth/RedirectGoogle.php");
 
+Router::get("/admin/dashboard/?", fn() => include "routes/admin/Home.php");
 Router::get("/admin/dashboard/([a-z]+)/?", function(Request $req, Response $res) {
     $table_name = $req->params[0];
     include("routes/admin/Dashboard.php");
@@ -101,7 +102,12 @@ $provider_controller = new ProviderController(
     ['id', 'name']
 );
 
-$user_controller = new UserController($mysqli);
+$user_controller = new UserController(
+    new \App\Model\Provider($mysqli),
+    'user',
+    ['id', 'username', 'email', 'password', 'role_id', 'provider_id']
+);
+
 $google_auth_controller = new GoogleAuthController($mysqli);
 
 Router::get("/{$api_suffix}/?", function (Request $req, Response $res) {
@@ -118,6 +124,7 @@ addRoutesForResource('reviews', $review_controller);
 addRoutesForResource('cuisines', $cuisine_controller);
 addRoutesForResource('reservations', $reservation_controller);
 addRoutesForResource('providers', $provider_controller);
+addRoutesForResource('users', $user_controller);
 
 function addRoutesForResource($resource_name, $controller): void {
     $api_suffix = "api/v1"; // Replace with your own API version suffix
@@ -129,25 +136,14 @@ function addRoutesForResource($resource_name, $controller): void {
     Router::delete("/{$api_suffix}/{$resource_name}/(\d+)/?", [$controller, "deleteRow"]);
 }
 
-//  Retrieves all users
-Router::get("/{$api_suffix}/users/?", [$user_controller, "getAllUsers"]);
-//  Retrieves one user by its id
-Router::get("/{$api_suffix}/users/(\d+)/?", [$user_controller, "getOneUserById"]);
-//  Creates a new user
-Router::post("/{$api_suffix}/users/?", [$user_controller, "createUser"]);
-//  Updates one user by its id
-Router::put("/{$api_suffix}/users/(\d+)/?", [$user_controller, "updateUser"]);
-//  Deletes one user by its id
-Router::delete("/{$api_suffix}/users/(\d+)/?", [$user_controller, "deleteUser"]);
-
 // Retrieves all restaurant items by restaurant id
-//Router::get("/{$api_suffix}/restaurants/(\d+)/items/?", [$item_controller, "getAllItemsByRestaurantId"]);
+Router::get("/{$api_suffix}/restaurants/(\d+)/items/?", [$item_controller, "getAllRowsByRestaurantId"]);
 
 // Authentication
 Router::post("/{$api_suffix}/auth/login/?", [$user_controller, "loginUser"]);
-Router::post("/{$api_suffix}/auth/register/?", [$user_controller, "registerUser"]);
+//Router::post("/{$api_suffix}/auth/register/?", [$user_controller, "registerUser"]);
 Router::get("/{$api_suffix}/auth/logout/?", [$user_controller, "logoutUser"]);
-
+//
 Router::get("/{$api_suffix}/auth/verify/?", [$user_controller, "verifyUser"]);
 
 // Google Oauth login
