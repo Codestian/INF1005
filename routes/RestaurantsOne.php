@@ -6,12 +6,20 @@ include("views/template/Top.php"); ?>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css"
       integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css">
+<!-- Swiffy Slider CSS -->
+<link href="own-carousel.min.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/swiffy-slider@1.6.0/dist/css/swiffy-slider.min.css" rel="stylesheet" crossorigin="anonymous">
 
 <script>
 
     let restName = "";
     let restAddress = "";
     let restDesription = "";
+    let restRating = "";
+    let restOpeningHours = "";
+    let restClosingHours = "";
+    let restPrice = "";
+    let restCuisine = "";
 
     const apiURL = "/api/v1/restaurants/";
     const queryString = window.location.href;
@@ -38,7 +46,25 @@ include("views/template/Top.php"); ?>
                 document.getElementById("restAddr").innerText = restAddress;
                 restDesription = restInfo[0].description;
                 document.getElementById("restDesc").innerText = restDesription;
+                restRating = restInfo[0].rating;
+                let tmpData = "";
+                tmpData += '<svg style="padding-right: 1%" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1792 1792" width="15" height="15">';
+                tmpData += '<path fill="currentColor" d="M1728 647q0 22-26 48l-363 354 86 500q1 7 1 20 0 21-10.5 35.5t-30.5 14.5q-19 0-40-12l-449-236-449 236q-22 12-40 12-21 0-31.5-14.5t-10.5-35.5q0-6 2-20l86-500-364-354q-25-27-25-48 0-37 56-46l502-73 225-455q19-41 49-41t49 41l225 455 502 73q56 9 56 46z"></path>';
+                tmpData += '</svg>';
+                tmpData += restRating;
+                document.getElementById("restRating").innerHTML = tmpData;
+                restOpeningHours = restInfo[0].opening_hours;
+                restClosingHours = restInfo[0].closing_hours;
+                tmpData = '<i class="bi bi-clock-fill"></i>' + " " + restOpeningHours + ' - ' + restClosingHours;
+                document.getElementById("restHours").innerHTML = tmpData;
+                restPrice = restInfo[0].estimated_price;
+                tmpData = '<i class="bi bi-currency-dollar"></i>'+ restPrice + '/pax ';
+                document.getElementById("restPrice").innerHTML = tmpData;
+                restCuisine = restInfo[0].cuisine_id;
+                document.getElementById("restCuisine").innerText = "Cuisine: " + restCuisine;
             })
+        const apiCallCuisine = apiURL + restID + "/items";
+
         const apiCallMenuItems = apiURL + restID + "/items";
         fetch(apiCallMenuItems)
             .then(response => response.json())
@@ -313,12 +339,8 @@ include("views/template/Top.php"); ?>
                     <div style="white-space: nowrap; margin-left: 2%">
                         <p id="restName" style="font-size: 3rem; ">Restaurant Name</p>
                     </div>
-                    <div style="margin-left: 5%; display: flex; align-items: center; color: #ffbf00;">
-                        <svg style="padding-right: 1%" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1792 1792" width="15" height="15">
-                            <path fill="currentColor"
-                                  d="M1728 647q0 22-26 48l-363 354 86 500q1 7 1 20 0 21-10.5 35.5t-30.5 14.5q-19 0-40-12l-449-236-449 236q-22 12-40 12-21 0-31.5-14.5t-10.5-35.5q0-6 2-20l86-500-364-354q-25-27-25-48 0-37 56-46l502-73 225-455q19-41 49-41t49 41l225 455 502 73q56 9 56 46z"></path>
-                        </svg>
-                        5.0
+                    <div id="restRating" style="margin-left: 5%; display: flex; align-items: center; color: #ffbf00;">
+
                     </div>
                 </div>
                 <div style="margin-left: auto">
@@ -334,7 +356,7 @@ include("views/template/Top.php"); ?>
                     </p>
                 </div>
                 <div style="margin-left: 2%">
-                    <p style="font-size: 1.2rem;">
+                    <p style="font-size: 1.2rem;" id="restHours">
                         <i class="bi bi-clock-fill"></i> Opening Hours
                     </p>
                 </div>
@@ -349,23 +371,23 @@ include("views/template/Top.php"); ?>
                         Add a Review
                     </button>
                 </div>
-                </div>
-            </div>
-            <div style="display: flex">
-                <div>
-                    <p style="font-size: 1.2rem">Restaurant Type, Food Type</p>
-                </div>
-                <div style="margin-left: 1%">
-                    <p style="font-size: 1.2rem;">
-                        <i class="bi bi-currency-dollar"></i>Estimated Price
-                    </p>
-                </div>
-                <div style="margin-left: 2%">
-                    <p data-bs-toggle="modal" data-bs-target="#menuModal" style="font-size: 1.2rem;"> <i class="bi bi-book-fill"></i> Menu
-                    </p>
-                </div>
             </div>
         </div>
+        <div style="display: flex">
+            <div>
+                <p style="font-size: 1.2rem" id="restCuisine">Cuisine: </p>
+            </div>
+            <div style="margin-left: 1%">
+                <p style="font-size: 1.2rem;" id="restPrice">
+                    <i class="bi bi-currency-dollar"></i>Estimated Price
+                </p>
+            </div>
+            <div style="margin-left: 2%">
+                <p data-bs-toggle="modal" data-bs-target="#menuModal" style="font-size: 1.2rem;"> <i class="bi bi-book-fill"></i> Menu
+                </p>
+            </div>
+        </div>
+    </div>
     </div>
 </section>
 <div id="restaurantCarousel">

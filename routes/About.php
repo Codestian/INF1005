@@ -1,9 +1,9 @@
 <?php $title = "About";
 include("views/template/Top.php"); ?>
 
-<?php $title = "About Us";
+<?php $heroTitle = "About Us";
+$heroImage = "../../public/images/about/hero.png";
 include "views/components/Hero.php"; ?>
-
 
 <section class="container px-4 pt-5">
     <div class="row">
@@ -19,17 +19,48 @@ include "views/components/Hero.php"; ?>
             </p>
         </div>
         <div class="col-md-6">
-            <img src="https://images.unsplash.com/photo-1517048676732-d65bc937f952?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80"
-                 style="width: 100%; max-height: 320px; object-fit: cover;" class="img-fluid rounded-4"
+            <img src="../public/images/about/mission.png"
+                 style="width: 100%; max-height: 320px; object-fit: cover;" class="img-fluid rounded-3"
                  alt="Your Image Alt Text Here">
         </div>
     </div>
 </section>
 
 <section class="container px-4 pt-5">
+    <h2 class="pb-2 fw-bold border-bottom">Our Values</h2>
+    <div class="row">
+        <?php
+            $name = "Accessibility";
+            $color = "bg-primary";
+            $description="We believe that everyone should be able to access and use our offerings, regardless of their abilities or disabilities.";
+            include "views/components/ValuesCard.php";
+        ?>
+        <?php
+            $name = "Reliability";
+        $color = "bg-success";
+        $description="We are committed to delivering reliable solutions that consistently meet or exceed our customers' expectations.";
+            include "views/components/ValuesCard.php";
+        ?>
+        <?php
+            $name = "Transparency";
+        $color = "bg-danger";
+        $description="We believe in providing our customers with accurate and timely information about our services.";
+            include "views/components/ValuesCard.php";
+        ?>
+        <?php
+            $name = "Customer Service";
+        $color = "bg-info";
+        $description="We prioritize delivering outstanding service, from initial contact to long-term support.";
+            include "views/components/ValuesCard.php";
+        ?>
+    </div>
+
+</section>
+
+<section class="container px-4 pt-5">
     <h2 class="pb-2 fw-bold border-bottom">Our Team</h2>
     <div class="row">
-       <?php $name="Hakim"; $job="CEO - Founder"; include "views/components/AboutTeam.php"; ?>
+        <?php $name="Hakim"; $job="CEO - Founder"; include "views/components/AboutTeam.php"; ?>
         <?php $name="Alan"; $job="Marketing Manager"; include "views/components/AboutTeam.php"; ?>
         <?php $name="Zhi Yin"; $job="Customer Support Specialist"; include "views/components/AboutTeam.php"; ?>
         <?php $name="Hid"; $job="Technical Support"; include "views/components/AboutTeam.php"; ?>
@@ -41,10 +72,5 @@ include "views/components/Hero.php"; ?>
     <h2 class="pb-2 fw-bold border-bottom">Our Partners</h2>
 </section>
 
-<style>
-    .container {
-        /*background: red;*/
-    }
-</style>
 
 <?php include("views/template/Bottom.php"); ?>

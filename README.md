@@ -1,15 +1,19 @@
 # INF1005 Project
 
-This LAMP stack project is built with the MVC model, with the latest PHP 8 features.
-A framework is created from scratch, named Kimavel and is heavily inspired by Laravel.
+This LAMP stack project is built with the MVC model, with the latest PHP 8 features and OOP style.
+As this project is made from scratch, it provides a deeper level of understanding into how frameworks such as Laravel operate.
+
 Includes the following concepts:
 - Models
 - Views
 - Controllers
 - Routing
 - Migrations
+- Seeding
 - QueryBuilder
-- User Roles
+- Middlewares
+- JWT Tokens
+- Rest API
 
 ## Project Structure
 
@@ -17,9 +21,13 @@ Includes the following concepts:
 
 Where the code for the Controller and Model resides. The `/app/lib` folder stores necessary code to start the server, no need to touch.
 
+`/database`
+
+Database table migrations are stored here. This is where you can configure columns and attributes.
+
 `/logs`
 
-Log files can be viewed from here to check where an error comes from during development.
+Log files can be viewed from here to check where an error comes from during development. Actually not used.
 
 `/public`
 
@@ -44,42 +52,61 @@ This also ensures the URL does not contain a `.php` at the end, to make it look 
 
 `Config.php`
 
-Stores necessary static variables that are used by the server, such as database credentials.
+Stores necessary static variables that are used by the server.
+
+`Hakimator.php`
+
+A script to execute database migrations and seeding. Used only during development.
+
+`index.php`
+
+Entry point for all URLs.
 
 ## Setup
 
 ### httpd.conf 
 
-Find the line: `Options Indexes FollowSymLinks` and remove `Indexes`.
-This prevents the end user from accessing critical server directories such as `app` or `vendor`.
-
+#### Apache
+- Find the line: `Options Indexes FollowSymLinks` and remove `Indexes`. This prevents the end user from accessing critical server directories such as `app` or `vendor`.
 Replace `Listen 8080` with `Listen 80`.
 
-To clear a database schema and its tables, run `php hakimator.php clear $schema`.
-To create the database tables, run `php hakimator.php migrate`.
-To insert prebuilt data to the database, run `php hakimator.php seed`.
+#### Frontend
+No setup for frontend is needed, but do note the following endpoints:
+- `/` - Website
+- `/api/v1/` - API
+
+#### Backend
+If the project is returning an internal server error (status 500), follow the following steps.
+You need to have composer installed in your environment.
+
+- Delete the folder `vendor` and file `composer.lock`.
+- Run `composer install`.
+
+#### Database
+- To clear a database schema and its tables, run `php hakimator.php clear $schema`.
+- To create the database tables, run `php hakimator.php migrate`.
+- To insert prebuilt data to the database, run `php hakimator.php seed`.
 
 ### Project folder
 Git clone this repository to your apache /var/www folder. 
 
-## How to create a new route (URL)
+## Development Guide
+Note: This is for development only, not setting up.
+
+### How to create a new route (URL)
 
 1. Copy and rename the `Template.php` file in `routes` to your page name. For naming convention, follow like this: `ShoppingCart`, `Contact`. This will be where the frontend HTML content will be.
-2. Create a file of the same name in `app/controller`, and copy the contents from present Controllers (`Home.php`). Make sure the class names are renamed accordingly.
-3. In `index.php`, create the route, like the following:
+2In `index.php`, create the route, like the following:
 
 ```php
-Router::get('/example', function () {
-    (new Example())->indexAction();
-});
+Router::get('/example', fn() => include("routes/Template.php"));
 ```
 
 Notes:
-- All Bootstrap CSS and JS have already been loaded once inside `views/template/elements/Head.php`.
+- All Bootstrap CSS and JS have already been loaded once inside `views/template/elements/Head.php`. Any additional libraries should be inserted here, not in the routes.
 - Common elements used across webpages are stored under `views/template`.
-- Please create a new branch to commit changes. DO NOT push to main branch, main is for code that has been finalized.
 
-## How to create a new MySQL table in PHP and without opening MySQL Workbench.
+### How to create a new MySQL table in PHP and without opening MySQL Workbench.
 
 To create tables, we use what are called 'migrations'. They are located in `database/migrations`.
 Migrations are useful in quickly creating tables and helps a lot in development, especially in setting up in another environment.

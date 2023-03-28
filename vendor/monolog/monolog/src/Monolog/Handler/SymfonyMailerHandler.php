@@ -37,7 +37,7 @@ class SymfonyMailerHandler extends MailHandler
      * @phpstan-param Email|Closure(string, LogRecord[]): Email $email
      *
      * @param MailerInterface|TransportInterface $mailer The mailer to use
-     * @param Closure|Email                      $email  An email template, the subject/body will be replaced
+     * @param Closure|Email                      $email  An email components, the subject/body will be replaced
      */
     public function __construct($mailer, Email|Closure $email, int|string|Level $level = Level::Error, bool $bubble = true)
     {
