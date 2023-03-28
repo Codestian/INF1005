@@ -2,68 +2,56 @@
 
 use App\Lib\Request;
 use App\Lib\Response;
+use App\Lib\Token;
 use App\Model\Users;
 use mysqli;
+use stdClass;
 
 class UserController
 {
     private Users $users;
-    private string $table ='user';
-    public function __construct(mysqli $mysqli) {
+    private string $table = 'user';
+
+    public function __construct(mysqli $mysqli)
+    {
         $this->users = new Users($mysqli);
     }
 
-    public function getAllUsers(Request $req, Response $res): void
+
+
+    public function registerUser(Request $req, Response $res): void
     {
-        $data = $this->users->read(['id', 'username', 'email', 'password', 'role_id'], $this->table, ['1 = 1']);
-        $this->users->close();
-        $res->toJSON($data);
-    }
-    public function getOneUserById(Request $req, Response $res): void
-    {
-        $data = $this->users->read(['id', 'username', 'email', 'password', 'role_id', 'provider_id'], $this->table, ['id = ' . $req->params[0]]);
-        $this->users->close();
-        $res->toJSON($data);
-    }
-    public function createUser(Request $req, Response $res): void
-    {
-        $columns = ['username', 'email', 'password', 'role_id', 'provider_id'];
-        $data = $this->users->create($this->table, $columns, $req->getJSON($columns));
-        $this->users->close();
-        $res->toJSON($data);
-    }
-    public function updateUser(Request $req, Response $res): void
-    {
-        $columns = ['username', 'email', 'password', 'role_id', 'provider_id'];
+        $columns = ['email', 'username', 'password'];
         $value = $req->getJSON($columns);
 
-        $merged = array_map(function ($key, $val) {
-            return "$key = '$val'";
-        }, $columns, $value);
+        $sql = $this->users->read(['id', 'email'], $this->table, ['email = ' . '"' . $value['email'] . '"']);
 
-        $data = $this->users->update($this->table, $merged, ['id = ' . $req->params[0]]);
+        $data = new StdClass();
+
+        if (isset($sql[0]->email)) {
+            $data->message = "User account exists, please login.";
+            $res->toJSON($data, 409);
+        } else {
+            $sql_1 = $this->users->read(['id', 'username'], $this->table, ['username = ' . '"' . $value['username'] . '"']);
+            if (isset($sql_1[0]->username)) {
+                $data->message = "Username taken, please select another.";
+                $res->toJSON($data, 409);
+            } else {
+                // TODO: HASH PASSWORD
+                $columns = ['username', 'email', 'password', 'role_id', 'provider_id'];
+                $sql_2 = $this->users->create($this->table, $columns, [$value['username'], $value['email'], $value['password'], 2, 1]);
+
+                $payload = new stdClass();
+                $payload->email = $value['email'];
+                $payload->role = 2;
+                $jwt = Token::generateToken($payload);
+                setcookie("token", $jwt, path: "/", httponly: true);
+
+                $data->message = $sql_2[0];
+                $res->toJSON($data);
+            }
+        }
         $this->users->close();
-        $res->toJSON($data);
-    }
-    public function deleteUser(Request $req, Response $res): void
-    {
-        $data = $this->users->delete($this->table, ['id = ' . $req->params[0]]);
-        $this->users->close();
-        $res->toJSON($data);
     }
 
-    public function loginUser(Request  $req, Response $res): void {
-        $columns = ['email', 'password'];
-        $value = $req->getJSON($columns);
-
-        $res->toJSON($value);
-
-//        if($value["email"] == $data["email"]) {
-//            $res->toJSON($data);
-//        }
-//        else {
-//            echo "no";
-//        }
-
-    }
 }

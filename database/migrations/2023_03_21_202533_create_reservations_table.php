@@ -17,12 +17,12 @@ class CreateReservationsTable {
         $builder = new Schema($this->table);
 
         $builder->addColumn("id", "INT", true, true);
-        $builder->setPrimaryKey("id");
         $builder->addColumn("datetime", "DATETIME", true, false);
         $builder->addColumn("pax", "INT", true);
         $builder->addColumn("user_id", "INT", true);
         $builder->addColumn("restaurant_id", "INT", true);
 
+        $builder->setPrimaryKey("id");
         $builder->setForeignKey("user_id", "user", "id");
         $builder->setForeignKey("restaurant_id", "restaurant", "id");
 

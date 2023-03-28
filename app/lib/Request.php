@@ -1,5 +1,7 @@
 <?php namespace App\Lib;
 
+use stdClass;
+
 class Request
 {
     public $params;
@@ -53,7 +55,9 @@ class Request
             }
             if (!empty($missing_attributes)) {
                 // Handle missing attributes error
-                $res->toJSON('Missing attributes: ' . implode(', ', $missing_attributes), 400);
+                $data = new StdClass();
+                $data->message = 'Missing attributes: ' . implode(', ', $missing_attributes);
+                $res->toJSON($data, 400);
                 exit();
             }
 
@@ -63,14 +67,18 @@ class Request
                 $filtered_data[$attribute_name] = filter_var(trim($data[$attribute_name]), FILTER_SANITIZE_FULL_SPECIAL_CHARS);
                 if ($attribute_name == 'email' && !filter_var($filtered_data[$attribute_name], FILTER_VALIDATE_EMAIL)) {
                     // Handle invalid email address error
-                    $res->toJSON('Invalid email address', 400);
+                    $data = new StdClass();
+                    $data->message = 'Invalid email address';
+                    $res->toJSON($data, 400);
                     exit();
                 }
             }
 
             return $filtered_data;
         } catch (\JsonException $e) {
-            $res->toJSON('JSON is not in the correct format', 400);
+            $data = new StdClass();
+            $data->message = 'JSON is not in the correct format';
+            $res->toJSON($data, 400);
             exit();
         }
     }

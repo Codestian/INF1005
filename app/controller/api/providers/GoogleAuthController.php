@@ -52,7 +52,7 @@ class GoogleAuthController {
                 $data = $this->users->read(['username', 'email', 'role_id', 'provider_id'], $this->table, ['email = ' . "'" . $email . "'"]);
 
                 if(isset($data[0]->username)) {
-                    //  User exists in database, provide JWT token.
+                    //  User exists in database.
                     $obj->email = $data[0]->email;
                     $obj->role = $data[0]->role_id;
 
@@ -76,8 +76,11 @@ class GoogleAuthController {
 
                 $this->users->close();
 
-                $jwt = JWT::encode([$obj], "secret", 'HS256');
-                setcookie( "token", $jwt, path:"/" ,httponly:true);
+                $payload = new stdClass();
+                $payload->email = $email;
+                $payload->role = 2;
+                $jwt = Token::generateToken($payload);
+                setcookie( "token", $jwt, path:"/" , httponly:true);
 
                 $res->toJSON($obj);
             }
@@ -88,17 +91,6 @@ class GoogleAuthController {
         else {
             $res->toJSON("please login again", 400);
         }
-
-//        $test = Token::generateToken("test","secret");
-//
-//        $test1 = Token::decodeToken("mkfememiefw","secret");
-
-//        echo $test;
-
-//        printf('Hello %s!', $ownerDetails->getEmail());
-//        header("Location: http://www.localhost/");
-//        exit();
-
     }
 
     function generateUsername(): string
