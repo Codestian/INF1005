@@ -1,7 +1,7 @@
 <?php
 require __DIR__ . "/vendor/autoload.php";
 
-use App\Controller\api\ItemController;
+use App\Controller\Api\ItemController;
 use App\Controller\Api\RoleController;
 use App\Controller\Api\UserController;
 
@@ -20,6 +20,11 @@ Router::get("/", fn() => include("routes/Home.php"));
 Router::get("/restaurants/?", fn() => include("routes/Restaurants.php"));
 Router::get("/restaurants/(\d+)/?", fn() => include("routes/RestaurantsOne.php"));
 
+Router::get("/restaurants/north/?", fn() => include("routes/RestaurantsMap.php"));
+Router::get("/restaurants/central/?", fn() => include("routes/RestaurantsMap.php"));
+Router::get("/restaurants/east/?", fn() => include("routes/RestaurantsMap.php"));
+Router::get("/restaurants/west/?", fn() => include("routes/RestaurantsMap.php"));
+
 Router::get("/about/?", fn() => include("routes/About.php"));
 Router::get("/contact/?", fn() => include("routes/Contact.php"));
 Router::get("/work/?", fn() => include("routes/Work.php"));
@@ -30,7 +35,11 @@ Router::get("/login", fn() => include "routes/auth/Login.php");
 Router::get("/register", fn() => include "routes/auth/Register.php");
 Router::get("/auth/redirect/google/?(/?\?.*)", fn() => include "routes/auth/RedirectGoogle.php");
 
-Router::get("/admin/dashboard/?", fn() => include("routes/admin/Dashboard.php"));
+Router::get("/admin/dashboard/([a-z]+)/?", function(Request $req, Response $res) {
+    $table_name = $req->params[0];
+    include("routes/admin/Dashboard.php");
+});
+
 Router::get("/admin/login/?", fn() => include("routes/admin/Login.php"));
 
 // The below code is for backend API, frontend is above.
@@ -46,12 +55,9 @@ $role_controller = new RoleController($mysqli);
 $google_auth_controller = new GoogleAuthController($mysqli);
 
 Router::get("/{$api_suffix}/?", function (Request $req, Response $res) {
-
-    $obj = new stdClass();
-    $obj->status = 200;
-    $obj->message = "Welcome to Choppy's API";
-
-    $res->toJSON($obj);
+    $data = new StdClass();
+    $data->message = "Welcome to Choppy's API";
+    $res->toJSON($data);
 });
 
 //  Retrieves all restaurants
@@ -101,7 +107,12 @@ Router::delete("/{$api_suffix}/roles/(\d+)/?", [$role_controller, "deleteRole"])
 // Retrieves all restaurant items by restaurant id
 Router::get("/{$api_suffix}/restaurants/(\d+)/items/?", [$item_controller, "getAllItemsByRestaurantId"]);
 
+// Authentication
 Router::post("/{$api_suffix}/auth/login/?", [$user_controller, "loginUser"]);
+Router::post("/{$api_suffix}/auth/register/?", [$user_controller, "registerUser"]);
+Router::get("/{$api_suffix}/auth/logout/?", [$user_controller, "logoutUser"]);
+
+Router::get("/{$api_suffix}/auth/verify/?", [$user_controller, "verifyUser"]);
 
 // Google Oauth login
 Router::get("/{$api_suffix}/auth/google/url/?", [$google_auth_controller, "getAuthUrl"]);

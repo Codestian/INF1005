@@ -3,46 +3,18 @@
 <div class="container-fluid">
     <div class="row">
         <div class="col-lg-6 min-vh-100 login-container left-login">
-            <?php $quote="Food is symbolic of love when words are inadequate."; $background="https://images.unsplash.com/photo-1600891964599-f61ba0e24092?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1920&q=80"; include("views/auth/Background.php"); ?>
+            <?php $quote="Food is symbolic of love when words are inadequate."; $background="../../../public/images/auth/loginBackground.png"; include("views/auth/Background.php"); ?>
         </div>
         <div class="col-lg-6 min-vh-100 login-container right-login">
             <?php include("views/auth/LoginForm.php"); ?>
+            <img src="../../../public/images/auth/formBackground.png" alt="Form background">
         </div>
     </div>
 </div>
 
-<script>
-    document.querySelector("#login-form").addEventListener("submit", (e) => {
-        e.preventDefault();
-        fetch("/api/v1/auth/login", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-                "email": "mh.silvine@gmail.com",
-                "password": "testpass"
-            }),
-        })
-            .then(response => response.json())
-            .then(data => console.log(data))
-            .catch(error => console.error(error));
-    });
-
-    document.querySelector("#google-login").addEventListener("click", (e) => {
-        e.preventDefault();
-        fetch("/api/v1/auth/google/url")
-            .then(response => response.json())
-            .then(data => window.location.href = data.message.url)
-            .catch(error => console.error(error));
-    })
-</script>
+<script type="text/javascript" src="../../public/js/auth/login.js"></script>
 
 <style>
-    body {
-        padding-top: 0;
-    }
-
     .login-container {
         display: flex;
         justify-content: center;
@@ -110,10 +82,9 @@
         position: absolute;
         top: 0;
         left: 0;
-        z-index: 0;
+        z-index: -1;
         opacity: 0.05;
     }
-
 </style>
 
 <?php $showFooter = false; include("views/template/Bottom.php"); ?>

@@ -4,6 +4,7 @@ require_once 'app/lib/interfaces/CrudInterface.php';
 
 use App\Lib\Interfaces\CrudInterface;
 use mysqli;
+use stdClass;
 
 /*
 Most important part of backend, interacts with MySQL database via SQL statements created from QueryBuilder.php.
@@ -16,8 +17,8 @@ abstract class Model implements CrudInterface {
     {
         $this->mysqli = $mysqli;
     }
-    public function create(string $insert, array $column, array $values) : array {
-        $data = [];
+    public function create(string $insert, array $column, array $values) : object {
+        $data = new StdClass();
 
         $query = (new QueryBuilder())
             ->insert($insert)
@@ -27,9 +28,11 @@ abstract class Model implements CrudInterface {
         try {
             $this->mysqli->query($query);
             $id = $this->mysqli->insert_id;
-            $data[] = $id;
+
+            $data->message = "row created successfully";
+            $data->id = $id;
         } catch (\mysqli_sql_exception $e) {
-            $data[] = $e->getMessage();
+            $data->message = $e->getMessage();
         }
 
         return $data;
@@ -54,8 +57,8 @@ abstract class Model implements CrudInterface {
 
         return $data;
     }
-    public function update(string $update, array $set, array $where) : array {
-        $data = [];
+    public function update(string $update, array $set, array $where) : object {
+        $data = new StdClass();
 
         $query = (new QueryBuilder())
             ->update($update)
@@ -65,15 +68,17 @@ abstract class Model implements CrudInterface {
         try {
             $this->mysqli->query($query);
             $id = $this->mysqli->insert_id;
-            $data[] = "updated!";
+
+            $data->message = "row updated successfully";
+            $data->id = $id;
         } catch (\mysqli_sql_exception $e) {
-            $data[] = $e->getMessage();
+            $data->message = $e->getMessage();
         }
 
         return $data;
     }
-    public function delete(string $delete, array $where) : array {
-        $data = array();
+    public function delete(string $delete, array $where) : object {
+        $data = new StdClass();
 
         $query = (new QueryBuilder())
             ->delete($delete)
@@ -81,10 +86,9 @@ abstract class Model implements CrudInterface {
 
         try {
             $this->mysqli->query($query);
-            $data[] = "deleted!";
-        }
-        catch (\mysqli_sql_exception $e) {
-            $data[] = $e->getMessage();
+            $data->message = "row deleted successfully";
+        } catch (\mysqli_sql_exception $e) {
+            $data->message = $e->getMessage();
         }
 
         return $data;
