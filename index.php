@@ -19,7 +19,6 @@ use App\Lib\Database;
 use App\Lib\Request;
 use App\Lib\Response;
 use App\Lib\Router;
-use App\Model\Users;
 
 Router::get("/", fn() => include("routes/Home.php"));
 
@@ -138,6 +137,9 @@ function addRoutesForResource($resource_name, $controller): void {
 
 // Retrieves all restaurant items by restaurant id
 Router::get("/{$api_suffix}/restaurants/(\d+)/items/?", [$item_controller, "getAllRowsByRestaurantId"]);
+
+// Retrieves all restaurants by region id
+Router::get("/{$api_suffix}/regions/(\d+)/restaurants/?", [$restaurant_controller, "getAllRowsByRegionId"]);
 
 // Authentication
 Router::post("/{$api_suffix}/auth/login/?", [$user_controller, "loginUser"]);
