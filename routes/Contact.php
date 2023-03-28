@@ -1,7 +1,8 @@
 <?php $title="Contact"; include("views/template/Top.php"); ?>
 
-<?php $title="Contact Us"; include "views/components/Hero.php"; ?>
-
+<?php $heroTitle = "Contact Us";
+$heroImage = "../../public/images/contact/hero.png";
+include "views/components/Hero.php"; ?>
 
 
 

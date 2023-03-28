@@ -1,7 +1,8 @@
 <?php $title = "About";
 include("views/template/Top.php"); ?>
 
-<?php $title = "About Us";
+<?php $heroTitle = "About Us";
+$heroImage = "../../public/images/about/hero.png";
 include "views/components/Hero.php"; ?>
 
 <section class="container px-4 pt-5">
