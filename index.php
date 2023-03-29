@@ -107,13 +107,14 @@ $user_controller = new UserController(
     ['id', 'username', 'email', 'password', 'role_id', 'provider_id']
 );
 
-$google_auth_controller = new GoogleAuthController($mysqli);
 
 Router::get("/{$api_suffix}/?", function (Request $req, Response $res) {
     $data = new StdClass();
     $data->message = "Welcome to Choppy's API";
     $res->toJSON($data);
 });
+
+$google_auth_controller = new GoogleAuthController($mysqli);
 
 addRoutesForResource('restaurants', $restaurant_controller);
 addRoutesForResource('items', $item_controller);
@@ -125,16 +126,6 @@ addRoutesForResource('reservations', $reservation_controller);
 addRoutesForResource('providers', $provider_controller);
 addRoutesForResource('users', $user_controller);
 
-function addRoutesForResource($resource_name, $controller): void {
-    $api_suffix = "api/v1"; // Replace with your own API version suffix
-
-    Router::get("/{$api_suffix}/{$resource_name}/?", [$controller, "getAllRows"]);
-    Router::get("/{$api_suffix}/{$resource_name}/(\d+)/?", [$controller, "getOneRowById"]);
-    Router::post("/{$api_suffix}/{$resource_name}/?", [$controller, "createRow"]);
-    Router::put("/{$api_suffix}/{$resource_name}/(\d+)/?", [$controller, "updateRow"]);
-    Router::delete("/{$api_suffix}/{$resource_name}/(\d+)/?", [$controller, "deleteRow"]);
-}
-
 // Retrieves all restaurant items by restaurant id
 Router::get("/{$api_suffix}/restaurants/(\d+)/items/?", [$item_controller, "getAllRowsByRestaurantId"]);
 
@@ -145,11 +136,20 @@ Router::get("/{$api_suffix}/regions/(\d+)/restaurants/?", [$restaurant_controlle
 Router::post("/{$api_suffix}/auth/login/?", [$user_controller, "loginUser"]);
 Router::post("/{$api_suffix}/auth/register/?", [$user_controller, "registerUser"]);
 Router::get("/{$api_suffix}/auth/logout/?", [$user_controller, "logoutUser"]);
-//
 Router::get("/{$api_suffix}/auth/verify/?", [$user_controller, "verifyUser"]);
 
 // Google Oauth login
 Router::get("/{$api_suffix}/auth/google/url/?", [$google_auth_controller, "getAuthUrl"]);
 Router::get("/{$api_suffix}/auth/google/login/?(\?code=.+)?", [$google_auth_controller, "login"]);
+
+function addRoutesForResource($resource_name, $controller): void {
+    $api_suffix = "api/v1"; // Replace with your own API version suffix
+
+    Router::get("/{$api_suffix}/{$resource_name}/?", [$controller, "getAllRows"]);
+    Router::get("/{$api_suffix}/{$resource_name}/(\d+)/?", [$controller, "getOneRowById"]);
+    Router::post("/{$api_suffix}/{$resource_name}/?", [$controller, "createRow"]);
+    Router::put("/{$api_suffix}/{$resource_name}/(\d+)/?", [$controller, "updateRow"]);
+    Router::delete("/{$api_suffix}/{$resource_name}/(\d+)/?", [$controller, "deleteRow"]);
+}
 
 App::run();

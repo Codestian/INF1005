@@ -4,6 +4,7 @@ use mysqli;
 
 abstract class AbstractController implements ControllerInterface
 {
+
     protected Model $model;
     protected string $table;
     protected array $columns;
