@@ -47,6 +47,35 @@ class UserController extends AbstractController
         }
     }
 
+    public function registerUser(Request $req, Response $res): void
+    {
+        $columns = ['email', 'username', 'password'];
+        $value = $req->getJSON($columns);
+
+        $sql = $this->model->read(['id', 'email'], $this->table, ['email = ' . '"' . $value['email'] . '"']);
+
+        $data = new StdClass();
+
+        if (isset($sql[0]->email)) {
+            $data->message = "User account exists, please login.";
+            $res->toJSON($data, 409);
+        } else {
+            $sql_1 = $this->model->read(['id', 'username'], $this->table, ['username = ' . '"' . $value['username'] . '"']);
+            if (isset($sql_1[0]->username)) {
+                $data->message = "Username taken, please select another.";
+                $res->toJSON($data, 409);
+            } else {
+                // TODO: HASH PASSWORD
+                $columns = ['username', 'email', 'password', 'role_id', 'provider_id'];
+                $sql_2 = $this->model->create($this->table, $columns, [$value['username'], $value['email'], $value['password'], 2, 1]);
+
+                $data->message = $sql_2->message;
+
+                $res->toJSON($data);
+            }
+        }
+        $this->model->close();
+    }
     public function logoutUser(Request $req, Response $res): void
     {
         setcookie('token', '', time() - 3600, '/', '', true);

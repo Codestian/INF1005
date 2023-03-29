@@ -143,7 +143,7 @@ Router::get("/{$api_suffix}/regions/(\d+)/restaurants/?", [$restaurant_controlle
 
 // Authentication
 Router::post("/{$api_suffix}/auth/login/?", [$user_controller, "loginUser"]);
-//Router::post("/{$api_suffix}/auth/register/?", [$user_controller, "registerUser"]);
+Router::post("/{$api_suffix}/auth/register/?", [$user_controller, "registerUser"]);
 Router::get("/{$api_suffix}/auth/logout/?", [$user_controller, "logoutUser"]);
 //
 Router::get("/{$api_suffix}/auth/verify/?", [$user_controller, "verifyUser"]);
