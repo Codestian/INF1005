@@ -43,7 +43,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const data = await response.json();
         if (response.ok) {
             // Redirect to new page
-            window.location.href = 'http://choppy.codestian.com/admin/dashboard';
+            window.location.href = '/admin/dashboard/users';
         } else {
             // Display error message
             console.log(data.error);
