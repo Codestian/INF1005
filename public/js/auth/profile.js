@@ -1,5 +1,26 @@
-const navUsername = document.querySelector('#nav-username');
 
+let username = "";
+
+function getName(callback) {
+    fetch('/api/v1/auth/verify')
+        .then(response => response.json())
+        .then(data => {
+            const {isVerified, username} = data.data;
+            username.textContent = username;
+            console.log(username);
+            callback(username);
+        })
+        .catch(err => {
+            console.log(err)
+        })
+}
+
+function callName(username) {
+    document.getElementById("welcome").innerHTML = "Welcome Back! " + username;
+}
+getName(callName);
+
+// Functions for changing profile picture.
 document.getElementById('button-file').addEventListener('click', openDialog);
 
 function openDialog() {
@@ -17,4 +38,3 @@ document.getElementById("my-file").onchange = function() {
     }
 }
 
-document.getElementById("welcome").innerHTML = "Welcome Back! " + navUsername.textContent;
