@@ -1,3 +1,4 @@
+let count =0;
 function createTableHead(...rowData) {
     const tableRow = document.createElement('tr');
     const tableData = rowData.map(data => {
@@ -10,6 +11,7 @@ function createTableHead(...rowData) {
 
     for (let i = 0; i < rowData.length; i++) {
         tableRow.appendChild(tableData[i] || document.createElement('th'));
+
     }
 
     return tableRow;
@@ -54,13 +56,13 @@ function createRowCheckBox(isTD) {
 // create the input element with type "checkbox", id "checkbox1", name "options[]", and value "1"
     const input = document.createElement('input');
     input.type = 'checkbox';
-    input.id = 'checkbox1';
+    input.id = 'checkbox'+ count.toString();
     input.name = 'options[]';
     input.value = '1';
 
 // create the label element with "for" attribute "checkbox1"
     const label = document.createElement('label');
-    label.setAttribute('for', 'checkbox1');
+    label.setAttribute('for', 'checkbox'+ count.toString());
 
 // append the input and label elements to the span element
     span.appendChild(input);
@@ -68,6 +70,7 @@ function createRowCheckBox(isTD) {
 
 // append the span element to the table cell element
     td.appendChild(span);
+    count++;
     return td;
 }
 

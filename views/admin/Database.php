@@ -11,6 +11,7 @@
 
 <script type="text/javascript" src="../../public/js/admin/table.js"></script>
 <script type="text/javascript" src="../../public/js/admin/crud.js"></script>
+<script type="text/javascript" src="../../public/js/admin/tableHandling.js"></script>
 <script>
     createTable(<?php echo "'" . $table_name . "'"; ?>);
 </script>

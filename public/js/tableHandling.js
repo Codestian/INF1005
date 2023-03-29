@@ -265,7 +265,7 @@ function deleteAll(){
 }
 
 //Disable mass delete button
-const table = document.querySelector('table');
+const table = document.querySelector('.table-form');
 table.addEventListener('change', (a) => {
     const checkboxes = table.querySelectorAll('input[type="checkbox"]:checked');
     const deleteButton = document.getElementById(' deleteBtn');
@@ -286,11 +286,12 @@ table.addEventListener('change', (a) => {
 
 
 //selectAll checkbox function
-const selectAllCheckbox = document.querySelector('#selectAll');
+const selectAllCheckbox = document.querySelector('#checkbox0');
 selectAllCheckbox.addEventListener('change', function() {
     const checkboxes = document.querySelectorAll('input[type="checkbox"]');
     // If the "Select All" checkbox is checked, check all the other checkboxes
     if (this.checked) {
+        console.log("pressed");
         checkboxes.forEach(function(checkbox) {
             //console.log(checkbox.id);
             checkbox.checked = true;
