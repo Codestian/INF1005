@@ -10,7 +10,7 @@
         </div>
     </div>
     <table id= "table-form" class="table table-striped table-hover">
-        <thead id="table-head">
+        <thead id="table-head" style = "background-color:rgba(5,53,116,0.29)">
         </thead>
         <tbody id="table-body">
         </tbody>
