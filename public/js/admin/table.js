@@ -7,6 +7,8 @@ function createTableHead(...rowData) {
         return th;
     });
 
+
+
     tableRow.appendChild(createRowCheckBox(false));
 
     for (let i = 0; i < rowData.length; i++) {
@@ -18,6 +20,7 @@ function createTableHead(...rowData) {
 }
 
 function createTableRow(row, idx) {
+
     const tableRow = document.createElement('tr');
 
     const keyArr =Object.keys(row);
@@ -26,8 +29,11 @@ function createTableRow(row, idx) {
         const td = document.createElement('td');
         td.classList.add("key-" + key);
         td.textContent = row[key];
+
         return td;
     });
+
+    console.log();
 
     tableRow.appendChild(createRowCheckBox(true));
 
@@ -35,12 +41,15 @@ function createTableRow(row, idx) {
         tableRow.appendChild( tableData[i] || document.createElement('td'));
     }
 
+
     tableRow.appendChild(createRowButtons(idx));
 
     return tableRow;
+
 }
 
-function createRowCheckBox(isTD) {
+function createRowCheckBox(isTD,idx) {
+
     // create the table cell element
     let td;
     if (isTD) {
@@ -56,21 +65,28 @@ function createRowCheckBox(isTD) {
 // create the input element with type "checkbox", id "checkbox1", name "options[]", and value "1"
     const input = document.createElement('input');
     input.type = 'checkbox';
-    input.id = 'checkbox'+ count.toString();
     input.name = 'options[]';
-    input.value = '1';
+    input.value = count.toString();
 
 // create the label element with "for" attribute "checkbox1"
     const label = document.createElement('label');
-    label.setAttribute('for', 'checkbox'+ count.toString());
 
+
+    if (isTD) {
+        input.id = 'checkbox'+ count.toString();
+        label.setAttribute('for', 'checkbox'+ count.toString());
+    } else {
+        input.id = 'selectAll';
+        label.setAttribute('for', 'selectAll');
+    }
+    count++;
 // append the input and label elements to the span element
     span.appendChild(input);
     span.appendChild(label);
 
 // append the span element to the table cell element
     td.appendChild(span);
-    count++;
+
     return td;
 }
 

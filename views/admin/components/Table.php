@@ -4,7 +4,7 @@
             <div class="d-flex justify-content-end p-4">
                 <button id="add-row-btn" type="submit" class="btn btn-success me-3 d-flex align-items-center" data-bs-toggle="modal" data-bs-target="#addRowModal">
                     <i class="material-icons">&#xE147;</i> <span class="ps-2">Add</span></button>
-                <button id="delete" type="button" class="btn btn-danger d-flex align-items-center" data-bs-toggle="modal" data-bs-target="#deleteUsersModal">
+                <button id="deleteRow" type="button" class="btn btn-danger d-flex align-items-center" data-bs-toggle="modal" data-bs-target="#deleteRowModal">
                     <i class="material-icons">&#xE15C;</i> <span class="ps-2">Delete</span></button>
             </div>
         </div>
