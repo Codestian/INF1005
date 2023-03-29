@@ -18,6 +18,9 @@
         </div>
     </div>
 </section>
+<section>
+
+</section>
 
 <script>
     let restaurantInfoArr = [];
@@ -55,7 +58,7 @@
             const restaurantNameHTML = `<h2><a href="/restaurants/${restaurant.id}">${restaurant.name}</a></h2>`;
 
             // Generate the HTML for the restaurant's description
-            const restaurantDescHTML = `<p>${restaurant.description}</p>`;
+            const restaurantDescHTML = `<p class="body-overlay">${restaurant.description}</p>`;
 
             // Generate the HTML for the restaurant's rating
             const starsHTML = '<div class="rating-stars">' +
@@ -66,11 +69,15 @@
                 '<span class="star">&#9733;</span>' +
                 '</div>';
 
-            // Add the rating stars element to the restaurant div
-            restaurantDiv.innerHTML = restaurantNameHTML + starsHTML;
+            // Generate the HTML for the restaurant's image
+            const restaurantImageHTML = `<img src="https://images.unsplash.com/photo-1528279027-68f0d7fce9f1?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=870&q=80" alt="${restaurant.name}" class="restaurant-image">`;
 
-            // Get the rating stars element
+            // Add the rating stars, name, and image elements to the restaurant div
+            restaurantDiv.innerHTML = restaurantNameHTML + starsHTML + restaurantImageHTML;
+
+            // Get the rating stars and image elements
             const ratingStars = restaurantDiv.querySelector('.rating-stars');
+            const restaurantImage = restaurantDiv.querySelector('.restaurant-image');
 
             // Calculate the number of filled stars based on the rating value
             const filledStars = Math.floor(restaurant.rating);
@@ -104,6 +111,12 @@
     .rating-stars .star.filled {
         color: #ff9800;
     }
+
+    img {
+        max-width: 100%;
+        max-height: 100%;
+    }
+
 </style>
 
 <?php include("views/template/Bottom.php"); ?>
