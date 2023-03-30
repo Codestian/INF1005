@@ -89,20 +89,18 @@ class GoogleAuthController {
             }
         }
         else {
-            $res->toJSON("please login again", 400);
+            $res->toJSON("Please login again", 400);
         }
     }
 
     function generateUsername(): string
     {
-        $adjectives = array('red', 'green', 'blue', 'purple', 'yellow', 'orange', 'pink', 'black', 'white', 'gray');
-        $nouns = array('fox', 'dog', 'cat', 'bird', 'lion', 'tiger', 'bear', 'fish', 'snake', 'horse');
+        $adjectives = array('red', 'green', 'blue', 'purple', 'yellow', 'orange', 'pink', 'black', 'white', 'gray', 'magenta', 'cyan', 'teal');
+        $nouns = array('fox', 'dog', 'cat', 'bird', 'lion', 'tiger', 'bear', 'fish', 'snake', 'horse', 'dragon');
 
         $adjective = $adjectives[rand(0, count($adjectives) - 1)];
         $noun = $nouns[rand(0, count($nouns) - 1)];
 
-        $username = $adjective . $noun . rand(100, 999);
-
-        return $username;
+        return $adjective . $noun . rand(100, 999);
     }
 }

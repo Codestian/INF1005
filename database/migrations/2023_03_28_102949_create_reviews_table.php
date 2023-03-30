@@ -2,11 +2,11 @@
 
 use App\Lib\Schema;
 
-class CreateReservationsTable {
+class CreateReviewsTable {
 
     // Modify the table variable to target table.
     public mysqli $mysqli;
-    private string $table = "reservation";
+    private string $table = "review";
     public function __construct(mysqli $mysqli)
     {
         $this->mysqli = $mysqli;
@@ -17,14 +17,15 @@ class CreateReservationsTable {
         $builder = new Schema($this->table);
 
         $builder->addColumn("id", "INT", true, true);
-        $builder->addColumn("datetime", "DATETIME", true, false);
-        $builder->addColumn("pax", "INT", true);
-        $builder->addColumn("user_id", "INT", true);
+        $builder->addColumn("rating", "INT", true);
+        $builder->addColumn("description", "TEXT(512)", true);
+        $builder->addColumn("date", "DATETIME", true);
         $builder->addColumn("restaurant_id", "INT", true);
+        $builder->addColumn("user_id", "INT", true);
 
         $builder->setPrimaryKey("id");
-        $builder->setForeignKey("user_id", "user", "id");
         $builder->setForeignKey("restaurant_id", "restaurant", "id");
+        $builder->setForeignKey("user_id", "user", "id");
 
         $this->mysqli->query($builder->buildCreate());
     }

@@ -45,7 +45,5 @@
 
 </body>
 <script type="text/javascript" src="../../public/js/admin/login.js"></script>
-<!--</html>-->
-
 
 <?php $showFooter = false; include("views/template/Bottom.php"); ?>

@@ -2,7 +2,6 @@ const apiURL = "/api/v1/users";
 const idName = 'checkbox';
 let count = '';
 
-
 const userList = document.querySelector('#user-list');
 
 
@@ -13,7 +12,6 @@ function getData() {
         .then(response => response.json())
         .then(data => {
             let message = data.message;
-
             console.log(data.message);
             let tmpData = "";
 
@@ -41,13 +39,8 @@ function getData() {
                 tmpData += "</tr>";
                 tmpData += "</tbody>";
                 count++;
-
             });
-
             document.getElementById("user-list").innerHTML = tmpData;
-
-
-
         });
 }
 getData();
@@ -72,7 +65,6 @@ function addUser() {
             userData.provider_id = 1;
             //console.log(userData);
             //console.log(message.length.id);
-
 
             const options = {
                 method: 'POST',
@@ -269,10 +261,4 @@ table.addEventListener('change', (a) => {
         deleteButton.disabled = true;
         // Do something here, e.g. disable a button
     }
-
-
 });
-
-
-
-
