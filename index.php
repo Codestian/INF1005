@@ -33,6 +33,8 @@ Router::get("/restaurants/west/?", fn() => include("routes/RestaurantsMap.php"))
 Router::get("/about/?", fn() => include("routes/About.php"));
 Router::get("/contact/?", fn() => include("routes/Contact.php"));
 Router::get("/work/?", fn() => include("routes/Work.php"));
+Router::get("/privacy-policy/?", fn() => include("routes/Privacy.php"));
+Router::get("/terms/?", fn() => include("routes/Terms.php"));
 
 Router::get("/profile/?", fn() => include("routes/auth/Profile.php"));
 
@@ -107,13 +109,14 @@ $user_controller = new UserController(
     ['id', 'username', 'email', 'password', 'role_id', 'provider_id']
 );
 
-$google_auth_controller = new GoogleAuthController($mysqli);
 
 Router::get("/{$api_suffix}/?", function (Request $req, Response $res) {
     $data = new StdClass();
     $data->message = "Welcome to Choppy's API";
     $res->toJSON($data);
 });
+
+$google_auth_controller = new GoogleAuthController($mysqli);
 
 addRoutesForResource('restaurants', $restaurant_controller);
 addRoutesForResource('items', $item_controller);
@@ -125,6 +128,22 @@ addRoutesForResource('reservations', $reservation_controller);
 addRoutesForResource('providers', $provider_controller);
 addRoutesForResource('users', $user_controller);
 
+// Retrieves all restaurant items by restaurant id
+Router::get("/{$api_suffix}/restaurants/(\d+)/items/?", [$item_controller, "getAllRowsByRestaurantId"]);
+
+// Retrieves all restaurants by region id
+Router::get("/{$api_suffix}/regions/(\d+)/restaurants/?", [$restaurant_controller, "getAllRowsByRegionId"]);
+
+// Authentication
+Router::post("/{$api_suffix}/auth/login/?", [$user_controller, "loginUser"]);
+Router::post("/{$api_suffix}/auth/register/?", [$user_controller, "registerUser"]);
+Router::get("/{$api_suffix}/auth/logout/?", [$user_controller, "logoutUser"]);
+Router::get("/{$api_suffix}/auth/verify/?", [$user_controller, "verifyUser"]);
+
+// Google Oauth login
+Router::get("/{$api_suffix}/auth/google/url/?", [$google_auth_controller, "getAuthUrl"]);
+Router::get("/{$api_suffix}/auth/google/login/?(\?code=.+)?", [$google_auth_controller, "login"]);
+
 function addRoutesForResource($resource_name, $controller): void {
     $api_suffix = "api/v1"; // Replace with your own API version suffix
 
@@ -134,22 +153,5 @@ function addRoutesForResource($resource_name, $controller): void {
     Router::put("/{$api_suffix}/{$resource_name}/(\d+)/?", [$controller, "updateRow"]);
     Router::delete("/{$api_suffix}/{$resource_name}/(\d+)/?", [$controller, "deleteRow"]);
 }
-
-// Retrieves all restaurant items by restaurant id
-Router::get("/{$api_suffix}/restaurants/(\d+)/items/?", [$item_controller, "getAllRowsByRestaurantId"]);
-
-// Retrieves all restaurants by region id
-Router::get("/{$api_suffix}/regions/(\d+)/restaurants/?", [$restaurant_controller, "getAllRowsByRegionId"]);
-
-// Authentication
-Router::post("/{$api_suffix}/auth/login/?", [$user_controller, "loginUser"]);
-//Router::post("/{$api_suffix}/auth/register/?", [$user_controller, "registerUser"]);
-Router::get("/{$api_suffix}/auth/logout/?", [$user_controller, "logoutUser"]);
-//
-Router::get("/{$api_suffix}/auth/verify/?", [$user_controller, "verifyUser"]);
-
-// Google Oauth login
-Router::get("/{$api_suffix}/auth/google/url/?", [$google_auth_controller, "getAuthUrl"]);
-Router::get("/{$api_suffix}/auth/google/login/?(\?code=.+)?", [$google_auth_controller, "login"]);
 
 App::run();

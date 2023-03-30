@@ -35,8 +35,8 @@ document.querySelector("#register-form").addEventListener("submit", (e) => {
                 }
                 else {
                     // User account creation successful, redirect user to home.
-                    alert('Welcome! You are now registered.');
-                    window.location.href = "/";
+                    alert('Welcome! You can now login.');
+                    window.location.href = "/login";
                 }
             })
             .catch(error => {
