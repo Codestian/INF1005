@@ -22,7 +22,9 @@ function getData() {
     fetch(API_URI + tableName)
         .then(response=>response.json())
         .then(data => {
+
             data.data.forEach((row, idx) => {
+
                 if(idx === 0) {
                     setInputForModals(Object.keys(row));
                     tableHead.appendChild(createTableHead(...Object.keys(row), 'Actions'));
@@ -79,6 +81,7 @@ function updateData(inputForms, requestBody) {
 }
 
 function deleteData() {
+
     fetch(API_URI + tableName + "/" + selectedId, {
         method: 'DELETE',
     })
@@ -156,6 +159,9 @@ function editRow() {
         const inputElement = formGrp.querySelector('.form-control');
         requestBody[inputElement.id] = inputElement.value;
     })
+    console.log(requestBody);
 
     updateData(inputForms, requestBody);
 }
+
+

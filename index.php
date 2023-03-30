@@ -33,6 +33,8 @@ Router::get("/restaurants/west/?", fn() => include("routes/RestaurantsMap.php"))
 Router::get("/about/?", fn() => include("routes/About.php"));
 Router::get("/contact/?", fn() => include("routes/Contact.php"));
 Router::get("/work/?", fn() => include("routes/Work.php"));
+Router::get("/privacy-policy/?", fn() => include("routes/Privacy.php"));
+Router::get("/terms/?", fn() => include("routes/Terms.php"));
 
 Router::get("/profile/?", fn() => include("routes/auth/Profile.php"));
 
