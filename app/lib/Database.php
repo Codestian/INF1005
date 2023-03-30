@@ -9,7 +9,7 @@ class Database {
         // TODO: PUT IN .env file
         $servername = "127.0.0.1";
         $username = "root";
-        $password = "";
+        $password = "Mhidayah19";
         $database = "inf1005-alpha";
 
         // Create connection
