@@ -4,6 +4,64 @@ include("views/template/Top.php"); ?>
 <?php $heroTitle = "About Us";
 $heroImage = "../../public/images/about/hero.png";
 include "views/components/Hero.php"; ?>
+<style>
+
+    @-webkit-keyframes scroll {
+    0% {
+    transform: translateX(0);
+    }
+    100% {
+    transform: translateX(calc(-250px * 7));
+    }
+    }
+
+    @keyframes scroll {
+    0% {
+    transform: translateX(0);
+    }
+    100% {
+    transform: translateX(calc(-250px * 7));
+    }
+    }
+    .slider {
+    box-shadow: 0 10px 20px -5px rgba(0, 0, 0, 0.125);
+    height: 150px;
+    margin: auto;
+    overflow: hidden;
+    position: relative;
+    width: 960px;
+    }
+    .slider::before, .slider::after {
+    content: "";
+    height: 150px;
+    position: absolute;
+    width: 300px;
+    z-index: 2;
+    }
+    .slider::after {
+    right: 0;
+    top: 0;
+    transform: rotateZ(180deg);
+    }
+    .slider::before {
+    left: 0;
+    top: 0;
+    }
+    .slider .slide-track {
+    -webkit-animation: scroll 40s linear infinite;
+    animation: scroll 40s linear infinite;
+    display: flex;
+    width: calc(250px * 14);
+    }
+    .slider .slide {
+    height: 150px;
+    width: 350px;
+    }
+
+    .partners p {
+        text-align: center;
+    }
+</style>
 
 <section class="container px-4 pt-5">
     <div class="row">
@@ -70,7 +128,43 @@ include "views/components/Hero.php"; ?>
 
 <section class="container px-4 pt-5">
     <h2 class="pb-2 fw-bold border-bottom">Our Partners</h2>
+    <div class="slider">
+        <div class="slide-track">
+            <div class="slide">
+                <img src="https://mobirise.com/extensions/businessm4/assets/images/1.png" alt="" />
+            </div>
+            <div class="slide">
+                <img src="https://mobirise.com/extensions/businessm4/assets/images/2.png" alt="" />
+            </div>
+            <div class="slide">
+                <img src="https://mobirise.com/extensions/businessm4/assets/images/3.png" alt="" />
+            </div>
+            <div class="slide">
+                <img src="https://mobirise.com/extensions/businessm4/assets/images/4.png" alt="" />
+            </div>
+            <div class="slide">
+                <img src="https://mobirise.com/extensions/businessm4/assets/images/5.png" alt="" />
+            </div>
+            <div class="slide">
+                <img src="https://mobirise.com/extensions/businessm4/assets/images/1.png" alt="" />
+            </div>
+            <div class="slide">
+                <img src="https://mobirise.com/extensions/businessm4/assets/images/2.png" alt="" />
+            </div>
+            <div class="slide">
+                <img src="https://mobirise.com/extensions/businessm4/assets/images/3.png" alt="" />
+            </div>
+            <div class="slide">
+                <img src="https://mobirise.com/extensions/businessm4/assets/images/4.png" alt="" />
+            </div>
+            <div class="slide">
+                <img src="https://mobirise.com/extensions/businessm4/assets/images/5.png" alt="" />
+            </div>
+        </div>
+    </div>
+    <div class="partners">
+        <p>We work with a variety of restaurants and dining establishments to bring our customers the best dining options.</p>
+    </div>
 </section>
-
 
 <?php include("views/template/Bottom.php"); ?>
