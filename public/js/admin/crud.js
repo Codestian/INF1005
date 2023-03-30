@@ -13,11 +13,14 @@ let selectedId = 0;
 function createTable(table) {
     tableName = table;
     getData();
+    test();
 }
 
 function getData() {
+    //clear previous table
     tableHead.innerHTML = "";
     tableBody.innerHTML = "";
+
 
     fetch(API_URI + tableName)
         .then(response=>response.json())
@@ -26,10 +29,12 @@ function getData() {
             data.data.forEach((row, idx) => {
 
                 if(idx === 0) {
+                    //Set input type for modals
                     setInputForModals(Object.keys(row));
                     tableHead.appendChild(createTableHead(...Object.keys(row), 'Actions'));
                 }
                 tableBody.appendChild(createTableRow(row, idx));
+
             });
         });
 }
@@ -159,9 +164,16 @@ function editRow() {
         const inputElement = formGrp.querySelector('.form-control');
         requestBody[inputElement.id] = inputElement.value;
     })
-    console.log(requestBody);
+
 
     updateData(inputForms, requestBody);
 }
 
 
+function test() {
+
+
+    fetch(API_URI + tableName)
+        .then(response=>response.json())
+        .then(data => console.log(data.data));
+}

@@ -1,4 +1,5 @@
 let count =0;
+//Row for column Headers
 function createTableHead(...rowData) {
     const tableRow = document.createElement('tr');
     const tableData = rowData.map(data => {
@@ -18,7 +19,7 @@ function createTableHead(...rowData) {
 
     return tableRow;
 }
-
+//Create row for users
 function createTableRow(row, idx) {
 
     const tableRow = document.createElement('tr');
@@ -35,13 +36,15 @@ function createTableRow(row, idx) {
 
     console.log();
 
-    tableRow.appendChild(createRowCheckBox(true));
+    //Checkbox
+    tableRow.appendChild(createRowCheckBox(true,idx));
 
+    //Content
     for (let i = 0; i < keyArr.length; i++) {
         tableRow.appendChild( tableData[i] || document.createElement('td'));
     }
 
-
+    //Edit and delete buttons
     tableRow.appendChild(createRowButtons(idx));
 
     return tableRow;
@@ -66,20 +69,20 @@ function createRowCheckBox(isTD,idx) {
     const input = document.createElement('input');
     input.type = 'checkbox';
     input.name = 'options[]';
-    input.value = count.toString();
+    input.value = idx;
 
 // create the label element with "for" attribute "checkbox1"
     const label = document.createElement('label');
 
 
     if (isTD) {
-        input.id = 'checkbox'+ count.toString();
-        label.setAttribute('for', 'checkbox'+ count.toString());
+        input.id = 'checkbox'+ idx.toString();
+        label.setAttribute('for', 'checkbox'+ idx.toString());
     } else {
         input.id = 'selectAll';
         label.setAttribute('for', 'selectAll');
     }
-    count++;
+    //count++;
 // append the input and label elements to the span element
     span.appendChild(input);
     span.appendChild(label);
@@ -90,6 +93,7 @@ function createRowCheckBox(isTD,idx) {
     return td;
 }
 
+//create Row buttons for users
 function createRowButtons(idx) {
     // create the table cell element
     const td = document.createElement('td');
@@ -136,6 +140,7 @@ function createRowButtons(idx) {
     return td;
 }
 
+//Create textboxes for add and edit button
 function createFormGroup(labelText, inputId, inputType) {
     const formGroup = document.createElement('div');
     formGroup.classList.add('form-group');
@@ -157,6 +162,7 @@ function createFormGroup(labelText, inputId, inputType) {
     return formGroup;
 }
 
+//Cleaning codes
 function snakeToCapitalizedSpaced(str) {
     return str.split('_').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
 }
