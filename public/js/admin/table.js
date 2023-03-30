@@ -20,7 +20,7 @@ function createTableHead(...rowData) {
     return tableRow;
 }
 //Create row for users
-function createTableRow(row, idx) {
+function createTableRow(row, idx, cid) {
 
     const tableRow = document.createElement('tr');
 
@@ -34,10 +34,10 @@ function createTableRow(row, idx) {
         return td;
     });
 
-    console.log();
+
 
     //Checkbox
-    tableRow.appendChild(createRowCheckBox(true,idx));
+    tableRow.appendChild(createRowCheckBox(true,cid));
 
     //Content
     for (let i = 0; i < keyArr.length; i++) {
@@ -51,7 +51,7 @@ function createTableRow(row, idx) {
 
 }
 
-function createRowCheckBox(isTD,idx) {
+function createRowCheckBox(isTD,cid) {
 
     // create the table cell element
     let td;
@@ -69,15 +69,15 @@ function createRowCheckBox(isTD,idx) {
     const input = document.createElement('input');
     input.type = 'checkbox';
     input.name = 'options[]';
-    input.value = idx;
+    input.value = cid;
 
 // create the label element with "for" attribute "checkbox1"
     const label = document.createElement('label');
 
 
     if (isTD) {
-        input.id = 'checkbox'+ idx.toString();
-        label.setAttribute('for', 'checkbox'+ idx.toString());
+        input.id = 'checkbox'+ cid.toString();
+        label.setAttribute('for', 'checkbox'+ cid.toString());
     } else {
         input.id = 'selectAll';
         label.setAttribute('for', 'selectAll');

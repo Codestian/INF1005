@@ -22,5 +22,39 @@ window.onload = function() {
 
         });
     }
+
+    function deleteAll(){
+        const ids = checkedID();
+        const deleteBtn = document.querySelector("#delete");
+
+        deleteBtn.addEventListener('click', (f)=>{
+            ids.forEach(function(content){
+                deleteModal(content);
+            })
+        })
+    }
+
+
 };
 
+function checkedID(){
+    // Get all checkboxes on the page
+    const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+
+// Create an empty array to store the checked checkboxes
+    const checkedCheckboxes = [];
+
+// Loop through all the checkboxes
+    checkboxes.forEach((checkbox) => {
+        // Check if the checkbox is checked
+        if (checkbox.checked) {
+            // Check if the checkbox is the selectAll checkbox
+            if (checkbox.id != 'selectAll') {
+                checkedCheckboxes.push(checkbox.id.replace('checkbox', ''));
+            }
+        }
+    });
+    console.log(checkedCheckboxes);
+    return checkedCheckboxes;
+
+}
