@@ -73,7 +73,7 @@ class UserController extends AbstractController
 
     public function registerUser(Request $req, Response $res): void
     {
-        $columns = ['email', 'username', 'password'];
+        $columns = ['email', 'username', 'password', 'role_id'];
         $value = $req->getJSON($columns);
 
         $sql = $this->model->read(['id', 'email', 'provider_id'], $this->table, ['email = ' . '"' . $value['email'] . '"']);
@@ -97,7 +97,7 @@ class UserController extends AbstractController
             } else {
                 // TODO: HASH PASSWORD
                 $columns = ['username', 'email', 'password', 'role_id', 'provider_id'];
-                $sql_2 = $this->model->create($this->table, $columns, [$value['username'], $value['email'], $value['password'], 2, 1]);
+                $sql_2 = $this->model->create($this->table, $columns, [$value['username'], $value['email'], $value['password'], $value['role_id'], 1]);
 
                 $data->message = $sql_2->message;
 
