@@ -247,3 +247,4 @@ include "views/components/Food.php"; ?>
 </style>
 
 <?php include("views/template/Bottom.php"); ?>
+
