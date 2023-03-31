@@ -27,7 +27,7 @@
 
     const regionIds = {
         'north': 1,
-        'south': 2,
+        'central': 2,
         'east': 3,
         'west': 4
     };
