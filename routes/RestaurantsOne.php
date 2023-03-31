@@ -3,12 +3,14 @@ include("views/template/Top.php"); ?>
 
 
 <!-- Honestly IDK why its making me import Bootstrap again for it to work -->
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css"
-      integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+<!--<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css"-->
+<!--      integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">-->
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css">
 <!-- Swiffy Slider CSS -->
 <link href="own-carousel.min.css" rel="stylesheet">
 <link href="https://cdn.jsdelivr.net/npm/swiffy-slider@1.6.0/dist/css/swiffy-slider.min.css" rel="stylesheet" crossorigin="anonymous">
+<script src="https://cdn.jsdelivr.net/npm/swiffy-slider@1.6.0/dist/js/swiffy-slider.min.js" crossorigin="anonymous" defer></script>
+
 
 <script>
 
@@ -28,20 +30,31 @@ include("views/template/Top.php"); ?>
     if (queryString.includes("restaurants/"))
     {
         // console.log("has rest")
-        const restID = queryString.split("restaurants/").pop();
+        let restID = queryString.split("restaurants/").pop();
         getData(restID);
         checkLogin()
     }
 
     function reviewSubmit(){
+        const reviewapiURL = "http://localhost/api/v1/reviews";
         var reviewScore = document.getElementById("reviewForm").elements[0].value;
         var reviewBody = document.getElementById("reviewForm").elements[1].value;
+        const restID = window.location.href.split("restaurants/").pop();
         const apiCallAuthVerify = "http://localhost/api/v1/auth/verify";
         fetch(apiCallAuthVerify)
             .then(response => response.json())
             .then(data => {
                 let userID = data.data.id;
-                console.log("User with ID: " + userID + " posted a view with score: " + reviewScore + " saying: " + reviewBody )
+                var datetime = new Date()
+                datetime = datetime.toISOString()
+                // console.log("User with ID: " + userID + " posted a view" + " for rest with ID: " + restID + " with score: " + reviewScore + " saying: " + reviewBody + " at ISO Date: " + datetime )
+                fetch(reviewapiURL, {
+                    method: 'POST',
+                    body: JSON.stringify({ "rating": reviewScore, "description": reviewBody, "date": datetime, "restaurant_id": restID, "user_id": userID })
+                })
+                    .then(response => response.json())
+                    .then(response => console.log(JSON.stringify(response)))
+
             })
     }
 
@@ -54,8 +67,15 @@ include("views/template/Top.php"); ?>
             .then(data => {
                 let userID = data.data.id;
                 const queryString = window.location.href;
-                const restID = queryString.split("restaurants/").pop();
-                console.log("User with ID: " + userID + " made a booking for date-time: " + bookingDateTime + " for pax: " + bookingPax + " for restaurant with ID: " + restID)
+                let restID = queryString.split("restaurants/").pop();
+                let bookingTime = new Date(bookingDateTime)
+                console.log(bookingTime.toISOString())
+                fetch("http://localhost/api/v1/reservations", {
+                    method: 'POST',
+                    body: JSON.stringify({ "datetime": bookingTime.toISOString(), "pax": bookingPax, "user_id": userID, "restaurant_id": restID })
+                })
+                    .then(response => response.json())
+                    .then(response => console.log(JSON.stringify(response)))
             })
     }
 
@@ -68,12 +88,13 @@ include("views/template/Top.php"); ?>
                 if (message == true)
                 {
                     // console.log("logged in")
+                    document.getElementById("restDescBookNow").setAttribute("data-bs-target", "#reviewModalLoggedInModal");
                     let tmpData = "";
-                    tmpData += '<button type="button" class="btn btn-primary btn-outline-success"  data-bs-toggle="modal" data-bs-target="#reviewModalLoggedInModal">\n';
+                    tmpData += '<button type="button" class="btn btn-outline-success"  data-bs-toggle="modal" data-bs-target="#reviewModalLoggedInModal">\n';
                     tmpData += 'Add a Review\n';
                     tmpData += '</button>';
                     document.getElementById("ReviewButton").innerHTML = tmpData;
-                    tmpData = '<button style="height: 50px; " type="button" class="btn btn-primary btn-outline-success" data-bs-toggle="modal" data-bs-target="#bookingModalLoggedInModal">\n'
+                    tmpData = '<button type="button" class="btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#bookingModalLoggedInModal">\n'
                     tmpData += 'Book Now\n';
                     tmpData += '</button>';
                     document.getElementById("BookingButton").innerHTML = tmpData;
@@ -84,12 +105,13 @@ include("views/template/Top.php"); ?>
                 else if (message == false)
                 {
                     // console.log("not logged in")
+                    document.getElementById("restDescBookNow").setAttribute("data-bs-target", "#reviewModalNotLoggedInModal");
                     let tmpData = "";
-                    tmpData += '<button type="button" class="btn btn-primary btn-outline-success"  data-bs-toggle="modal" data-bs-target="#reviewModalNotLoggedInModal">\n';
+                    tmpData += '<button type="button" class="btn btn-outline-success"  data-bs-toggle="modal" data-bs-target="#reviewModalNotLoggedInModal">\n';
                     tmpData += 'Add a Review\n';
                     tmpData += '</button>';
                     document.getElementById("ReviewButton").innerHTML = tmpData;
-                    tmpData = '<button style="height: 50px; " type="button" class="btn btn-primary btn-outline-success" data-bs-toggle="modal" data-bs-target="#bookingModalNotLoggedInModal">\n'
+                    tmpData = '<button type="button" class="btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#bookingModalNotLoggedInModal">\n'
                     tmpData += 'Book Now\n';
                     tmpData += '</button>';
                     document.getElementById("BookingButton").innerHTML = tmpData;
@@ -103,7 +125,6 @@ include("views/template/Top.php"); ?>
         fetch(apiCallRestInfo)
             .then(response => response.json())
             .then(data => {
-
                 let restInfo = data.data;
                 // console.log(restInfo);
                 restName = restInfo[0].name;
@@ -141,7 +162,6 @@ include("views/template/Top.php"); ?>
             .then(response => response.json())
             .then(data => {
                 let menuItems = data.data;
-                // console.log(menuItems);
                 let tmpData = "";
                 menuItems.forEach((item) => {
                     // console.log(item.price)
@@ -164,7 +184,103 @@ include("views/template/Top.php"); ?>
                     tmpData += '</div>\n';
                 })
                 document.getElementById("menuModalSubBody2").innerHTML = tmpData;
+                tmpData = "";
+                menuItems.forEach((item) => {
+                    // console.log(item.price)
+                    tmpData += '<li class="">\n';
+                    tmpData += '<div class="card">\n';
+                    tmpData += '<div class="ratio ratio-4x3">\n';
+                    tmpData += '<img src="" class="card-img-top" loading="lazy" alt="...">\n';
+                    tmpData += '</div>\n';
+                    tmpData += '<div class="card-body">\n';
+                    tmpData += '<p class="card-title">\n';
+                    tmpData += item.name;
+                    tmpData += '</p>\n';
+                    tmpData += '</div>\n';
+                    tmpData += '</div>\n';
+                    tmpData += '</li>\n';
+                })
+                document.getElementById("menuPopularItemsList").innerHTML = tmpData;
             })
+
+        const apiCallReviews = "http://localhost/api/v1/reviews/";
+        fetch(apiCallReviews)
+            .then(response => response.json())
+            .then(data => {
+                let reviewItems = data.data;
+                let reviewCount = 0;
+                let tmpData = ""
+                reviewItems.forEach((review) => {
+                    if (review.restaurant_id == restID)
+                    {
+                        let datetime = new Date(review.date);
+                        // console.log(datetime.getDate())
+                        // console.log(datetime.getMonth())
+                        // console.log(datetime.getFullYear())
+
+                        tmpData += '<div class="d-flex">\n';
+                        tmpData += '<div class="left">\n';
+                        tmpData += '<span>\n';
+                        tmpData += '<img src="https://bootdey.com/img/Content/avatar/avatar1.png" class="profile-pict-img img-fluid" alt=""/>\n';
+                        tmpData += '</span>\n';
+                        tmpData += '</div>\n';
+                        tmpData += '<div class="right">\n';
+                        tmpData += '<h4> ' + review.user_id + '<span class="gig-rating text-body-2">\n';
+                        tmpData += '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1792 1792" width="15" height="15">';
+                        tmpData += '<path fill="currentColor" d="M1728 647q0 22-26 48l-363 354 86 500q1 7 1 20 0 21-10.5 35.5t-30.5 14.5q-19 0-40-12l-449-236-449 236q-22 12-40 12-21 0-31.5-14.5t-10.5-35.5q0-6 2-20l86-500-364-354q-25-27-25-48 0-37 56-46l502-73 225-455q19-41 49-41t49 41l225 455 502 73q56 9 56 46z"></path>';
+                        tmpData += '</svg>\n';
+                        tmpData +=  review.rating + '\n';
+                        tmpData +=  '</span>\n';
+                        tmpData +=  '</h4>\n';
+                        tmpData +=  '<div class="review-description">\n';
+                        tmpData +=  '<p>\n';
+                        tmpData +=  '<p>' + review.description + '\n';
+                        tmpData +=  '</p>\n';
+                        tmpData +=  '</div>\n';
+                        tmpData +=  '<span class="publish py-3 d-inline-block w-100">\n';
+                        tmpData +=   'Published on ' + datetime.getDate() + '/' + datetime.getMonth() + '/' + datetime.getFullYear() + '\n';
+                        tmpData +=  '</span>\n';
+                        tmpData +=  '</div>\n';
+                        tmpData += '</div>\n';
+                        reviewCount++;
+                    }
+
+                })
+                console.log(reviewCount)
+                document.getElementById("restReviewCount").innerText = reviewCount + " Reviews";
+                document.getElementById("restReviewList").innerHTML = tmpData;
+            })
+
+        const apiCallRetList = "http://localhost/api/v1/restaurants/";
+        fetch(apiCallRetList)
+            .then(response => response.json())
+            .then(data => {
+                let restList = data.data;
+                let tmpData = "";
+                restList.forEach((rest) => {
+                    if (rest.id != restID)
+                    {
+                        tmpData += '<a style="color: inherit ;text-decoration: none;" href="/restaurants/' + rest.id +'" \n';
+                        tmpData += '<li class="slide-visible">\n';
+                        tmpData += '<div class="card">\n';
+                        tmpData += '<div class="card-body">\n';
+                        tmpData += '<p class="card-title"><strong>' + rest.name + '</strong></p>\n';
+                        tmpData += '<p class="card-text">\n';
+                        tmpData +=  rest.address + '<br> \n';
+                        tmpData += '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1792 1792" width="15" height="15" color="#ffbf00">';
+                        tmpData += '<path fill="currentColor" d="M1728 647q0 22-26 48l-363 354 86 500q1 7 1 20 0 21-10.5 35.5t-30.5 14.5q-19 0-40-12l-449-236-449 236q-22 12-40 12-21 0-31.5-14.5t-10.5-35.5q0-6 2-20l86-500-364-354q-25-27-25-48 0-37 56-46l502-73 225-455q19-41 49-41t49 41l225 455 502 73q56 9 56 46z"></path>';
+                        tmpData += '</svg>\n';
+                        tmpData +=  rest.rating + '\n';
+                        tmpData += '</p>\n';
+                        tmpData += '</div>\n';
+                        tmpData += '</div>\n';
+                        tmpData += '</li>\n';
+                        tmpData += '</a>\n';
+                    }
+                })
+                document.getElementById("restRecommendList").innerHTML = tmpData;
+            })
+
 
     }
 
@@ -377,26 +493,31 @@ include("views/template/Top.php"); ?>
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="menuModalTitle">Menu</h5>
-                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+
             </div>
             <div id="menuModalBody" class="modal-body">
                 <div id="menuModalSubBody1" class="container">
                     <div class="row">
                         <div class="col-sm-3" >
-                            <p class="font-weight-bold" style="font-size: 1rem">
+                            <strong><p style="font-size: 1rem">
                                 Item
                             </p>
+                            </strong>
                         </div>
                         <div class="col-sm-7" >
-                            <p class="font-weight-bold" style="font-size: 1rem">
-                                Description
+                            <p style="font-size: 1rem">
+                                <strong>
+                                    Description
+                                </strong>
+
                             </p>
                         </div>
                         <div class="col-sm-2" >
-                            <p class="font-weight-bold" style="font-size: 1rem">
+                            <p  style="font-size: 1rem">
+                                <strong>
                                 Price
+                                </strong>
                             </p>
                         </div>
                     </div>
@@ -414,9 +535,8 @@ include("views/template/Top.php"); ?>
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="reviewModalLoggedInModalTitle">Leave a Review</h5>
-                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+
             </div>
             <div id="reviewModalLoggedInBody" class="modal-body">
                 <form id="reviewForm">
@@ -454,9 +574,8 @@ include("views/template/Top.php"); ?>
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="reviewModalLoggedInModalTitle">Leave a Review</h5>
-                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+
             </div>
             <div id="reviewModalNotLoggedInModalBody" class="modal-body">
                 Please Log-in to leave a review!
@@ -473,9 +592,8 @@ include("views/template/Top.php"); ?>
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="bookingModalLoggedInModalTitle">Make a Booking</h5>
-                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+
             </div>
             <div id="bookingModalLoggedInBody" class="modal-body">
                 <form id="bookingForm">
@@ -505,9 +623,8 @@ include("views/template/Top.php"); ?>
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="bookingModalLoggedInModalTitle">Make a Booking</h5>
-                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+
             </div>
             <div id="bookingModalNotLoggedInModalBody" class="modal-body">
                 Please Log-in to make a booking!
@@ -531,9 +648,9 @@ include("views/template/Top.php"); ?>
 
                     </div>
                 </div>
-                <div style="margin-left: auto">
-                    <div id="BookingButton"></div>
-                </div>
+<!--                <div style="margin-left: auto">-->
+<!--                    <div id="BookingButton"></div>-->
+<!--                </div>-->
             </div>
             <div style="display: flex">
                 <div>
@@ -547,11 +664,12 @@ include("views/template/Top.php"); ?>
                     </p>
                 </div>
                 <div style="margin-left: auto; display: flex">
-                    <div style="margin-right: 2%;">
-                        <button type="button" class="btn btn-success">
-                            <i class="bi bi-share-fill"></i>
-                        </button>
-                    </div>
+<!--                    <div style="margin-right: 2%;">-->
+<!--                        <button type="button" class="btn btn-success">-->
+<!--                            <i class="bi bi-share-fill"></i>-->
+<!--                        </button>-->
+<!--                    </div>-->
+                    <div style="margin-right: 2%" id="BookingButton"></div>
                     <div id="ReviewButton"></div>
                 </div>
             </div>
@@ -572,35 +690,30 @@ include("views/template/Top.php"); ?>
         </div>
     </div>
 </section>
-<div id="restaurantCarousel">
-    <div id="restaurantImageCarousel" class="carousel slide" data-ride="carousel">
-        <ol class="carousel-indicators">
-            <li data-target="#restaurantImageCarousel" data-slide-to="0" class="active"></li>
-            <li data-target="#restaurantImageCarousel" data-slide-to="1"></li>
-            <li data-target="#restaurantImageCarousel" data-slide-to="2"></li>
-        </ol>
-        <div class="carousel-inner">
-            <div class="carousel-item active">
-                <img class="d-block w-100" src="..." alt="First slide">
-            </div>
-            <div class="carousel-item">
-                <img class="d-block w-100" src="..." alt="Second slide">
-            </div>
-            <div class="carousel-item">
-                <img class="d-block w-100" src="..." alt="Third slide">
-            </div>
+<div id="restauratItemsCarousel" class="carousel slide" data-bs-ride="carousel">
+    <div class="carousel-inner" id="restauratItemsCarouselInnerBody">
+        <div class="carousel-item active">
+            <img src="..." class="d-block w-100" alt="...">
         </div>
-        <a class="carousel-control-prev" href="#restaurantImageCarousel" role="button" data-slide="prev">
-            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-        </a>
-        <a class="carousel-control-next" href="#restaurantImageCarousel" role="button" data-slide="next">
-            <span class="carousel-control-next-icon" aria-hidden="true"></span>
-        </a>
+        <div class="carousel-item">
+            <img src="..." class="d-block w-100" alt="...">
+        </div>
+        <div class="carousel-item">
+            <img src="..." class="d-block w-100" alt="...">
+        </div>
     </div>
+    <button class="carousel-control-prev" type="button" data-bs-target="#restauratItemsCarousel" data-bs-slide="prev">
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Previous</span>
+    </button>
+    <button class="carousel-control-next" type="button" data-bs-target="#restauratItemsCarousel" data-bs-slide="next">
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Next</span>
+    </button>
 </div>
 <div style="display: flex; width: 90%; margin-left: 5%; margin-top: 20px ">
     <div style="width: 60%;">
-        <p class="font-weight-bold" style="font-size: 1.2rem">Restaurant Description</p>
+        <p style="font-size: 1.2rem"><strong>Restaurant Description</strong></p>
         <p id="restDesc" style="margin: 10px">
             Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the
             industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and
@@ -610,282 +723,33 @@ include("views/template/Top.php"); ?>
             software like Aldus PageMaker including versions of Lorem Ipsum.
         </p>
         <div style="display: flex; margin-top: 30px">
-            <p class="font-weight-bold" style="font-size: 1.2rem;">Popular Items</p>
-            <p class="font-weight-bold" style="margin-left: auto; margin-right: 10px" data-bs-toggle="modal" data-bs-target="#menuModal">view full menu</p>
+            <p style="font-size: 1.2rem;"> <strong>Popular Items </strong></p>
+            <p style="margin-left: auto; margin-right: 10px" data-bs-toggle="modal" data-bs-target="#menuModal"> <strong>view full menu </strong></p>
         </div>
         <div class="swiffy-slider slider-item-show3 slider-item-reveal slider-nav-invisible slider-nav-dark slider-nav-inside">
-            <ul class="slider-container py-4" style="padding-top: 0px">
-                <li class="">
-                    <div class="card">
-                        <div class="ratio ratio-4x3">
-                            <img src="" class="card-img-top" loading="lazy" alt="...">
-                        </div>
-                        <div class="card-body">
-                            <p class="card-title">See the world</p>
-                        </div>
-                    </div>
-                </li>
-                <li class="">
-                    <div class="card">
-                        <div class="ratio ratio-4x3">
-                            <img src="" class="card-img-top" loading="lazy" alt="...">
-                        </div>
-                        <div class="card-body">
-                            <p class="card-title">See the world</p>
-                        </div>
-                    </div>
-                </li>
-                <li class="">
-                    <div class="card">
-                        <div class="ratio ratio-4x3">
-                            <img src="" class="card-img-top" loading="lazy" alt="...">
-                        </div>
-                        <div class="card-body">
-                            <p class="card-title">See the world</p>
-                        </div>
-                    </div>
-                </li>
-                <li class="">
-                    <div class="card">
-                        <div class="ratio ratio-4x3">
-                            <img src="" class="card-img-top" loading="lazy" alt="...">
-                        </div>
-                        <div class="card-body">
-                            <p class="card-title">See the world</p>
-                        </div>
-                    </div>
-                </li>
-                <li class="">
-                    <div class="card">
-                        <div class="ratio ratio-4x3">
-                            <img src="" class="card-img-top" loading="lazy" alt="...">
-                        </div>
-                        <div class="card-body">
-                            <p class="card-title">See the world</p>
-                        </div>
-                    </div>
-                </li>
+            <ul id="menuPopularItemsList" class="slider-container py-4" style="padding-top: 0px">
+
             </ul>
             <button type="button" class="slider-nav" aria-label="Go left"></button>
             <button type="button" class="slider-nav slider-nav-next" aria-label="Go left"></button>
 
         </div>
-        <p class="font-weight-bold" style="font-size: 1.2rem">How to Reserve?</p>
+        <p style="font-size: 1.2rem"><strong>How to Reserve?</strong></p>
         <p style="margin: 10px;">
-            Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the
-            industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and
-            scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap
-            into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the
-            release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing
-            software like Aldus PageMaker including versions of Lorem Ipsum.
+            You must be logged-in to make a Reservation. To make a reservation, simply click on <a id="restDescBookNow" data-bs-toggle="modal" data-bs-target="#bookingModalNotLoggedInModal">Book Now</a> at the top of the page, fill in your number of pax, date, and time for your reservations and click Sumbit. It's that easy!
         </p>
     </div>
     <div style="width: 40%">
-        <!--        <p class="font-weight-bold" style="font-size: 1.2rem">Restaurant Reviews</p>-->
         <div class="container">
-            <div id="reviews" class="review-section">
                 <div class="d-flex align-items-center justify-content-between mb-4">
-                    <!--                        <p class="font-weight-bold" style="font-size: 1.2rem;">37 Reviews</p>-->
-                    <h4 style="font-size: 1.2rem;">37 Reviews</h4>
-                    <span class="select2 select2-container select2-container--default" dir="ltr" data-select2-id="2"
-                          style="width: 188px;">
-                <span class="selection">
-                    <span class="select2-selection select2-selection--single" role="combobox" aria-haspopup="true"
-                          aria-expanded="false" tabindex="0" aria-labelledby="select2-qd66-container">
-                        <span class="select2-selection__arrow" role="presentation"><b role="presentation"></b></span>
-                    </span>
-                </span>
-            </span>
+                    <h4 id="restReviewCount" style="font-size: 1.2rem;">37 Reviews</h4>
                 </div>
-                <div class="row">
-                    <!--                        <div class="col-md-6">-->
-                    <div>
-                        <table class="stars-counters">
-                            <tbody>
-                            <tr class="">
-                                <td>
-                                <span>
-                                    <button class="fit-button fit-button-color-blue fit-button-fill-ghost fit-button-size-medium stars-filter">5 Stars</button>
-                                </span>
-                                </td>
-                                <td class="progress-bar-container">
-                                    <div class="fit-progressbar fit-progressbar-bar star-progress-bar">
-                                        <div class="fit-progressbar-background">
-                                            <span class="progress-fill" style="width: 97.2973%;"></span>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td class="star-num">(36)</td>
-                            </tr>
-                            <tr class="">
-                                <td>
-                                <span>
-                                    <button class="fit-button fit-button-color-blue fit-button-fill-ghost fit-button-size-medium stars-filter">4 Stars</button>
-                                </span>
-                                </td>
-                                <td class="progress-bar-container">
-                                    <div class="fit-progressbar fit-progressbar-bar star-progress-bar">
-                                        <div class="fit-progressbar-background">
-                                            <span class="progress-fill" style="width: 2.2973%;"></span>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td class="star-num">(2)</td>
-                            </tr>
-                            <tr class="">
-                                <td>
-                                <span>
-                                    <button class="fit-button fit-button-color-blue fit-button-fill-ghost fit-button-size-medium stars-filter">3 Stars</button>
-                                </span>
-                                </td>
-                                <td class="progress-bar-container">
-                                    <div class="fit-progressbar fit-progressbar-bar star-progress-bar">
-                                        <div class="fit-progressbar-background">
-                                            <span class="progress-fill" style="width: 0;"></span>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td class="star-num">(0)</td>
-                            </tr>
-                            <tr class="">
-                                <td>
-                                <span>
-                                    <button class="fit-button fit-button-color-blue fit-button-fill-ghost fit-button-size-medium stars-filter">2 Stars</button>
-                                </span>
-                                </td>
-                                <td class="progress-bar-container">
-                                    <div class="fit-progressbar fit-progressbar-bar star-progress-bar">
-                                        <div class="fit-progressbar-background">
-                                            <span class="progress-fill" style="width: 0;"></span>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td class="star-num">(0)</td>
-                            </tr>
-                            <tr class="">
-                                <td>
-                                <span>
-                                    <button class="fit-button fit-button-color-blue fit-button-fill-ghost fit-button-size-medium stars-filter">1 Stars</button>
-                                </span>
-                                </td>
-                                <td class="progress-bar-container">
-                                    <div class="fit-progressbar fit-progressbar-bar star-progress-bar">
-                                        <div class="fit-progressbar-background">
-                                            <span class="progress-fill" style="width: 0;"></span>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td class="star-num">(0)</td>
-                            </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
+
 
             <div class="review-list">
                 <ul>
-                    <li>
-                        <div class="d-flex">
-                            <div class="left">
-                                    <span>
-                                        <img src="https://bootdey.com/img/Content/avatar/avatar1.png"
-                                             class="profile-pict-img img-fluid" alt=""/>
-                                    </span>
-                            </div>
-                            <div class="right">
-                                <h4> User First Name <span class="gig-rating text-body-2">
-                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1792 1792" width="15" height="15">
-                                    <path fill="currentColor"
-                                          d="M1728 647q0 22-26 48l-363 354 86 500q1 7 1 20 0 21-10.5 35.5t-30.5 14.5q-19 0-40-12l-449-236-449 236q-22 12-40 12-21 0-31.5-14.5t-10.5-35.5q0-6 2-20l86-500-364-354q-25-27-25-48 0-37 56-46l502-73 225-455q19-41 49-41t49 41l225 455 502 73q56 9 56 46z"></path>
-                                </svg>
-                                5.0
-                            </span>
-                                </h4>
-                                <div class="review-description">
-                                    <p>
-                                        The process was smooth, after providing the required info, Pragyesh sent me
-                                        an outstanding packet of wireframes. Thank you a lot!
-                                    </p>
-                                </div>
-                                <span class="publish py-3 d-inline-block w-100">Published on 14/01/2022</span>
-                            </div>
-                        </div>
-                        <div class="d-flex">
-                            <div class="left">
-                                    <span>
-                                        <img src="https://bootdey.com/img/Content/avatar/avatar1.png"
-                                             class="profile-pict-img img-fluid" alt=""/>
-                                    </span>
-                            </div>
-                            <div class="right">
-                                <h4> User First Name <span class="gig-rating text-body-2">
-                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1792 1792" width="15" height="15">
-                                    <path fill="currentColor"
-                                          d="M1728 647q0 22-26 48l-363 354 86 500q1 7 1 20 0 21-10.5 35.5t-30.5 14.5q-19 0-40-12l-449-236-449 236q-22 12-40 12-21 0-31.5-14.5t-10.5-35.5q0-6 2-20l86-500-364-354q-25-27-25-48 0-37 56-46l502-73 225-455q19-41 49-41t49 41l225 455 502 73q56 9 56 46z"></path>
-                                </svg>
-                                5.0
-                            </span>
-                                </h4>
-                                <div class="review-description">
-                                    <p>
-                                        The process was smooth, after providing the required info, Pragyesh sent me
-                                        an outstanding packet of wireframes. Thank you a lot!
-                                    </p>
-                                </div>
-                                <span class="publish py-3 d-inline-block w-100">Published on 14/01/2022</span>
-                            </div>
-                        </div>
-                        <div class="d-flex">
-                            <div class="left">
-                                    <span>
-                                        <img src="https://bootdey.com/img/Content/avatar/avatar1.png"
-                                             class="profile-pict-img img-fluid" alt=""/>
-                                    </span>
-                            </div>
-                            <div class="right">
-                                <h4> User First Name <span class="gig-rating text-body-2">
-                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1792 1792" width="15" height="15">
-                                    <path fill="currentColor"
-                                          d="M1728 647q0 22-26 48l-363 354 86 500q1 7 1 20 0 21-10.5 35.5t-30.5 14.5q-19 0-40-12l-449-236-449 236q-22 12-40 12-21 0-31.5-14.5t-10.5-35.5q0-6 2-20l86-500-364-354q-25-27-25-48 0-37 56-46l502-73 225-455q19-41 49-41t49 41l225 455 502 73q56 9 56 46z"></path>
-                                </svg>
-                                5.0
-                            </span>
-                                </h4>
-                                <div class="review-description">
-                                    <p>
-                                        The process was smooth, after providing the required info, Pragyesh sent me
-                                        an outstanding packet of wireframes. Thank you a lot!
-                                    </p>
-                                </div>
-                                <span class="publish py-3 d-inline-block w-100">Published on 14/01/2022</span>
-                            </div>
-                        </div>
-                        <div class="d-flex">
-                            <div class="left">
-                                    <span>
-                                        <img src="https://bootdey.com/img/Content/avatar/avatar1.png"
-                                             class="profile-pict-img img-fluid" alt=""/>
-                                    </span>
-                            </div>
-                            <div class="right">
-                                <h4> User First Name <span class="gig-rating text-body-2">
-                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1792 1792" width="15" height="15">
-                                    <path fill="currentColor"
-                                          d="M1728 647q0 22-26 48l-363 354 86 500q1 7 1 20 0 21-10.5 35.5t-30.5 14.5q-19 0-40-12l-449-236-449 236q-22 12-40 12-21 0-31.5-14.5t-10.5-35.5q0-6 2-20l86-500-364-354q-25-27-25-48 0-37 56-46l502-73 225-455q19-41 49-41t49 41l225 455 502 73q56 9 56 46z"></path>
-                                </svg>
-                                5.0
-                            </span>
-                                </h4>
-                                <div class="review-description">
-                                    <p>
-                                        The process was smooth, after providing the required info, Pragyesh sent me
-                                        an outstanding packet of wireframes. Thank you a lot!
-                                    </p>
-                                </div>
-                                <span class="publish py-3 d-inline-block w-100">Published on 14/01/2022</span>
-                            </div>
-                        </div>
+                    <li id="restReviewList">
+
                     </li>
                 </ul>
             </div>
@@ -895,59 +759,10 @@ include("views/template/Top.php"); ?>
 </div>
 <div style="display: flex; margin-top: 30px">
     <div style="width: 90%; margin-left: 5%">
-        <p class="font-weight-bold" style="font-size: 1.2rem">Restaurants you May like</p>
+        <strong><p style="font-size: 1.2rem">Restaurants You May Like</p></strong>
         <div class="swiffy-slider slider-item-show4 slider-item-reveal slider-nav-visible slider-nav-dark slider-nav-outside-expand">
-            <ul class="slider-container py-4">
-                <li class="">
-                    <div class="card">
-                        <div class="ratio ratio-4x3">
-                            <img src="" class="card-img-top" loading="lazy" alt="...">
-                        </div>
-                        <div class="card-body">
-                            <p class="card-title">See the world</p>
-                        </div>
-                    </div>
-                </li>
-                <li class="">
-                    <div class="card">
-                        <div class="ratio ratio-4x3">
-                            <img src="" class="card-img-top" loading="lazy" alt="...">
-                        </div>
-                        <div class="card-body">
-                            <p class="card-title">See the world</p>
-                        </div>
-                    </div>
-                </li>
-                <li class="">
-                    <div class="card">
-                        <div class="ratio ratio-4x3">
-                            <img src="" class="card-img-top" loading="lazy" alt="...">
-                        </div>
-                        <div class="card-body">
-                            <p class="card-title">See the world</p>
-                        </div>
-                    </div>
-                </li>
-                <li class="">
-                    <div class="card">
-                        <div class="ratio ratio-4x3">
-                            <img src="" class="card-img-top" loading="lazy" alt="...">
-                        </div>
-                        <div class="card-body">
-                            <p class="card-title">See the world</p>
-                        </div>
-                    </div>
-                </li>
-                <li class="">
-                    <div class="card">
-                        <div class="ratio ratio-4x3">
-                            <img src="" class="card-img-top" loading="lazy" alt="...">
-                        </div>
-                        <div class="card-body">
-                            <p class="card-title">See the world</p>
-                        </div>
-                    </div>
-                </li>
+            <ul class="slider-container py-4" id="restRecommendList">
+
             </ul>
             <button type="button" class="slider-nav" aria-label="Go left"></button>
             <button type="button" class="slider-nav slider-nav-next" aria-label="Go left"></button>
