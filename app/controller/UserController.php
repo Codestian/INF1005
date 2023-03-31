@@ -152,6 +152,19 @@ class UserController extends AbstractController
         return $obj;
     }
 
+    // Only users with role_id = 1 or role_id = 3 can access the method.
+    public static function noNormalAllowedMiddleware(Model $model, Request $req, Response $res) {
+        $obj = UserController::checkTokenMiddleware($model ,$req, $res, 401);
+
+        if($obj->role == 1 || $obj->role == 3) {
+            $data = new StdClass();
+            $data->isAdmin = false;
+            $res->toJSON($data, 403);
+            exit();
+        }
+    }
+
+    // Only users with role_id = 1 can access the method.
     public static function adminOnlyMiddleware(Model $model, Request $req, Response $res) {
         $obj = UserController::checkTokenMiddleware($model ,$req, $res, 401);
 
