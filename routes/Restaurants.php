@@ -175,9 +175,9 @@
     const ratingFilter = document.getElementById('rating-filter');
 
     ratingFilter.addEventListener('change', () =>{
-       const selectedRating = ratingFilter.value;
+        const selectedRating = ratingFilter.value;
 
-       // If "All ratings" is selected, show all restaurants
+        // If "All ratings" is selected, show all restaurants
         if (selectedRating === ''){
             displayRestaurants(restaurantInfoArr);
         } else {
@@ -213,3 +213,4 @@
 </style>
 
 <?php include("views/template/Bottom.php"); ?>
+
