@@ -37,10 +37,14 @@ class CreateUsersTable {
         $users = new Users($this->mysqli);
 
         $keys = ['username', 'email', 'password', 'role_id', 'provider_id'];
-        $values = ['Administrator Hid', 'admin@gmail.com', 'Password12!', 1, 1];
+
+        $values = ['Administrator Hid', 'admin@gmail.com', '$2y$10$RgJa7ymXXCKq.9j0KuujWe4DmmYRTbx.ZR7jeCtJypwg3NdQqDu0e', 1, 1];
         $users->create($this->table, $keys, $values);
 
-        $values1 = ['John Doe', 'john@gmail.com', 'mypassword!', 2, 1];
+        $values1 = ['John Doe', 'john@gmail.com', '$2y$10$/QtjNDtOWVgbyU7Fks1fHOec4.2hOwQDjr2O.DS85czSehGtBa6/y', 2, 1];
+        $users->create($this->table, $keys, $values1);
+
+        $values1 = ['The Fast Foods', 'food@company.com', '$2y$10$Msc1hGsre/gAaAY371vwPuOrMd/FE4XRY2vL2vXgVsta8AkYxzCC6', 3, 1];
         $users->create($this->table, $keys, $values1);
     }
 

@@ -112,13 +112,13 @@ function create_migration($input_name) : void {
 // Useful for debugging and knowing what's to be executed in MySQL>
 function echoSQL() : void {
     // Edit your SQL statement between the lines.
-    $id = 'DROP TABLE;';
-    $query = (new QueryBuilder())
-        ->select('id')
-        ->from('restaurant')
-        ->where('email = ' . '"' . $id . '"');
-
-    echo $query . "\n";
+//    $id = 'DROP TABLE;';
+//    $query = (new QueryBuilder())
+//        ->select('id')
+//        ->from('restaurant')
+//        ->where('email = ' . '"' . $id . '"');
+//
+//    echo $query . "\n";
 //    $builder = new Schema("exampleTable");
 ////    ----------------------------------------------
 //
