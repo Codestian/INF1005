@@ -23,4 +23,11 @@ class RestaurantController extends AbstractController
         UserController::adminOnlyMiddleware($this->model, $req, $res);
         parent::deleteRow($req, $res);
     }
+
+    public function getAllRowsByRegionId(Request $req, Response $res): void
+    {
+        $data = $this->model->read(['id', 'name', 'description'], $this->table, ['region_id = ' . $req->params[0]]);
+        $this->model->close();
+        $res->toJSON($data);
+    }
 }

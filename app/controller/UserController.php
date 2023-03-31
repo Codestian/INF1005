@@ -38,7 +38,7 @@ class UserController extends AbstractController
         $columns = ['email', 'password'];
         $value = $req->getJSON($columns);
 
-        $sql = $this->model->read(['provider_id'], $this->table, ['email = ' . '"' . $value['email'] . '"']);
+        $sql = $this->model->read(['provider_id', 'password'], $this->table, ['email = ' . '"' . $value['email'] . '"']);
 
         $data = new StdClass();
 
@@ -46,9 +46,8 @@ class UserController extends AbstractController
         if (isset($sql[0]->provider_id)) {
             if ($sql[0]->provider_id == 1) {
                 // TODO: HASH PASSWORD
-                $sql_1 = $this->model->read(['email'], $this->table, ['password = ' . '"' . $value['password'] . '"']);
 
-                if (isset($sql_1[0]->email)) {
+                if (password_verify($value['password'], $sql[0]->password)) {
                     $payload = new stdClass();
                     $payload->email = $value['email'];
                     $payload->role = 2;
@@ -96,9 +95,8 @@ class UserController extends AbstractController
                     $data->message = "Username taken, please select another.";
                     $res->toJSON($data, 409);
                 } else {
-                    // TODO: HASH PASSWORD
                     $columns = ['username', 'email', 'password', 'role_id', 'provider_id'];
-                    $sql_2 = $this->model->create($this->table, $columns, [$value['username'], $value['email'], $value['password'], $value['role_id'], 1]);
+                    $sql_2 = $this->model->create($this->table, $columns, [$value['username'], $value['email'], password_hash($value['password'], PASSWORD_BCRYPT), $value['role_id'], 1]);
 
                     $data->message = $sql_2->message;
 
