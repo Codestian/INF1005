@@ -5,12 +5,12 @@
     position: relative;
 }
 
-.auth-login {
+.left-auth {
     padding: 0;
 }
 
 @media (max-width: 992px) {
-    .auth-login {
+    .left-auth {
         display: none;
     }
 }

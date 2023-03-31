@@ -45,8 +45,6 @@ class UserController extends AbstractController
         //  Check if provider is traditional or using oauth.
         if (isset($sql[0]->provider_id)) {
             if ($sql[0]->provider_id == 1) {
-                // TODO: HASH PASSWORD
-
                 if (password_verify($value['password'], $sql[0]->password)) {
                     $payload = new stdClass();
                     $payload->email = $value['email'];
