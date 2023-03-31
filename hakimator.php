@@ -37,7 +37,7 @@ function migrate() : void {
             $migration->up();
             echo "Successfully migrated to database!\n";
         }
-        catch (\mysqli_sql_exception $e) {
+        catch (mysqli_sql_exception $e) {
             echo $e->getMessage() . "\n";
         }
     }
@@ -50,7 +50,7 @@ function seed() : void {
             $migration->seed();
             echo "Successfully seeded to database!\n";
         }
-        catch (\mysqli_sql_exception $e) {
+        catch (mysqli_sql_exception $e) {
             echo $e->getMessage() . "\n";
         }
     }

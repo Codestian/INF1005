@@ -12,6 +12,9 @@ use Psr\Http\Client\ClientInterface;
 use Psr\Http\Message\RequestFactoryInterface;
 use RuntimeException;
 use UnexpectedValueException;
+use function is_null;
+use function is_string;
+use function strlen;
 
 /**
  * @implements ArrayAccess<string, Key>
@@ -166,7 +169,7 @@ class CachedKeySet implements ArrayAccess
                 $this->keySet = $item->get();
                 // If the cached item is a string, the JWKS response was cached (previous behavior).
                 // Parse this into expected format array<kid, jwk> instead.
-                if (\is_string($this->keySet)) {
+                if (is_string($this->keySet)) {
                     $this->keySet = $this->formatJwksForCache($this->keySet);
                 }
             }
@@ -217,7 +220,7 @@ class CachedKeySet implements ArrayAccess
 
     private function getCacheItem(): CacheItemInterface
     {
-        if (\is_null($this->cacheItem)) {
+        if (is_null($this->cacheItem)) {
             $this->cacheItem = $this->cache->getItem($this->cacheKey);
         }
 
@@ -237,7 +240,7 @@ class CachedKeySet implements ArrayAccess
         $key = $this->cacheKeyPrefix . $key;
 
         // Hash keys if they exceed $maxKeyLength of 64
-        if (\strlen($key) > $this->maxKeyLength) {
+        if (strlen($key) > $this->maxKeyLength) {
             $key = substr(hash('sha256', $key), 0, $this->maxKeyLength);
         }
 
@@ -248,7 +251,7 @@ class CachedKeySet implements ArrayAccess
             $rateLimitKey = $this->cacheKeyPrefix . 'ratelimit' . $key;
 
             // Hash keys if they exceed $maxKeyLength of 64
-            if (\strlen($rateLimitKey) > $this->maxKeyLength) {
+            if (strlen($rateLimitKey) > $this->maxKeyLength) {
                 $rateLimitKey = substr(hash('sha256', $rateLimitKey), 0, $this->maxKeyLength);
             }
 

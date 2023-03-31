@@ -11,6 +11,7 @@
 
 namespace Monolog\Handler;
 
+use DateTimeImmutable;
 use InvalidArgumentException;
 use Monolog\Level;
 use Monolog\Utils;
@@ -34,7 +35,7 @@ class RotatingFileHandler extends StreamHandler
     protected string $filename;
     protected int $maxFiles;
     protected bool|null $mustRotate = null;
-    protected \DateTimeImmutable $nextRotation;
+    protected DateTimeImmutable $nextRotation;
     protected string $filenameFormat;
     protected string $dateFormat;
 
@@ -47,7 +48,7 @@ class RotatingFileHandler extends StreamHandler
     {
         $this->filename = Utils::canonicalizePath($filename);
         $this->maxFiles = $maxFiles;
-        $this->nextRotation = new \DateTimeImmutable('tomorrow');
+        $this->nextRotation = new DateTimeImmutable('tomorrow');
         $this->filenameFormat = '{filename}-{date}';
         $this->dateFormat = static::FILE_PER_DAY;
 
@@ -126,7 +127,7 @@ class RotatingFileHandler extends StreamHandler
     {
         // update filename
         $this->url = $this->getTimedFilename();
-        $this->nextRotation = new \DateTimeImmutable('tomorrow');
+        $this->nextRotation = new DateTimeImmutable('tomorrow');
 
         // skip GC of old logs if files are unlimited
         if (0 === $this->maxFiles) {

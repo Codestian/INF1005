@@ -124,6 +124,6 @@ include "views/components/Work.php"; ?>
     </form>
 </section>
 
-<script type="text/javascript" src="../../public/js/auth/restaurants.js"></script>
+<script type="text/javascript" src="../public/js/auth/restaurants.js"></script>
 
 <?php include("views/template/Bottom.php"); ?>

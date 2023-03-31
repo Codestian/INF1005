@@ -111,7 +111,7 @@ class AccessToken implements AccessTokenInterface, ResourceOwnerAccessTokenInter
         // Defer to 'expires' if it is provided instead.
         if (isset($options['expires_in'])) {
             if (!is_numeric($options['expires_in'])) {
-                throw new \InvalidArgumentException('expires_in value must be an integer');
+                throw new InvalidArgumentException('expires_in value must be an integer');
             }
 
             $this->expires = $options['expires_in'] != 0 ? $this->getTimeNow() + $options['expires_in'] : 0;

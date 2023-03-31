@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace GuzzleHttp\Psr7;
 
+use InvalidArgumentException;
 use Psr\Http\Message\RequestFactoryInterface;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseFactoryInterface;
@@ -16,6 +17,9 @@ use Psr\Http\Message\UploadedFileFactoryInterface;
 use Psr\Http\Message\UploadedFileInterface;
 use Psr\Http\Message\UriFactoryInterface;
 use Psr\Http\Message\UriInterface;
+use RuntimeException;
+use function in_array;
+use const UPLOAD_ERR_OK;
 
 /**
  * Implements all of the PSR-17 interfaces.
@@ -34,7 +38,7 @@ final class HttpFactory implements
     public function createUploadedFile(
         StreamInterface $stream,
         int $size = null,
-        int $error = \UPLOAD_ERR_OK,
+        int $error = UPLOAD_ERR_OK,
         string $clientFilename = null,
         string $clientMediaType = null
     ): UploadedFileInterface {
@@ -54,9 +58,9 @@ final class HttpFactory implements
     {
         try {
             $resource = Utils::tryFopen($file, $mode);
-        } catch (\RuntimeException $e) {
-            if ('' === $mode || false === \in_array($mode[0], ['r', 'w', 'a', 'x', 'c'], true)) {
-                throw new \InvalidArgumentException(sprintf('Invalid file opening mode "%s"', $mode), 0, $e);
+        } catch (RuntimeException $e) {
+            if ('' === $mode || false === in_array($mode[0], ['r', 'w', 'a', 'x', 'c'], true)) {
+                throw new InvalidArgumentException(sprintf('Invalid file opening mode "%s"', $mode), 0, $e);
             }
 
             throw $e;
@@ -76,7 +80,7 @@ final class HttpFactory implements
             if (!empty($serverParams['REQUEST_METHOD'])) {
                 $method = $serverParams['REQUEST_METHOD'];
             } else {
-                throw new \InvalidArgumentException('Cannot determine HTTP method');
+                throw new InvalidArgumentException('Cannot determine HTTP method');
             }
         }
 

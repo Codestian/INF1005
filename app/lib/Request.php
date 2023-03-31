@@ -1,5 +1,6 @@
 <?php namespace App\Lib;
 
+use JsonException;
 use stdClass;
 
 class Request
@@ -20,7 +21,7 @@ class Request
     /*
      * Retrieves the query params in the url.
      * Traditionally, this used to be the way to send data from the client to the server.
-     * In this context, its used for other purposes, such as oauth provider authentication.
+     * In this context, it's used for other purposes, such as oauth provider authentication.
      */
     function getQueryParams(string ...$keys): array {
         // Parse the query string and store it in an array
@@ -75,7 +76,7 @@ class Request
             }
 
             return $filtered_data;
-        } catch (\JsonException $e) {
+        } catch (JsonException $e) {
             $data = new StdClass();
             $data->message = 'JSON is not in the correct format';
             $res->toJSON($data, 400);

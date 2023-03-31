@@ -14,10 +14,12 @@
 
 namespace League\OAuth2\Client\Provider\Exception;
 
+use Exception;
+
 /**
  * Exception thrown if the provider response contains errors.
  */
-class IdentityProviderException extends \Exception
+class IdentityProviderException extends Exception
 {
     /**
      * @var mixed

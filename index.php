@@ -19,6 +19,14 @@ use App\Lib\Database;
 use App\Lib\Request;
 use App\Lib\Response;
 use App\Lib\Router;
+use App\Model\Cuisine;
+use App\Model\Items;
+use App\Model\Provider;
+use App\Model\Region;
+use App\Model\Reservation;
+use App\Model\Restaurants;
+use App\Model\Review;
+use App\Model\Roles;
 
 Router::get("/", fn() => include("routes/Home.php"));
 
@@ -56,55 +64,55 @@ $mysqli = (new Database())->getConnection();
 $api_suffix = Config::get("API_SUFFIX");
 
 $restaurant_controller = new RestaurantController(
-    new \App\Model\Restaurants($mysqli),
+    new Restaurants($mysqli),
     'restaurant',
     ['id', 'name', 'description', 'address', 'rating', 'opening_hours', 'closing_hours', 'estimated_price', 'cuisine_id', 'region_id']
 );
 
 $item_controller = new ItemController(
-    new \App\Model\Items($mysqli),
+    new Items($mysqli),
     'item',
     ['id', 'name', 'description', 'price', 'restaurant_id']
 );
 
 $role_controller = new RoleController(
-    new \App\Model\Roles($mysqli),
+    new Roles($mysqli),
     'role',
     ['id', 'name']
 );
 
 $region_controller = new RegionController(
-    new \App\Model\Region($mysqli),
+    new Region($mysqli),
     'region',
     ['id', 'name']
 );
 
 $review_controller = new ReviewController(
-    new \App\Model\Review($mysqli),
+    new Review($mysqli),
     'review',
     ['id', 'rating', 'description', 'date', 'restaurant_id', 'user_id']
 );
 
 $cuisine_controller = new CuisineController(
-    new \App\Model\Cuisine($mysqli),
+    new Cuisine($mysqli),
     'cuisine',
     ['id', 'name']
 );
 
 $reservation_controller = new ReservationController(
-    new \App\Model\Reservation($mysqli),
+    new Reservation($mysqli),
     'reservation',
     ['id', 'datetime', 'pax', 'user_id', 'restaurant_id']
 );
 
 $provider_controller = new ProviderController(
-    new \App\Model\Provider($mysqli),
+    new Provider($mysqli),
     'provider',
     ['id', 'name']
 );
 
 $user_controller = new UserController(
-    new \App\Model\Provider($mysqli),
+    new Provider($mysqli),
     'user',
     ['id', 'username', 'email', 'password', 'role_id', 'provider_id']
 );

@@ -6,6 +6,8 @@ use InvalidArgumentException;
 use OpenSSLAsymmetricKey;
 use OpenSSLCertificate;
 use TypeError;
+use function is_resource;
+use function is_string;
 
 class Key
 {
@@ -23,10 +25,10 @@ class Key
         string $algorithm
     ) {
         if (
-            !\is_string($keyMaterial)
+            !is_string($keyMaterial)
             && !$keyMaterial instanceof OpenSSLAsymmetricKey
             && !$keyMaterial instanceof OpenSSLCertificate
-            && !\is_resource($keyMaterial)
+            && !is_resource($keyMaterial)
         ) {
             throw new TypeError('Key material must be a string, resource, or OpenSSLAsymmetricKey');
         }

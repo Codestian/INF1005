@@ -5,6 +5,16 @@ namespace Firebase\JWT;
 use DomainException;
 use InvalidArgumentException;
 use UnexpectedValueException;
+use function base64_encode;
+use function chr;
+use function chunk_split;
+use function count;
+use function is_null;
+use function ltrim;
+use function openssl_error_string;
+use function openssl_pkey_get_public;
+use function pack;
+use function strlen;
 
 /**
  * JSON Web Key implementation, based on this spec:
@@ -65,7 +75,7 @@ class JWK
             }
         }
 
-        if (0 === \count($keys)) {
+        if (0 === count($keys)) {
             throw new UnexpectedValueException('No supported algorithms found in JWK Set');
         }
 
@@ -98,7 +108,7 @@ class JWK
         }
 
         if (!isset($jwk['alg'])) {
-            if (\is_null($defaultAlg)) {
+            if (is_null($defaultAlg)) {
                 // The "alg" parameter is optional in a KTY, but an algorithm is required
                 // for parsing in this library. Use the $defaultAlg parameter when parsing the
                 // key set in order to prevent this error.
@@ -118,10 +128,10 @@ class JWK
                 }
 
                 $pem = self::createPemFromModulusAndExponent($jwk['n'], $jwk['e']);
-                $publicKey = \openssl_pkey_get_public($pem);
+                $publicKey = openssl_pkey_get_public($pem);
                 if (false === $publicKey) {
                     throw new DomainException(
-                        'OpenSSL error: ' . \openssl_error_string()
+                        'OpenSSL error: ' . openssl_error_string()
                     );
                 }
                 return new Key($publicKey, $jwk['alg']);
@@ -180,7 +190,7 @@ class JWK
                 ) .
                 self::encodeDER(
                     self::ASN1_BIT_STRING,
-                    \chr(0x00) . \chr(0x04)
+                    chr(0x00) . chr(0x04)
                     . JWT::urlsafeB64Decode($x)
                     . JWT::urlsafeB64Decode($y)
                 )
@@ -209,31 +219,31 @@ class JWK
         $mod = JWT::urlsafeB64Decode($n);
         $exp = JWT::urlsafeB64Decode($e);
 
-        $modulus = \pack('Ca*a*', 2, self::encodeLength(\strlen($mod)), $mod);
-        $publicExponent = \pack('Ca*a*', 2, self::encodeLength(\strlen($exp)), $exp);
+        $modulus = pack('Ca*a*', 2, self::encodeLength(strlen($mod)), $mod);
+        $publicExponent = pack('Ca*a*', 2, self::encodeLength(strlen($exp)), $exp);
 
-        $rsaPublicKey = \pack(
+        $rsaPublicKey = pack(
             'Ca*a*a*',
             48,
-            self::encodeLength(\strlen($modulus) + \strlen($publicExponent)),
+            self::encodeLength(strlen($modulus) + strlen($publicExponent)),
             $modulus,
             $publicExponent
         );
 
         // sequence(oid(1.2.840.113549.1.1.1), null)) = rsaEncryption.
-        $rsaOID = \pack('H*', '300d06092a864886f70d0101010500'); // hex version of MA0GCSqGSIb3DQEBAQUA
-        $rsaPublicKey = \chr(0) . $rsaPublicKey;
-        $rsaPublicKey = \chr(3) . self::encodeLength(\strlen($rsaPublicKey)) . $rsaPublicKey;
+        $rsaOID = pack('H*', '300d06092a864886f70d0101010500'); // hex version of MA0GCSqGSIb3DQEBAQUA
+        $rsaPublicKey = chr(0) . $rsaPublicKey;
+        $rsaPublicKey = chr(3) . self::encodeLength(strlen($rsaPublicKey)) . $rsaPublicKey;
 
-        $rsaPublicKey = \pack(
+        $rsaPublicKey = pack(
             'Ca*a*',
             48,
-            self::encodeLength(\strlen($rsaOID . $rsaPublicKey)),
+            self::encodeLength(strlen($rsaOID . $rsaPublicKey)),
             $rsaOID . $rsaPublicKey
         );
 
         return "-----BEGIN PUBLIC KEY-----\r\n" .
-            \chunk_split(\base64_encode($rsaPublicKey), 64) .
+            chunk_split(base64_encode($rsaPublicKey), 64) .
             '-----END PUBLIC KEY-----';
     }
 
@@ -249,12 +259,12 @@ class JWK
     private static function encodeLength(int $length): string
     {
         if ($length <= 0x7F) {
-            return \chr($length);
+            return chr($length);
         }
 
-        $temp = \ltrim(\pack('N', $length), \chr(0));
+        $temp = ltrim(pack('N', $length), chr(0));
 
-        return \pack('Ca*', 0x80 | \strlen($temp), $temp);
+        return pack('Ca*', 0x80 | strlen($temp), $temp);
     }
 
     /**
@@ -273,10 +283,10 @@ class JWK
         }
 
         // Type
-        $der = \chr($tag_header | $type);
+        $der = chr($tag_header | $type);
 
         // Length
-        $der .= \chr(\strlen($value));
+        $der .= chr(strlen($value));
 
         return $der . $value;
     }
@@ -294,21 +304,21 @@ class JWK
         // Get the first octet
         $first = (int) array_shift($octets);
         $second = (int) array_shift($octets);
-        $oid = \chr($first * 40 + $second);
+        $oid = chr($first * 40 + $second);
 
         // Iterate over subsequent octets
         foreach ($octets as $octet) {
             if ($octet == 0) {
-                $oid .= \chr(0x00);
+                $oid .= chr(0x00);
                 continue;
             }
             $bin = '';
 
             while ($octet) {
-                $bin .= \chr(0x80 | ($octet & 0x7f));
+                $bin .= chr(0x80 | ($octet & 0x7f));
                 $octet >>= 7;
             }
-            $bin[0] = $bin[0] & \chr(0x7f);
+            $bin[0] = $bin[0] & chr(0x7f);
 
             // Convert to big endian if necessary
             if (pack('V', 65534) == pack('L', 65534)) {

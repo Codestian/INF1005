@@ -6,7 +6,7 @@ use stdClass;
 
 class Response
 {
-    public function status(int $code)
+    public function status(int $code): static
     {
         $this->status = $code;
         return $this;

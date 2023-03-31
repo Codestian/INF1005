@@ -53,38 +53,37 @@ document.querySelector("#restaurant-signup").addEventListener("submit", (e) => {
                 }
                 else {
                     // User account creation successful, redirect user to home.
-                    alert('Welcome! You can now add restaurant items!.');
-                    window.location.href = "/";
+                    fetch("/api/v1/restaurants", {
+                        method: "POST",
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body : JSON.stringify({
+                            "name" : sanitizedRestName,
+                            "description" : sanitizedRestDesc,
+                            "address" : sanitizedRestAddress,
+                            "rating" : "1",
+                            "opening_hours" : sanitizedRestOpenHours.replace(":", ""),
+                            "closing_hours" : sanitizedRestCloseHours.replace(":", ""),
+                            "estimated_price" : sanitizedRestPricing,
+                            "cuisine_id" : sanitizedRestCuisine,
+                            "region_id" : sanitizedRestRegion
+                        })
+                    })
+                        .then(response => response.json())
+                        .then(data => {
+                            console.log(data);
+                            alert('Welcome! You can now add restaurant items!.');
+                            window.location.href = "/";
+                        })
+                        .catch((error) => {
+                            alert('Error: ' + error);
+                            console.error('Error:', error);
+                        });
                 }
             })
             .catch(error => {
                 console.error(error);
-            });
-
-        fetch("/api/v1/restaurants", {
-            method: "POST",
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body : JSON.stringify({
-                "name" : sanitizedRestName,
-                "description" : sanitizedRestDesc,
-                "address" : sanitizedRestAddress,
-                "rating" : "1",
-                "opening_hours" : sanitizedRestOpenHours,
-                "closing_hours" : sanitizedRestCloseHours,
-                "estimated_price" : sanitizedRestPricing,
-                "cuisine_id" : sanitizedRestCuisine,
-                "region_id" : sanitizedRestRegion
-            })
-        })
-            .then(response => response.json())
-            .then(data => {
-                alert('Success: ' + data.data.message);
-            })
-            .catch((error) => {
-                alert('Error: ' + error);
-                console.error('Error:', error);
             });
     }
     else {

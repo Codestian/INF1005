@@ -4,6 +4,7 @@ require_once 'app/lib/interfaces/CrudInterface.php';
 
 use App\Lib\Interfaces\CrudInterface;
 use mysqli;
+use mysqli_sql_exception;
 use stdClass;
 
 /*
@@ -31,7 +32,7 @@ abstract class Model implements CrudInterface {
 
             $data->message = "row created successfully";
             $data->id = $id;
-        } catch (\mysqli_sql_exception $e) {
+        } catch (mysqli_sql_exception $e) {
             $data->message = $e->getMessage();
         }
 
@@ -51,7 +52,7 @@ abstract class Model implements CrudInterface {
                 $data[] = $row;
             }
         }
-        catch (\mysqli_sql_exception $e) {
+        catch (mysqli_sql_exception $e) {
             $data[] = $e->getMessage();
         }
 
@@ -71,7 +72,7 @@ abstract class Model implements CrudInterface {
 
             $data->message = "row updated successfully";
             $data->id = $id;
-        } catch (\mysqli_sql_exception $e) {
+        } catch (mysqli_sql_exception $e) {
             $data->message = $e->getMessage();
         }
 
@@ -87,7 +88,7 @@ abstract class Model implements CrudInterface {
         try {
             $this->mysqli->query($query);
             $data->message = "row deleted successfully";
-        } catch (\mysqli_sql_exception $e) {
+        } catch (mysqli_sql_exception $e) {
             $data->message = $e->getMessage();
         }
 
