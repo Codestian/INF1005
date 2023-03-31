@@ -1,4 +1,4 @@
-<?php $title="Work"; include("views/template/Top.php"); ?>
+<?php $title="Template"; include("views/template/Top.php"); ?>
 
 <?php $heroTitle = "Work With Us";
 $heroImage = "../../public/images/Work.jpg";

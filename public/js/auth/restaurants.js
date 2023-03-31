@@ -76,7 +76,7 @@ document.querySelector("#restaurant-signup").addEventListener("submit", (e) => {
                 "estimated_price" : sanitizedRestPricing,
                 "cuisine_id" : sanitizedRestCuisine,
                 "region_id" : sanitizedRestRegion
-            }),
+            })
         })
             .then(response => response.json())
             .then(data => {
