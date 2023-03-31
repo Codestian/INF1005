@@ -24,4 +24,6 @@ include("views/template/Top.php"); ?>
         </section>
     </div>
 
+<!--    <script type="text/javascript" src="../../public/js/handle.js"></script>-->
+    
 <?php $showFooter=false; include("views/template/Bottom.php"); ?>
