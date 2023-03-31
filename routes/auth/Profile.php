@@ -35,15 +35,6 @@
                     <div class="col" style="padding-bottom: 0px;margin-bottom: -2px;">
                         <div class="card shadow mb-3">
                             <div class="card-header py-3">
-                                <p class="text-primary m-0 fw-bold">Check Your Bookings!</p>
-                            </div>
-                            <div class="card-body">
-                                <p>To check your bookings made. Click on the Booking Checker below!</p>
-                                <a href="#"><button class="btn btn-primary" type="button">Booking Checker!</button></a>
-                            </div>
-                        </div>
-                        <div class="card shadow mb-3">
-                            <div class="card-header py-3">
                                 <p class="text-primary m-0 fw-bold">Make A Booking!</p>
                             </div>
                             <div class="card-body">

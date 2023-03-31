@@ -122,6 +122,7 @@ class UserController extends AbstractController
         $data->isVerified = true;
         $data->username = $obj->username;
         $data->id = $obj->id;
+        $data->role_id = $obj->role;
         $res->toJSON($data);
     }
 

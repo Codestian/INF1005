@@ -71,8 +71,8 @@ document.querySelector("#restaurant-signup").addEventListener("submit", (e) => {
                 "description" : sanitizedRestDesc,
                 "address" : sanitizedRestAddress,
                 "rating" : "1",
-                "opening_hours" : sanitizedRestOpenHours,
-                "closing_hours" : sanitizedRestCloseHours,
+                "opening_hours" : sanitizedRestOpenHours + "00",
+                "closing_hours" : sanitizedRestCloseHours + "00",
                 "estimated_price" : sanitizedRestPricing,
                 "cuisine_id" : sanitizedRestCuisine,
                 "region_id" : sanitizedRestRegion
