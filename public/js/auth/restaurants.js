@@ -71,12 +71,12 @@ document.querySelector("#restaurant-signup").addEventListener("submit", (e) => {
                 "description" : sanitizedRestDesc,
                 "address" : sanitizedRestAddress,
                 "rating" : "1",
-                "opening_hours" : sanitizedRestOpenHours + "00",
-                "closing_hours" : sanitizedRestCloseHours + "00",
+                "opening_hours" : sanitizedRestOpenHours,
+                "closing_hours" : sanitizedRestCloseHours,
                 "estimated_price" : sanitizedRestPricing,
                 "cuisine_id" : sanitizedRestCuisine,
                 "region_id" : sanitizedRestRegion
-            }),
+            })
         })
             .then(response => response.json())
             .then(data => {

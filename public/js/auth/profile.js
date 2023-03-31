@@ -19,10 +19,11 @@ function getName(callback) {
                 card.classList.add('mt-3');
                 card.innerHTML = `
                     <div class="card-header py-3">
-                        <p class="text-primary m-0 fw-bold">Favorite Restaurants!</p>
+                        <p class="text-primary m-0 fw-bold">Add Restaurants Items!</p>
                     </div>
                     <div class="card-body">
-                        <p>To check restaurants that you loved. Click on the Favorites button below!</p><button class="btn btn-primary" type="button">Favourites</button>
+                        <p>To add items into your Restaurant. Click on the Add Items button below!</p>
+                        <button class="btn btn-primary" type="button">Add Items</button>
                     </div>
                 `;
                 document.querySelector('.col-lg-8').appendChild(card);
