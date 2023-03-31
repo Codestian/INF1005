@@ -15,9 +15,8 @@ const restaurantRegion = document.querySelector('#restaurant-region');
 const restaurantDescription = document.querySelector('#restaurant-description');
 
 
-registerAlert.style.display = 'none';
 
-document.querySelector("#register-signup").addEventListener("submit", (e) => {
+document.querySelector("#restaurant-signup").addEventListener("submit", (e) => {
     e.preventDefault();
     // Sanitize and trim the input values
     const sanitizedEmail = registerEmail.value.trim();
@@ -50,13 +49,12 @@ document.querySelector("#register-signup").addEventListener("submit", (e) => {
             .then(response => response.json())
             .then(data => {
                 if(data.status !== 200) {
-                    registerAlert.style.display = 'block';
-                    registerAlert.textContent = data.data.message;
+                    console.log("Failure");
                 }
                 else {
                     // User account creation successful, redirect user to home.
-                    alert('Welcome! You can now login.');
-                    window.location.href = "/login";
+                    alert('Welcome! You can now add restaurant items!.');
+                    window.location.href = "/";
                 }
             })
             .catch(error => {
@@ -65,12 +63,33 @@ document.querySelector("#register-signup").addEventListener("submit", (e) => {
 
         fetch("/api/v1/restaurants", {
             method: "POST",
-
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body : JSON.stringify({
+                "name" : sanitizedRestName,
+                "description" : sanitizedRestDesc,
+                "address" : sanitizedRestAddress,
+                "rating" : "1",
+                "opening_hours" : sanitizedRestOpenHours,
+                "closing_hours" : sanitizedRestCloseHours,
+                "estimated_price" : sanitizedRestPricing,
+                "cuisine_id" : sanitizedRestCuisine,
+                "region_id" : sanitizedRestRegion
+            }),
         })
+            .then(response => response.json())
+            .then(data => {
+                alert('Success: ' + data.data.message);
+            })
+            .catch((error) => {
+                alert('Error: ' + error);
+                console.error('Error:', error);
+            });
     }
     else {
-        registerAlert.style.display = 'block';
-        registerAlert.textContent = "Passwords do not match.";
+        // registerAlert.style.display = 'block';
+        // registerAlert.textContent = "Passwords do not match.";
     }
 
 });
