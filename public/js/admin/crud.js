@@ -28,6 +28,7 @@ function getData() {
 
             data.data.forEach((row, idx) => {
                 let cid = Object.values(row)[0];
+                delete row.tables;
                 if(idx === 0) {
 
                     //Set input type for modals
