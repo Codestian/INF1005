@@ -808,14 +808,30 @@
         <div class="carousel-inner">
             <div class="carousel-item active">
                 <div class="d-flex" style="align-items: center;justify-content: center;">
-                    <img id="carousel-img" src="../public/images/icon/mac.png" alt="..." style="align-content: center">
+                    <a href="/restaurants/1">
+                    <img id="carousel-img-1"
+                         src="https://images.unsplash.com/photo-1528279027-68f0d7fce9f1?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=870&q=80"
+                         alt="..." style="align-content: center">
+                    </a>
                 </div>
             </div>
             <div class="carousel-item">
-                <img id="carousel-img" src="../public/images/icon/kfc.png" alt="...">
+                <div class="d-flex" style="align-items: center;justify-content: center;">
+                    <a href="/restaurants/2">
+                    <img id="carousel-img-2"
+                         src="https://images.unsplash.com/photo-1528279027-68f0d7fce9f1?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=870&q=80"
+                         alt="..." style="align-content: center">
+                    </a>
+                </div>
             </div>
-            <div class="carousel-item">
-                <img id="carousel-img" src="../public/images/icon/pizahut.jpg" alt="...">
+            <div class="carousel-item" style="align-items: center;justify-content: center;">
+                <div class="d-flex" style="align-items: center;justify-content: center;">
+                    <a href="/restaurants/3">
+                    <img id="carousel-img-3"
+                         src="https://images.unsplash.com/photo-1528279027-68f0d7fce9f1?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=870&q=80"
+                         alt="..." style="align-content: center">
+                    </a>
+                </div>
             </div>
         </div>
         <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="prev">
@@ -870,6 +886,12 @@
         transform: scale(1.05) translate(-2%, -3%);
         filter: drop-shadow(0 6mm 4mm #FF272A);
     }
+
+    .img carousel-img {
+        width: 75px;
+        height 75px;
+    }
+
 </style>
 
 <script>
