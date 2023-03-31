@@ -57,6 +57,54 @@
         </div>
     </div>
     </div>
+
+    <div class="modal" id="itemModal" tabindex="-1">
+        <div class="modal-dialog">
+            <form class="modal-content" method="post" id="add-item">
+                <div class="modal-header">
+                    <h5 class="modal-title">Add a Restaurant Item</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+
+
+                        <div class="form-group">
+                            <label for="res-item">Restaurant Item: </label>
+                            <input type="text" class="form-control" id="res-item" required name="res-item" placeholder="Enter the Restaurant's item.">
+                        </div>
+                        <br>
+
+                        <div class="form-group">
+                            <label for="res-item-desc">Item Description: </label>
+                            <input type="text" class="form-control" id="res-item-desc" required name="res-item-desc" placeholder="What is this Item about.">
+                        </div>
+                        <br>
+
+                        <div class="form-group">
+                            <label for="rest-item-price">Price: </label>
+                            <div class="input-group">
+                                <span class="input-group-text">$</span>
+                                <input type="text" class="form-control" id="rest-item-price" required name="rest-item-price" placeholder="Amount (to the nearest dollar)">
+                                <span class="input-group-text">.00</span>
+                            </div>
+                        </div>
+                        <br>
+
+                        <div class="form-group">
+                            <label for="restaurant">Restaurant: </label>
+                            <select class="form-select" required id="restaurant">
+                            </select>
+                        </div>
+                        <br>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Add Item</button>
+                </div>
+            </form>
+            </div>
+        </div>
+    </div>
 </section>
 
 <script type="text/javascript" src="../../public/js/auth/profile.js"></script>
