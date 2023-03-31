@@ -156,7 +156,7 @@ class UserController extends AbstractController
     public static function noNormalAllowedMiddleware(Model $model, Request $req, Response $res) {
         $obj = UserController::checkTokenMiddleware($model ,$req, $res, 401);
 
-        if($obj->role == 1 || $obj->role == 3) {
+        if($obj->role == 2) {
             $data = new StdClass();
             $data->isAdmin = false;
             $res->toJSON($data, 403);
