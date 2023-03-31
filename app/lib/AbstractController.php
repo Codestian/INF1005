@@ -18,6 +18,17 @@ abstract class AbstractController implements ControllerInterface
     public function getAllRows(Request $req, Response $res): void
     {
         $data = $this->model->read($this->columns, $this->table, ['1 = 1']);
+
+        foreach ($data[0] as $key => $value) {
+            if (str_ends_with($key, '_id')) {
+                // This property represents a foreign key column, so output its value
+                $table_name = substr($key, 0, -3);
+                $data_1 = $this->model->read(['*'], $table_name, ['id = ' . $value]);
+
+                unset($data[0]->$key);
+                $data[0]->$table_name = $data_1;
+            }
+        }
         $this->model->close();
         $res->toJSON($data);
     }
@@ -25,6 +36,17 @@ abstract class AbstractController implements ControllerInterface
     public function getOneRowById(Request $req, Response $res): void
     {
         $data = $this->model->read($this->columns, $this->table, ['id = ' . $req->params[0]]);
+
+        foreach ($data[0] as $key => $value) {
+            if (str_ends_with($key, '_id')) {
+                // This property represents a foreign key column, so output its value
+                $table_name = substr($key, 0, -3);
+                $data_1 = $this->model->read(['*'], $table_name, ['id = ' . $value]);
+
+                unset($data[0]->$key);
+                $data[0]->$table_name = $data_1;
+            }
+        }
         $this->model->close();
         $res->toJSON($data);
     }
