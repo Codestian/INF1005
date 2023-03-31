@@ -1,9 +1,11 @@
 <?php $title="Restaurants"; include("views/template/Top.php"); ?>
 
+<?php $heroTitle = "Welcome to the Master Directory";
+$heroImage = "../../public/images/Food.jpg";
+include "views/components/Food.php"; ?>
 
 <!-- INSERT CONTENT HERE -->
 <section>
-    <h1>Welcome to the Master Directory</h1>
     <br>
     <div class="container-fluid">
         <div class="row">
@@ -151,44 +153,76 @@
     }
 
 
-    // Region filter script
+    // // Region filter script
+    // const regionFilter = document.getElementById('region-filter');
+    // const filteredRestaurantsDiv = document.getElementById('filtered-restaurants');
+    //
+    // regionFilter.addEventListener('change', () => {
+    //     const selectedRegion = regionFilter.value;
+    //
+    //     // If "All regions" is selected, show all restaurants
+    //     if (selectedRegion === '') {
+    //         displayRestaurants(restaurantInfoArr);
+    //     } else {
+    //         // Otherwise, filter the restaurants by the selected region
+    //         const filteredRestaurants = restaurantInfoArr.filter((restaurant) => {
+    //             return restaurant.region_id === selectedRegion;
+    //         });
+    //         displayRestaurants(filteredRestaurants);
+    //         console.log(filteredRestaurants)
+    //     }
+    // });
+    //
+    // // Rating filter script
+    // const ratingFilter = document.getElementById('rating-filter');
+    //
+    // ratingFilter.addEventListener('change', () =>{
+    //     const selectedRating = ratingFilter.value;
+    //
+    //     // If "All ratings" is selected, show all restaurants
+    //     if (selectedRating === ''){
+    //         displayRestaurants(restaurantInfoArr);
+    //     } else {
+    //         // Otherwise, filter the restaurants by the ratings
+    //         const filteredRestaurants = restaurantInfoArr.filter((restaurant) => {
+    //             return restaurant.rating === selectedRating;
+    //         });
+    //         displayRestaurants(filteredRestaurants);
+    //         console.log(filteredRestaurants)
+    //     }
+    // });
+
     const regionFilter = document.getElementById('region-filter');
+    const ratingFilter = document.getElementById('rating-filter');
     const filteredRestaurantsDiv = document.getElementById('filtered-restaurants');
 
-    regionFilter.addEventListener('change', () => {
+    function filterRestaurants() {
         const selectedRegion = regionFilter.value;
-
-        // If "All regions" is selected, show all restaurants
-        if (selectedRegion === '') {
-            displayRestaurants(restaurantInfoArr);
-        } else {
-            // Otherwise, filter the restaurants by the selected region
-            const filteredRestaurants = restaurantInfoArr.filter((restaurant) => {
-                return restaurant.region_id === selectedRegion;
-            });
-            displayRestaurants(filteredRestaurants);
-            console.log(filteredRestaurants)
-        }
-    });
-
-    // Rating filter script
-    const ratingFilter = document.getElementById('rating-filter');
-
-    ratingFilter.addEventListener('change', () =>{
         const selectedRating = ratingFilter.value;
 
-        // If "All ratings" is selected, show all restaurants
-        if (selectedRating === ''){
-            displayRestaurants(restaurantInfoArr);
-        } else {
-            // Otherwise, filter the restaurants by the ratings
-            const filteredRestaurants = restaurantInfoArr.filter((restaurant) => {
+        let filteredRestaurants = restaurantInfoArr;
+
+        // Apply the region filter if a region is selected
+        if (selectedRegion !== '') {
+            filteredRestaurants = filteredRestaurants.filter((restaurant) => {
+                return restaurant.region_id === selectedRegion;
+            });
+        }
+
+        // Apply the rating filter if a rating is selected
+        if (selectedRating !== '') {
+            filteredRestaurants = filteredRestaurants.filter((restaurant) => {
                 return restaurant.rating === selectedRating;
             });
-            displayRestaurants(filteredRestaurants);
-            console.log(filteredRestaurants)
         }
-    });
+
+        displayRestaurants(filteredRestaurants);
+    }
+
+    // Listen to changes on both filters
+    regionFilter.addEventListener('change', filterRestaurants);
+    ratingFilter.addEventListener('change', filterRestaurants);
+
 
     // Call the function and pass in the callback function
     getAllRestaurants(displayRestaurants);
