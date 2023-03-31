@@ -15,9 +15,11 @@
                 <div class="card">
                     <div class="card-header" id="headingOne" style="background-color: #ffcd39">
                         <h5 class="mb-0">
-                            <button class="btn btn-link" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne" style=" color: black; font-family: Arial, sans-serif; text-decoration: none;">
+
+                            <button class="btn btn-link" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne" style="color: black; font-family: Arial, sans-serif; text-decoration: none;  padding-right: 745px;">
                                 Use of the Site
                             </button>
+
 
                         </h5>
                     </div>
@@ -50,7 +52,7 @@
                 <div class="card">
                     <div class="card-header" id="headingTwo" style ="background-color: chocolate">
                         <h5 class="mb-0">
-                            <button class="btn btn-link collapsed" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo" style=" color: white; font-family: Arial, sans-serif; text-decoration: none;">
+                            <button class="btn btn-link collapsed" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo" style=" color: white; font-family: Arial, sans-serif; text-decoration: none; padding-right: 635px;">
                                 User Account and Security
                             </button>
                         </h5>
@@ -64,7 +66,7 @@
                 <div class="card">
                     <div class="card-header" id="headingThree" style =" background-color: #ffcd39">
                         <h5 class="mb-0">
-                            <button class="btn btn-link collapsed" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree" style=" color: black; font-family: Arial, sans-serif; text-decoration: none;">
+                            <button class="btn btn-link collapsed" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree" style=" color: black; font-family: Arial, sans-serif; text-decoration: none; padding-right: 745px;">
                                 User Content
                             </button>
                         </h5>
@@ -78,7 +80,7 @@
                 <div class="card">
                     <div class="card-header" id="headingOne" style ="background-color: chocolate">
                         <h5 class="mb-0">
-                            <button class="btn btn-link" data-bs-toggle="collapse" data-bs-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour" style=" color: white; font-family: Arial, sans-serif; text-decoration: none;">
+                            <button class="btn btn-link" data-bs-toggle="collapse" data-bs-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour" style=" color: white; font-family: Arial, sans-serif; text-decoration: none; padding-right: 610px;">
                                 Intellectual Property Rights
                             </button>
                         </h5>
@@ -94,7 +96,7 @@
                 <div class="card">
                     <div class="card-header" id="headingFive" style = "background-color: #ffcd39">
                         <h5 class="mb-0">
-                            <button class="btn btn-link collapsed" data-bs-toggle="collapse" data-bs-target="#collapseFive" aria-expanded="false" aria-controls="collapseFive" style=" color: black; font-family: Arial, sans-serif; text-decoration: none;">
+                            <button class="btn btn-link collapsed" data-bs-toggle="collapse" data-bs-target="#collapseFive" aria-expanded="false" aria-controls="collapseFive" style=" color: black; font-family: Arial, sans-serif; text-decoration: none; padding-right: 650px;">
                                 Disclaimer of Warranties
                             </button>
                         </h5>
@@ -108,7 +110,7 @@
                 <div class="card">
                     <div class="card-header" id="headingSix" style ="background-color: chocolate">
                         <h5 class="mb-0">
-                            <button class="btn btn-link collapsed" data-bs-toggle="collapse" data-bs-target="#collapseSix" aria-expanded="false" aria-controls="collapseSix" style=" color: white; font-family: Arial, sans-serif; text-decoration: none;">
+                            <button class="btn btn-link collapsed" data-bs-toggle="collapse" data-bs-target="#collapseSix" aria-expanded="false" aria-controls="collapseSix" style=" color: white; font-family: Arial, sans-serif; text-decoration: none; padding-right: 687px;">
                                Limitation of Liability
                             </button>
                         </h5>
@@ -133,7 +135,6 @@
 
     </div>
 </main>
-
 
 
 <?php include("views/template/Bottom.php"); ?>
