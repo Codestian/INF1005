@@ -80,30 +80,38 @@ class UserController extends AbstractController
 
         $data = new StdClass();
 
-        if (isset($sql[0]->email)) {
-            if($sql[0]->provider_id !== 1) {
-                $data->message = "You have registered with OAuth, please login.";
+        if($value['role_id'] != 1) {
+            if (isset($sql[0]->email)) {
+                if($sql[0]->provider_id !== 1) {
+                    $data->message = "You have registered with OAuth, please login.";
+                }
+                else {
+                    $data->message = "User account exists, please login.";
+                }
+                $res->toJSON($data, 409);
             }
             else {
-                $data->message = "User account exists, please login.";
+                $sql_1 = $this->model->read(['id', 'username'], $this->table, ['username = ' . '"' . $value['username'] . '"']);
+                if (isset($sql_1[0]->username)) {
+                    $data->message = "Username taken, please select another.";
+                    $res->toJSON($data, 409);
+                } else {
+                    // TODO: HASH PASSWORD
+                    $columns = ['username', 'email', 'password', 'role_id', 'provider_id'];
+                    $sql_2 = $this->model->create($this->table, $columns, [$value['username'], $value['email'], $value['password'], $value['role_id'], 1]);
+
+                    $data->message = $sql_2->message;
+
+                    $res->toJSON($data);
+                }
             }
-            $res->toJSON($data, 409);
         }
         else {
-            $sql_1 = $this->model->read(['id', 'username'], $this->table, ['username = ' . '"' . $value['username'] . '"']);
-            if (isset($sql_1[0]->username)) {
-                $data->message = "Username taken, please select another.";
-                $res->toJSON($data, 409);
-            } else {
-                // TODO: HASH PASSWORD
-                $columns = ['username', 'email', 'password', 'role_id', 'provider_id'];
-                $sql_2 = $this->model->create($this->table, $columns, [$value['username'], $value['email'], $value['password'], $value['role_id'], 1]);
-
-                $data->message = $sql_2->message;
-
-                $res->toJSON($data);
-            }
+            $data->message = "Registering for admin account is not permitted.";
+            $res->toJSON($data, 403);
         }
+
+
         $this->model->close();
     }
 
@@ -158,7 +166,7 @@ class UserController extends AbstractController
 
         if($obj->role == 2) {
             $data = new StdClass();
-            $data->isAdmin = false;
+            $data->isNormal = true;
             $res->toJSON($data, 403);
             exit();
         }
