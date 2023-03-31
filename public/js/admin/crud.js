@@ -25,6 +25,8 @@ function getData() {
 
             data.data.forEach((row, idx) => {
 
+                delete row.tables;
+
                 if(idx === 0) {
                     setInputForModals(Object.keys(row));
                     tableHead.appendChild(createTableHead(...Object.keys(row), 'Actions'));

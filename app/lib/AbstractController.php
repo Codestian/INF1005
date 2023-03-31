@@ -1,6 +1,7 @@
 <?php namespace App\Lib;
 use App\Lib\Interfaces\ControllerInterface;
 use mysqli;
+use stdClass;
 
 abstract class AbstractController implements ControllerInterface
 {
@@ -18,6 +19,7 @@ abstract class AbstractController implements ControllerInterface
     public function getAllRows(Request $req, Response $res): void
     {
         $data = $this->model->read($this->columns, $this->table, ['1 = 1']);
+        $data[0]->tables = new StdClass();
 
         foreach ($data[0] as $key => $value) {
             if (str_ends_with($key, '_id')) {
@@ -25,8 +27,7 @@ abstract class AbstractController implements ControllerInterface
                 $table_name = substr($key, 0, -3);
                 $data_1 = $this->model->read(['*'], $table_name, ['id = ' . $value]);
 
-                unset($data[0]->$key);
-                $data[0]->$table_name = $data_1;
+                $data[0]->tables->$table_name = $data_1;
             }
         }
         $this->model->close();
@@ -36,6 +37,7 @@ abstract class AbstractController implements ControllerInterface
     public function getOneRowById(Request $req, Response $res): void
     {
         $data = $this->model->read($this->columns, $this->table, ['id = ' . $req->params[0]]);
+        $data[0]->tables = new StdClass();
 
         foreach ($data[0] as $key => $value) {
             if (str_ends_with($key, '_id')) {
@@ -43,8 +45,7 @@ abstract class AbstractController implements ControllerInterface
                 $table_name = substr($key, 0, -3);
                 $data_1 = $this->model->read(['*'], $table_name, ['id = ' . $value]);
 
-                unset($data[0]->$key);
-                $data[0]->$table_name = $data_1;
+                $data[0]->tables->$table_name = $data_1;
             }
         }
         $this->model->close();
