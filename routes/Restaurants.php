@@ -3,18 +3,30 @@
 
 <!-- INSERT CONTENT HERE -->
 <section>
+    <h1>Welcome to the Master Directory</h1>
     <br>
     <div class="container-fluid">
         <div class="row">
             <div class="col-lg-2">
                 <div class="filter-bar mb-3">
-                    <h4>Filter by region:</h4>
-                    <select id="region-filter" class="form-select">
+                    <h2 class="fs-4">Filter by region:</h2>
+                    <select id="region-filter" class="form-select" aria-label="Region-filter">
                         <option value="">All regions</option>
                         <option value="1">North</option>
                         <option value="2">Central</option>
                         <option value="3">East</option>
                         <option value="4">West</option>
+                    </select>
+                </div>
+                <div class="filter-bar mb-3">
+                    <h2 class="fs-5">Filter by ratings:</h2>
+                    <select id="rating-filter" class="form-select" aria-label="rating-filter">
+                        <option value="">All ratings</option>
+                        <option value="1">1 star</option>
+                        <option value="2">2 stars</option>
+                        <option value="3">3 stars</option>
+                        <option value="4">4 stars</option>
+                        <option value="5">5 stars</option>
                     </select>
                 </div>
             </div>
@@ -138,6 +150,8 @@
         }
     }
 
+
+    // Region filter script
     const regionFilter = document.getElementById('region-filter');
     const filteredRestaurantsDiv = document.getElementById('filtered-restaurants');
 
@@ -151,6 +165,25 @@
             // Otherwise, filter the restaurants by the selected region
             const filteredRestaurants = restaurantInfoArr.filter((restaurant) => {
                 return restaurant.region_id === selectedRegion;
+            });
+            displayRestaurants(filteredRestaurants);
+            console.log(filteredRestaurants)
+        }
+    });
+
+    // Rating filter script
+    const ratingFilter = document.getElementById('rating-filter');
+
+    ratingFilter.addEventListener('change', () =>{
+       const selectedRating = ratingFilter.value;
+
+       // If "All ratings" is selected, show all restaurants
+        if (selectedRating === ''){
+            displayRestaurants(restaurantInfoArr);
+        } else {
+            // Otherwise, filter the restaurants by the ratings
+            const filteredRestaurants = restaurantInfoArr.filter((restaurant) => {
+                return restaurant.rating === selectedRating;
             });
             displayRestaurants(filteredRestaurants);
             console.log(filteredRestaurants)
