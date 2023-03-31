@@ -24,7 +24,8 @@ document.querySelector("#register-form").addEventListener("submit", (e) => {
             body: JSON.stringify({
                 "email": sanitizedEmail,
                 "username": sanitizedUsername,
-                "password": sanitizedPassword
+                "password": sanitizedPassword,
+                "role_id" : 2
             }),
         })
             .then(response => response.json())

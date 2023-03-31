@@ -47,16 +47,12 @@ class QueryBuilder
         $where = $this->conditions === [] ? '' : ' WHERE ' . implode(' AND ', $this->conditions);
         $fields = empty($this->fields) ? '*' : implode(', ', $this->fields);
 
-        switch (true) {
-            case !empty($this->values):
-                return 'INSERT INTO ' . $this->table . ' (' . $fields . ') VALUES (' . implode(', ', $this->values) . ')';
-            case !empty($this->set):
-                return 'UPDATE ' . $this->table . ' SET ' . implode(', ', $this->set) . $where;
-            case !empty($this->table):
-                return 'DELETE FROM ' . $this->table . $where;
-            default:
-                return 'SELECT ' . $fields . ' FROM ' . implode(', ', $this->from) . $where;
-        }
+        return match (true) {
+            !empty($this->values) => 'INSERT INTO ' . $this->table . ' (' . $fields . ') VALUES (' . implode(', ', $this->values) . ')',
+            !empty($this->set) => 'UPDATE ' . $this->table . ' SET ' . implode(', ', $this->set) . $where,
+            !empty($this->table) => 'DELETE FROM ' . $this->table . $where,
+            default => 'SELECT ' . $fields . ' FROM ' . implode(', ', $this->from) . $where,
+        };
     }
 
     public function select(string ...$select): self

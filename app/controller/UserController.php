@@ -38,17 +38,14 @@ class UserController extends AbstractController
         $columns = ['email', 'password'];
         $value = $req->getJSON($columns);
 
-        $sql = $this->model->read(['provider_id'], $this->table, ['email = ' . '"' . $value['email'] . '"']);
+        $sql = $this->model->read(['provider_id', 'password'], $this->table, ['email = ' . '"' . $value['email'] . '"']);
 
         $data = new StdClass();
 
         //  Check if provider is traditional or using oauth.
         if (isset($sql[0]->provider_id)) {
             if ($sql[0]->provider_id == 1) {
-                // TODO: HASH PASSWORD
-                $sql_1 = $this->model->read(['email'], $this->table, ['password = ' . '"' . $value['password'] . '"']);
-
-                if (isset($sql_1[0]->email)) {
+                if (password_verify($value['password'], $sql[0]->password)) {
                     $payload = new stdClass();
                     $payload->email = $value['email'];
                     $payload->role = 2;
@@ -73,37 +70,44 @@ class UserController extends AbstractController
 
     public function registerUser(Request $req, Response $res): void
     {
-        $columns = ['email', 'username', 'password'];
+        $columns = ['email', 'username', 'password', 'role_id'];
         $value = $req->getJSON($columns);
 
         $sql = $this->model->read(['id', 'email', 'provider_id'], $this->table, ['email = ' . '"' . $value['email'] . '"']);
 
         $data = new StdClass();
 
-        if (isset($sql[0]->email)) {
-            if($sql[0]->provider_id !== 1) {
-                $data->message = "You have registered with OAuth, please login.";
+        if($value['role_id'] != 1) {
+            if (isset($sql[0]->email)) {
+                if($sql[0]->provider_id !== 1) {
+                    $data->message = "You have registered with OAuth, please login.";
+                }
+                else {
+                    $data->message = "User account exists, please login.";
+                }
+                $res->toJSON($data, 409);
             }
             else {
-                $data->message = "User account exists, please login.";
+                $sql_1 = $this->model->read(['id', 'username'], $this->table, ['username = ' . '"' . $value['username'] . '"']);
+                if (isset($sql_1[0]->username)) {
+                    $data->message = "Username taken, please select another.";
+                    $res->toJSON($data, 409);
+                } else {
+                    $columns = ['username', 'email', 'password', 'role_id', 'provider_id'];
+                    $sql_2 = $this->model->create($this->table, $columns, [$value['username'], $value['email'], password_hash($value['password'], PASSWORD_BCRYPT), $value['role_id'], 1]);
+
+                    $data->message = $sql_2->message;
+
+                    $res->toJSON($data);
+                }
             }
-            $res->toJSON($data, 409);
         }
         else {
-            $sql_1 = $this->model->read(['id', 'username'], $this->table, ['username = ' . '"' . $value['username'] . '"']);
-            if (isset($sql_1[0]->username)) {
-                $data->message = "Username taken, please select another.";
-                $res->toJSON($data, 409);
-            } else {
-                // TODO: HASH PASSWORD
-                $columns = ['username', 'email', 'password', 'role_id', 'provider_id'];
-                $sql_2 = $this->model->create($this->table, $columns, [$value['username'], $value['email'], $value['password'], 2, 1]);
-
-                $data->message = $sql_2->message;
-
-                $res->toJSON($data);
-            }
+            $data->message = "Registering for admin account is not permitted.";
+            $res->toJSON($data, 403);
         }
+
+
         $this->model->close();
     }
 
@@ -152,6 +156,19 @@ class UserController extends AbstractController
         return $obj;
     }
 
+    // Only users with role_id = 1 or role_id = 3 can access the method.
+    public static function noNormalAllowedMiddleware(Model $model, Request $req, Response $res) {
+        $obj = UserController::checkTokenMiddleware($model ,$req, $res, 401);
+
+        if($obj->role == 2) {
+            $data = new StdClass();
+            $data->isNormal = true;
+            $res->toJSON($data, 403);
+            exit();
+        }
+    }
+
+    // Only users with role_id = 1 can access the method.
     public static function adminOnlyMiddleware(Model $model, Request $req, Response $res) {
         $obj = UserController::checkTokenMiddleware($model ,$req, $res, 401);
 

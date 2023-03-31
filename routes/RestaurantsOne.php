@@ -126,7 +126,7 @@ include("views/template/Top.php"); ?>
             .then(response => response.json())
             .then(data => {
                 let restInfo = data.data;
-                // console.log(restInfo);
+                console.log(restInfo[0].tables.cuisine[0].name);
                 restName = restInfo[0].name;
                 document.getElementById("restName").innerText = restName;
                 restAddress = restInfo[0].address;
@@ -147,15 +147,8 @@ include("views/template/Top.php"); ?>
                 restPrice = restInfo[0].estimated_price;
                 tmpData = '<i class="bi bi-currency-dollar"></i>'+ restPrice + '/pax ';
                 document.getElementById("restPrice").innerHTML = tmpData;
-                restCuisineID = restInfo[0].cuisine_id;
-                const apiCallCuisine = "http://localhost/api/v1/cuisines/" + restCuisineID;
-                fetch(apiCallCuisine)
-                    .then(response => response.json())
-                    .then(data => {
-                        let cuisine = data.data;
-                        restCuisine = cuisine[0].name;
-                        document.getElementById("restCuisine").innerText = "Cuisine: " + restCuisine;
-                    })
+                document.getElementById("restCuisine").innerText = "Cuisine: " + restInfo[0].tables.cuisine[0].name;
+
             })
         const apiCallMenuItems = apiURL + restID + "/items";
         fetch(apiCallMenuItems)
@@ -189,12 +182,12 @@ include("views/template/Top.php"); ?>
                     // console.log(item.price)
                     tmpData += '<li class="">\n';
                     tmpData += '<div class="card">\n';
-                    tmpData += '<div class="ratio ratio-4x3">\n';
-                    tmpData += '<img src="" class="card-img-top" loading="lazy" alt="...">\n';
-                    tmpData += '</div>\n';
                     tmpData += '<div class="card-body">\n';
                     tmpData += '<p class="card-title">\n';
-                    tmpData += item.name;
+                    tmpData +=  '<strong>' + item.name + '</strong>\n';
+                    tmpData += '</p>\n';
+                    tmpData += '<p class="card-title">\n';
+                    tmpData +=  item.price + ' S$';
                     tmpData += '</p>\n';
                     tmpData += '</div>\n';
                     tmpData += '</div>\n';
@@ -208,15 +201,15 @@ include("views/template/Top.php"); ?>
             .then(response => response.json())
             .then(data => {
                 let reviewItems = data.data;
+                // console.log(reviewItems)
                 let reviewCount = 0;
                 let tmpData = ""
                 reviewItems.forEach((review) => {
                     if (review.restaurant_id == restID)
                     {
                         let datetime = new Date(review.date);
-                        // console.log(datetime.getDate())
-                        // console.log(datetime.getMonth())
-                        // console.log(datetime.getFullYear())
+                        let userName = review.tables.user[0].username;
+                        // console.log(review.tables.user[0].username)
 
                         tmpData += '<div class="d-flex">\n';
                         tmpData += '<div class="left">\n';
@@ -225,7 +218,7 @@ include("views/template/Top.php"); ?>
                         tmpData += '</span>\n';
                         tmpData += '</div>\n';
                         tmpData += '<div class="right">\n';
-                        tmpData += '<h4> ' + review.user_id + '<span class="gig-rating text-body-2">\n';
+                        tmpData += '<h4> ' + userName + '<span class="gig-rating text-body-2">\n';
                         tmpData += '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1792 1792" width="15" height="15">';
                         tmpData += '<path fill="currentColor" d="M1728 647q0 22-26 48l-363 354 86 500q1 7 1 20 0 21-10.5 35.5t-30.5 14.5q-19 0-40-12l-449-236-449 236q-22 12-40 12-21 0-31.5-14.5t-10.5-35.5q0-6 2-20l86-500-364-354q-25-27-25-48 0-37 56-46l502-73 225-455q19-41 49-41t49 41l225 455 502 73q56 9 56 46z"></path>';
                         tmpData += '</svg>\n';
@@ -494,15 +487,14 @@ include("views/template/Top.php"); ?>
             <div class="modal-header">
                 <h5 class="modal-title" id="menuModalTitle">Menu</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-
             </div>
             <div id="menuModalBody" class="modal-body">
                 <div id="menuModalSubBody1" class="container">
                     <div class="row">
                         <div class="col-sm-3" >
                             <strong><p style="font-size: 1rem">
-                                Item
-                            </p>
+                                    Item
+                                </p>
                             </strong>
                         </div>
                         <div class="col-sm-7" >
@@ -516,7 +508,7 @@ include("views/template/Top.php"); ?>
                         <div class="col-sm-2" >
                             <p  style="font-size: 1rem">
                                 <strong>
-                                Price
+                                    Price
                                 </strong>
                             </p>
                         </div>
@@ -561,7 +553,7 @@ include("views/template/Top.php"); ?>
                     </div>
                     <br>
                     <div style="display: flex; justify-content: center">
-                        <a id="reviewSubmit" onclick="reviewSubmit()" class="btn btn-primary">Submit</a>
+                        <a id="reviewSubmit" onclick="reviewSubmit()" data-bs-dismiss="modal" class="btn btn-primary">Submit</a>
                     </div>
                 </form>
             </div>
@@ -611,7 +603,7 @@ include("views/template/Top.php"); ?>
                         </div>
                     </div>
                     <br>
-                    <a id="bookingSubmit" onclick="bookingSubmit()" class="btn btn-primary">Submit</a>
+                    <a id="bookingSubmit" onclick="bookingSubmit()" data-bs-dismiss="modal" class="btn btn-primary">Submit</a>
                 </form>
             </div>
         </div>
@@ -648,9 +640,9 @@ include("views/template/Top.php"); ?>
 
                     </div>
                 </div>
-<!--                <div style="margin-left: auto">-->
-<!--                    <div id="BookingButton"></div>-->
-<!--                </div>-->
+                <!--                <div style="margin-left: auto">-->
+                <!--                    <div id="BookingButton"></div>-->
+                <!--                </div>-->
             </div>
             <div style="display: flex">
                 <div>
@@ -664,11 +656,11 @@ include("views/template/Top.php"); ?>
                     </p>
                 </div>
                 <div style="margin-left: auto; display: flex">
-<!--                    <div style="margin-right: 2%;">-->
-<!--                        <button type="button" class="btn btn-success">-->
-<!--                            <i class="bi bi-share-fill"></i>-->
-<!--                        </button>-->
-<!--                    </div>-->
+                    <!--                    <div style="margin-right: 2%;">-->
+                    <!--                        <button type="button" class="btn btn-success">-->
+                    <!--                            <i class="bi bi-share-fill"></i>-->
+                    <!--                        </button>-->
+                    <!--                    </div>-->
                     <div style="margin-right: 2%" id="BookingButton"></div>
                     <div id="ReviewButton"></div>
                 </div>
@@ -693,13 +685,13 @@ include("views/template/Top.php"); ?>
 <div id="restauratItemsCarousel" class="carousel slide" data-bs-ride="carousel">
     <div class="carousel-inner" id="restauratItemsCarouselInnerBody">
         <div class="carousel-item active">
-            <img src="..." class="d-block w-100" alt="...">
+            <img src="https://images.unsplash.com/photo-1504674900247-0877df9cc836?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=870&q=80" class="d-block w-100" alt="...">
         </div>
         <div class="carousel-item">
-            <img src="..." class="d-block w-100" alt="...">
+            <img src="https://images.unsplash.com/photo-1512621776951-a57141f2eefd?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=870&q=80" class="d-block w-100" alt="...">
         </div>
         <div class="carousel-item">
-            <img src="..." class="d-block w-100" alt="...">
+            <img src="https://images.unsplash.com/photo-1499028344343-cd173ffc68a9?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=870&q=80" class="d-block w-100" alt="...">
         </div>
     </div>
     <button class="carousel-control-prev" type="button" data-bs-target="#restauratItemsCarousel" data-bs-slide="prev">
@@ -741,9 +733,9 @@ include("views/template/Top.php"); ?>
     </div>
     <div style="width: 40%">
         <div class="container">
-                <div class="d-flex align-items-center justify-content-between mb-4">
-                    <h4 id="restReviewCount" style="font-size: 1.2rem;">37 Reviews</h4>
-                </div>
+            <div class="d-flex align-items-center justify-content-between mb-4">
+                <h4 id="restReviewCount" style="font-size: 1.2rem;">0 Reviews</h4>
+            </div>
 
 
             <div class="review-list">
