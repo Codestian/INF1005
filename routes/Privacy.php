@@ -10,7 +10,7 @@
                     <p class="col-md-12 fs-9">Thank you for visiting CHOPPY.COM. This privacy policy outlines how we collect, use, and protect your personal information.
                         Your privacy and safety of your data is important to us. This Privacy Policy document describes types of information that is or may be collected, used or shared by CHOPPY when you visit, use or make a reservation.
                         If you have any additional questions or require more information about our Privacy Policy or about how we handle user data and personal information, or wish to withdraw your consent for the continued collection, use or disclosure of your Personal Information, please feel free to
-                        <a href ="http://choppy.codestian.com/contact "class="btn btn-dark rounded-pill px-3" >contact us</a></p>
+                        <a href ="/contact "class="btn btn-dark rounded-pill px-3" >contact us</a></p>
 
                 </div>
             </div>
